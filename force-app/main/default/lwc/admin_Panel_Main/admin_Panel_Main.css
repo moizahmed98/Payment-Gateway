@@ -1,0 +1,271 @@
+/* Styles for the container element */
+.container {
+    background-color: white; /* Set the background color to white */
+    padding: 16px; /* Add padding as needed */
+    box-sizing: border-box; /* Include padding in element's total width/height */
+
+    /* Make the container responsive */
+    max-width: 100%; /* Ensures it doesn't exceed the viewport width */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.onlyonmob{
+    display: none;
+}
+
+
+/* Styles for SVG elements with class st0, st1, st2 */
+.st0{fill:#000000;}
+.st1{fill:#0075FF;}
+.st2{fill:#FFC300;}
+
+/* Styles for elements with class authorize-net-Tab */
+.authorize-net-Tab {
+    width: 150px;
+}
+
+/* Styles for logos with class anet_page_logo */
+.anet_page_logo{
+    margin: 0 auto;
+    width: 30%;
+    margin-top: 2%;
+}
+
+/* Styles for logos with class skrill_page_logo */
+.skrill_page_logo{
+    margin: 0 auto;
+    width: 12.5%;
+}
+
+/* Styles for logos with class stripe_page_logo */
+.stripe_page_logo{
+    margin: 0 auto;
+    width: 10.3%;
+    margin-top: 2%;
+}
+
+/* Styles for logos with class square_page_logo */
+.square_page_logo{
+    margin: 0 auto;
+    width: 17%;
+    margin-top: 2%;
+}
+
+/* Styles for logos with class gpayment_page_logo */
+.gpayment_page_logo{
+    margin: 0 auto;
+    width: 30%;
+    margin-top: 2%;
+}
+
+/* Styles for elements with class margin_top */
+.margin_top{
+    margin-top: 4%;
+}
+
+/* Styles for elements with class prv_merch_name */
+.prv_merch_name{
+    margin-top: 5%;
+}
+
+/* Styles for elements with class inputFont */
+.inputFont{
+    font-size: 22px;
+}
+
+/* Styles for elements with class inputwidth */
+.inputwidth{
+    margin-left: 15%;
+    width: 85%;
+    margin-right: 10%;
+}
+/* Remove highlighting on hover and focus */
+
+
+
+/* Styles for elements with class inputwidthmcname */
+.inputwidthmcname{
+    margin-left: 15%;
+    width: 45%;
+    margin-right: 10%;
+}
+
+
+
+
+/* Styles for step descriptions */
+.step-descriptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px; /* Adjust the margin as needed */
+}
+
+/* Styles for elements with class Response */
+.Response {
+    position: absolute;
+    right: 45%;
+}
+
+/* Styles for elements with class Verified */
+.Verified {
+    position: absolute;
+    right: 13%;
+}
+
+/* Styles for elements with class Request */
+.Request {
+    position: absolute;
+    left: 12.5%;
+}
+
+/* Styles for paragraphs inside step descriptions */
+.step-description p {
+    margin: 0;
+}
+
+/* Styles for elements with class rcorners2 */
+.rcorners2 {
+    border-radius: 15px;
+    border: 2px solid rgb(116, 116, 116);
+    padding: 20px;
+    width: 50%;
+    height: 55px;
+}
+
+
+/* Styles for elements with class rcornersmc */
+.rcornersmc {
+    border-radius: 15px;
+    border: 2px solid rgb(116, 116, 116);
+    padding: 20px;
+    width: 25%;
+    height: 55px;
+}
+.logo-container {
+    display: flex; /* Use flexbox to arrange children horizontally */
+    align-items: center; /* Vertically center the children */
+    height: 10vh;}
+
+
+/* Styles for custom buttons */
+.custom-button {
+    /* Background color: blue */
+    background-color: #0070d2;
+    /* Text color: white */
+    color: #ffffff;
+    /* Padding: 10px on top/bottom, 20px on left/right */
+    padding: 10px 20px;
+    /* Rounded corners: 12px */
+    border-radius: 12px;
+    /* Change cursor on hover */
+    cursor: pointer;
+    /* Remove default button styles */
+    border: none;
+    outline: none;
+    margin-left: 47%;
+    font-size: 20px;
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
+}
+
+/* Styles for custom button on hover */
+.custom-button:hover {
+    background-color: #0055a4; /* Change background color on hover */
+}
+
+@media screen and (max-width: 425px) {
+    .inputwidthmcname{
+        margin-left: 10%;
+        width: 80%;
+        margin-right: 10%;
+    }
+    .displaynone {
+        display: none; /* Hide the element when the screen width is <= 768px */
+    }
+    .rcornersmc {
+        border-radius: 15px;
+        border: 2px solid rgb(116, 116, 116);
+        width: 85%;
+        padding: 7px 10px; /* Adjust padding as needed */
+        height: 25px; 
+    }
+    .custom-button[logicpayment-admin_Panel_Main_admin_Panel_Main] {
+        background-color: #0070d2;
+        color: #ffffff;
+        padding: 6px 12px; /* Adjust padding for a smaller button */
+        border-radius: 8px; /* Adjust border radius accordingly */
+        cursor: pointer;
+        border: none;
+        outline: none;
+        margin-left: 39%;
+        font-size: 16px; /* Adjust font size for a smaller button */
+        margin-top: 1%; /* Adjust margin as needed */
+        margin-bottom: 1%; /* Adjust margin as needed */
+    }
+    
+    .custom-button:hover {
+        background-color: #0055a4; /* Change background color on hover */
+    }
+    .rcorners2 {
+        border-radius: 15px;
+    border: 2px solid rgb(116, 116, 116);
+    padding: 7px 10px; /* Adjust padding as needed */
+    width: 80%;
+    height: 25px; /* Decrease the height to 25px */
+    }
+    .inputwidth{
+        margin-left: 10%;
+        width: 85%;
+        margin-right: 10%;
+    }
+    .logo-container {
+        display: flex; /* Use flexbox to arrange children horizontally */
+        align-items: center; /* Vertically center the children */
+        height: 10vh;
+    }
+    .anet_page_logo{
+        width: 79%;
+    }
+    .square_page_logo{
+        width: 38%;
+        margin-left: 0%;
+    }
+    .stripe_page_logo{
+        width: 32%;
+        margin-left: 0;
+    }
+    .gpayment_page_logo{
+        width: 65%;
+    }
+    .skrill_page_logo{
+        width: 32%;
+        margin-left: -2%;
+    
+    }
+   /* CSS to change menu item styles on hover */
+/* Replace "my-button-menu" with the appropriate class or ID for your Button Menu component */
+
+  
+    .lgc-bg-inverse {
+        background-color: rgb(22 50 92);
+    }
+    
+    
+
+    .onlyonmob{
+        display: inline;
+        margin-left: 29%;
+        
+    }
+    .inputFont{
+        font-size: 15px;
+    }
+    .selected-menu-item {
+        background-color: #0070d2; /* Change the background color for the selected item */
+        color: #ffffff; /* Change the text color for better visibility */
+      }
+}
+div.slds-form-element[data-id="combobox-element"] label.slds-form-element__label {
+    font-size: 20px;
+}
