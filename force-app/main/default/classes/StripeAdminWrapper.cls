@@ -70,5 +70,3 @@ public class StripeAdminWrapper {
         public String type;
     }
 }
-
-

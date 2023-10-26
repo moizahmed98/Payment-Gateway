@@ -7,12 +7,6 @@
                 <identifier>home_heroChart</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>custom_tab_label</componentName>
-                <identifier>logicpayment_custom_tab_label</identifier>
-            </componentInstance>
-        </itemInstances>
         <mode>Replace</mode>
         <name>top</name>
         <type>Region</type>

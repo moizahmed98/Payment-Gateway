@@ -3,12 +3,6 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>custom_tab_label</componentName>
-                <identifier>logicpayment_custom_tab_label</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
                 <componentName>home:heroChart</componentName>
                 <identifier>home_heroChart</identifier>
             </componentInstance>
