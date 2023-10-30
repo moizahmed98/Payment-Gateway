@@ -1,0 +1,12 @@
+{
+    "packageDirectories": [
+      {
+        "path": "force-app",
+        "default": true
+      }
+    ],
+    "name": "PaymentGatewayIntegration2",
+    "namespace": "logicpayment",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "58.0"
+  }

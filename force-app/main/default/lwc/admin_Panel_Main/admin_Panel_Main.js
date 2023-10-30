@@ -209,22 +209,19 @@ callApexMethod() {
 
     console.log('ftn is called');
     
-
+/*
     StripeAdminAuth({  
         stripeMerchantName: this.merchantName,
         stripeSecretApiKey: this.secretKey,
         stripePublishableApiKey: this.publishKey })
     .then(result => {
         // Handle the successful response
-        this.response = JSON.parse(result);
+        this.response = result;
         this.error = null;
-        console.log('RESULT  : '+JSON.parse(JSON.parse(result)));
-        console.log('RESULT 2  : '+JSON.stringify(this.response));
-        console.log('RESULT  3 : '+this.response);
+      
         
 
        
-        //////////////////////**********************************HAndel Return**************************************/////////////////////////////////////////////////////////
         
         if(this.response.settings.dashboard.display_name != null  )
         {
@@ -280,7 +277,7 @@ callApexMethod() {
         this.response = null;
         this.error = error;
     });
-
+*/
     
 
     /*StripeAdminAuth({ 
