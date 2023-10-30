@@ -288,6 +288,8 @@ handleSubmitClick(){
         variant: 'success', // 'success', 'warning', 'error', or 'info'
         mode: 'dismissible' // 'dismissable' or 'pester'
     });
+
+    // Sample Event Toast
     if(this.template.querySelector('.card-cvv').value=='123')
     {
         this.dispatchEvent(toastRequestSentEvent);
