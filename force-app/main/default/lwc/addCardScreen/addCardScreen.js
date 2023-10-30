@@ -1,13 +1,20 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track,wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getGlobalPaymentCardController from '@salesforce/apex/CardRegistrationController.globalPaymentCardAuthentication';
+
+
 export default class AddCardScreen extends LightningElement {
 
 @track outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
+
 @track outputMMYY = 'MM/YY';
 @track outputCVV = 'CVV';
 @track currentStepRequestIndicator="1";
 accountname='George Davis';
 error = false;
+inputCardNumber;
+inputcardExpirationDate;
+inputCVV;
 
 //This function replaces logos with Global Payment logo and changes the text of dropdown button
 replacetoGPSVG() {
@@ -197,7 +204,7 @@ handleKeyPressCExpiry(event) {
 //It validates input in a credit card CVV (Card Verification Value) field. It checks if the pressed key is a number and displays an error message if not, preventing non-numeric input.
 handleKeyPressCCVV(event) {
     const keyPressed = event.key;
-    const cardNumberInput = this.template.querySelector('.card-cvv');
+    const cardNumberInput = this.template.querySelector('.card-cvv').value;
     
     // Check if the pressed key is not a number
     if (isNaN(keyPressed)) {
@@ -216,6 +223,7 @@ handleCardNumberChange(event) {
 
 
     const limitedInput = event.target.value;
+    this.inputCardNumber = event.target.value;
 
     // Format the input as XXXX-XXXX-XXXX-XXXX
     let formattedNumber = '';
@@ -238,6 +246,7 @@ handleCardNumberChange(event) {
 //This function formats the MM/YY input, adds a forward slash at the third position if needed
 handleMMYYChange(event) {
     const limitedInput = event.target.value;
+    this.inputcardExpirationDate = event.target.value;
     const hasSlash = limitedInput.includes('/');
     // Format the input as MM/YY
      let formattedNumber = '';
@@ -268,47 +277,94 @@ handleMMYYChange(event) {
 
 }
 
+//This function sets CVV
+handleCVVChange(event) {
+   
+    let formattedNumber = this.template.querySelector('.card-cvv').value;
+    this.inputCVV = event.target.value;
+    // Check if the input is empty, if yes, set the default placeholder text
+    if (formattedNumber.length === 0) {
+        formattedNumber = 'CVV';
+    }
+
+    // Update the outputCardNumber with the formatted number
+    this.outputCVV = formattedNumber;
+
+}
+
+
+resultdata;
+
 //This function handles card submission, updates the request indicator, and triggers different toast events
 handleSubmitClick(){
-    const toastRequestSentEvent = new ShowToastEvent({
-        title: 'Card Submition Requested',
-        message: 'Card submition request sent!',
-        variant: 'info', // 'success', 'warning', 'error', or 'info'
-        mode: 'dismissible' // 'dismissable' or 'pester'
-    });
-    const toastRequestRecievedErrorEvent = new ShowToastEvent({
-        title: 'No Response',
-        message: 'Response did not recieved!',
-        variant: 'error', // 'success', 'warning', 'error', or 'info'
-        mode: 'dismissible' // 'dismissable' or 'pester'
-    });
-    const toastEvent = new ShowToastEvent({
-        title: 'Card Submitted',
-        message: 'Card submitted succesfully!',
-        variant: 'success', // 'success', 'warning', 'error', or 'info'
-        mode: 'dismissible' // 'dismissable' or 'pester'
-    });
-
-    // Sample Event Toast
-    if(this.template.querySelector('.card-cvv').value=='123')
-    {
-        this.dispatchEvent(toastRequestSentEvent);
+    console.log('-----------------In Submit');
+    console.log('-----------------'+this.inputCardNumber);
+    console.log('-----------------'+this.inputcardExpirationDate);
+    console.log('-----------------'+this.inputCVV);
+   
+    // Call the Apex method when the "Fetch Data" button is clicked
+    getGlobalPaymentCardController({ cardNumber: this.inputCardNumber, cardExpirationDate: this.inputcardExpirationDate, cardCVV:this.inputCVV })
+    .then(result => {
         this.currentStepRequestIndicator="2";
-        console.log(this.template.querySelector('.request-indicator').currentStepRequestIndicator);
-        
+        this.resultdata=result;
+        console.log(result);
+
+        // Handle the returned data
+        console.log(result.id);
+        console.log(result.card);
+        console.log(result.detailed_error_description);
+        //this.name = result.name;
+        //this.age = result.age;
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error fetching data: ', error);
+    });
+    
+
+
+
+    //if(this.resultdata.error_code != 'undefined' && this.resultdata.error_code != undefined && this.resultdata!= null && this.resultdata!= undefined);
+    if(this.resultdata!= null || this.resultdata!= undefined || this.resultdata!= 'undefined')
+    {
+
+
+        this.currentStepRequestIndicator="2";
+        if(this.resultdata.error_code != 'undefined' || this.resultdata.error_code != undefined || this.resultdata.error_code != null)
+        {
+            const cardAddedSuccessfully = new ShowToastEvent({
+                title: 'Card Added Successfully!',
+                message: ('with the number '+this.resultdata.card.masked_number_last4),
+                variant: 'success', // 'success', 'warning', 'error', or 'info'
+                mode: 'dismissible' // 'dismissable' or 'pester'
+            });
+            this.currentStepRequestIndicator="3";
+            this.dispatchEvent(cardAddedSuccessfully);
+        }
+        else
+        {
+            const toastRequestRecievedError = new ShowToastEvent({
+                title: this.resultdata.error_code,
+                message: this.resultdata.detailed_error_description,
+                variant: 'error', // 'success', 'warning', 'error', or 'info'
+                mode: 'dismissible' // 'dismissable' or 'pester'
+            });
+            this.currentStepRequestIndicator="3";
+            this.error = true;  
+            this.dispatchEvent(toastRequestRecievedError);
+        }
+
     }
-    else if (this.template.querySelector('.card-cvv').value=='234'){
-        this.dispatchEvent(toastRequestRecievedErrorEvent);
+    else
+    {
         this.currentStepRequestIndicator="2";
         this.error = true;
-        
     }
-    else {
-        this.dispatchEvent(toastEvent);
-    }
+
+   
     
     
 }
-  
+
 
 }
