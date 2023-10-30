@@ -49,8 +49,8 @@ public class AdminAuthenticationController
     }
 
     //Method to authenticate Stripe Merchant account
-    @AuraEnabled(cacheable=true)
-    public static StripeAdminWrapper StripeAdminAuth(String stripeMerchantName, String stripeSecretApiKey, String stripePublishableApiKey )
+    @AuraEnabled
+    public static string StripeAdminAuth(String stripeMerchantName, String stripeSecretApiKey, String stripePublishableApiKey )
     {
        
             StripeAdminWrapper stripeAPIResponse= AuthenticateStripeAdmin.authenticateStripeAdminAPI(stripeMerchantName, stripeSecretApiKey);
@@ -63,25 +63,22 @@ public class AdminAuthenticationController
 
             if(stripeAPIResponse.error == null  )
             {
-                        system.debug('in first if ');
-                        if(stripeAPIResponse.Settings.dashboard.display_name == stripeMerchantName)
-                        {
-                            system.debug('the  display name is correct and the merchant is authenticated');
-                            // Retrieve the org-level default Custom Setting record for Stripe
-                            logicpayment__Stripe_CustomSetting__c stripeCustomSetting = logicpayment__Stripe_CustomSetting__c.getOrgDefaults();
+                    system.debug('in first if ');
+                    stripeAPIResponse.error.message = null;
+                    if(stripeAPIResponse.Settings.dashboard.display_name == stripeMerchantName)
+                    {
+                        system.debug('the  display name is correct and the merchant is authenticated');
+                        // Retrieve the org-level default Custom Setting record for Stripe
+                        UpdateStripeCustomsetting(stripeMerchantName,stripeSecretApiKey,stripePublishableApiKey);
+                    }
+                    else if(stripeAPIResponse.Settings.dashboard.display_name != stripeMerchantName)
+                    {
+                        system.debug('display name is not correct : '+stripeAPIResponse);
+                        system.debug('display name is  : '+stripeAPIResponse.Settings.dashboard.display_name);
 
-                            // Update the Custom Setting fields with the provided strip information
-                            stripeCustomSetting.logicpayment__Merchant_Name__c = stripeMerchantName;
-                            stripeCustomSetting.logicpayment__API_Secret_Key__c = stripeSecretApiKey;
-                            stripeCustomSetting.logicpayment__API_Publishable_Key__c = stripePublishableApiKey;
-                            system.debug(stripeCustomSetting);
-                            upsert stripeCustomSetting;
-                        }
-                        else if(stripeAPIResponse.Settings.dashboard.display_name != stripeMerchantName)
-                        {
-                            system.debug('display name is not correct : '+stripeAPIResponse);
+                        
 
-                        }
+                    }
                 
             }
             // Handle the case where the authentication with Stripe resulted in an error
@@ -94,7 +91,20 @@ public class AdminAuthenticationController
 
             }
             system.debug('final response that is retuned  : '+stripeAPIResponse);
-            return stripeAPIResponse;
+            string s=stripeAPIResponse.tostring();
+            return s;
 
     }
+
+    public static void UpdateStripeCustomsetting(String stripeMerchantName, String stripeSecretApiKey, String stripePublishableApiKey){
+    logicpayment__Stripe_CustomSetting__c stripeCustomSetting = logicpayment__Stripe_CustomSetting__c.getOrgDefaults();
+
+    // Update the Custom Setting fields with the provided strip information
+    stripeCustomSetting.logicpayment__Merchant_Name__c = stripeMerchantName;
+    stripeCustomSetting.logicpayment__API_Secret_Key__c = stripeSecretApiKey;
+    stripeCustomSetting.logicpayment__API_Publishable_Key__c = stripePublishableApiKey;
+    system.debug('this is the updated setting '+stripeCustomSetting);
+    upsert stripeCustomSetting;
+
+}
 }

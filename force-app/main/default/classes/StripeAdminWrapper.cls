@@ -1,21 +1,30 @@
 public class StripeAdminWrapper {
+    @AuraEnabled
     public String id { get; set; }
+    @AuraEnabled
     public String objectType; // Rename the field
+    @AuraEnabled
     public Map<String, Object> capabilities;
+    @AuraEnabled
     public Boolean charges_enabled;
+    @AuraEnabled
     public String country;
     public String default_currency;
     public Boolean details_submitted;
     public Boolean payouts_enabled;
+    @AuraEnabled
     public Settings settings;
     public String type;
+    @AuraEnabled
     public Error error{ get;  set; }
+    
     
     public class Settings {
         public Map<String, Object> bacs_debit_payments;
         public Branding branding;
         public CardIssuing card_issuing;
         public CardPayments card_payments;
+        @AuraEnabled
         public Dashboard dashboard;
         public Payments payments;
         public Payouts payouts;
@@ -44,7 +53,9 @@ public class StripeAdminWrapper {
         public String statement_descriptor_prefix_kanji;
     }
     
+    
     public class dashboard {
+        @AuraEnabled
         public String display_name { get; set; }
         public String timezone;
     }
@@ -65,8 +76,11 @@ public class StripeAdminWrapper {
         public Integer delay_days;
         public String interval;
     }
+    
     public class Error {
+        @AuraEnabled
         public String message;
+        @AuraEnabled
         public String type;
     }
 }
