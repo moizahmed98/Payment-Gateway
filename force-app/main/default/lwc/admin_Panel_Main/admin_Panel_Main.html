@@ -221,19 +221,20 @@
 
       <div class="inputwidth">
         <br />
-       
+        <template if:true={authNetprevMerchant}>
         <div class="prv_merch_name">
           <p class="inputFont inputwidth">Previous Merchant Name: <lightning-output-field field-name="Name"
               value="Ali Shehroz"></lightning-output-field></p>
 
         </div>
+        </template>
 
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Merchant Name: </label>
           <div class="slds-form-element__control">
-            <input type="text" id="text-input-id-1" class="slds-input inputwidthmcname rcornersmc " />
+            <input type="text" onchange={authNetMerchantName} id="text-input-id-1" class="slds-input inputwidthmcname rcornersmc " />
           </div>
         </div>
         <br />
@@ -241,7 +242,7 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             App Id: </label>
           <div class="slds-form-element__control">
-            <input type="text" id="text-input-id-2" class="slds-input inputwidth rcorners2" />
+            <input type="text" onchange={authNetloginIdinput} id="text-input-id-2" class="slds-input inputwidth rcorners2" />
           </div>
         </div>
         <br />
@@ -249,17 +250,17 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Secret Key: </label>
           <div class="slds-form-element__control">
-            <input type="password" id="text-input-id-3" class="slds-input inputwidth rcorners2" />
+            <input type="password" onchange={authNetTransactionIdinput} id="text-input-id-3" class="slds-input inputwidth rcorners2" />
           </div>
         </div>
       </div>
       <br />
       <br />
-      <button class="custom-button" onclick={handleButtonClick}>Save</button>
+      <button class="custom-button" onclick={AuthNethandleButtonClick}>Save</button>
 
       <br />
       <br />
-      <lightning-progress-indicator class="displaynone" current-step="1" type="base" variant="base">
+      <lightning-progress-indicator class="displaynone" current-step={authNetcurrentstep}  has-error={authNetProgressError} type="base" variant="base">
         <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
         <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
         <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>
@@ -316,7 +317,7 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Merchant Name: </label>
           <div class="slds-form-element__control">
-            <input type="text" id="text-input-id-4" class="slds-input inputwidthmcname rcornersmc " />
+            <input type="text" onchange={secre11tKeyinput} id="text-input-id-4" class="slds-input inputwidthmcname rcornersmc " />
           </div>
         </div>
         <br />
@@ -324,7 +325,7 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             App Id: </label>
           <div class="slds-form-element__control">
-            <input type="text" class="slds-input inputwidth rcorners2" />
+            <input type="text" onchange={secretKe11yinput} class="slds-input inputwidth rcorners2" />
           </div>
         </div>
         <br />
@@ -332,7 +333,7 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Secret Key: </label>
           <div class="slds-form-element__control">
-            <input type="password" class="slds-input inputwidth rcorners2" />
+            <input type="password" onchange={secretKeyinput} class="slds-input inputwidth rcorners2" />
           </div>
         </div>
       </div>
@@ -341,7 +342,7 @@
       <button class="custom-button" onclick={handleButtonClick}>Save</button>
       <br />
       <br />
-      <lightning-progress-indicator class="displaynone" current-step="1" type="base" variant="base">
+      <lightning-progress-indicator class="displaynone" current-step="1" has-error="false" type="base" variant="base">
         <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
         <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
         <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>
@@ -388,7 +389,7 @@
 
       <div class="inputwidth">
         <br />
-        <template if:true={prevMerchant}>
+        <template if:true={stripeprevMerchant}>
         <div class="prv_merch_name">
           <p class="inputFont inputwidth">Previous Merchant Name: <lightning-output-field field-name="Name"
               value="Ali Shehroz"></lightning-output-field></p>
@@ -401,7 +402,7 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Merchant Name: </label>
           <div class="slds-form-element__control">
-            <input type="text" onchange={merchantNameinput} class="slds-input inputwidthmcname rcornersmc " />
+            <input type="text" onchange={stripemerchantNameinput} class="slds-input inputwidthmcname rcornersmc " />
           </div>
         </div>
         <br />
@@ -409,7 +410,7 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Publishable Key: </label>
           <div class="slds-form-element__control">
-            <input type="text" onchange={publishKeyinput} class="slds-input inputwidth rcorners2" />
+            <input type="text" onchange={stripepublishKeyinput} class="slds-input inputwidth rcorners2" />
           </div>
         </div>
         <br />
@@ -417,16 +418,16 @@
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
             Secret Key: </label>
           <div class="slds-form-element__control">
-            <input type="password" onchange={secretKeyinput} class="slds-input inputwidth rcorners2" />
+            <input type="password" onchange={stripesecretKeyinput} class="slds-input inputwidth rcorners2" />
           </div>
         </div>
       </div>
       <br />
       <br />
-      <button class="custom-button" onclick={callApexMethod}>Save</button>
+      <button class="custom-button" onclick={StripehandleButtonClick}>Save</button>
       <br />
       <br />
-      <lightning-progress-indicator class="displaynone" current-step="1" type="base" variant="base">
+      <lightning-progress-indicator class="displaynone" current-step={currentstep}  has-error={stripeProgressError} type="base" variant="base">
         <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
         <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
         <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>

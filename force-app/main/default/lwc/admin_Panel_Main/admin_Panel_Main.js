@@ -1,11 +1,13 @@
 import { LightningElement, track, wire } from 'lwc';
 import StripeAdminAuth from '@salesforce/apex/AdminAuthenticationController.StripeAdminAuth';
+import authorizeNetAdminAuth from '@salesforce/apex/AdminAuthenticationController.authorizeNetAdminAuth';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 
 export default class TabExample extends LightningElement {
     @track selectedMenuItem = null;
-    @track prevMerchant = false;    
+    @track stripeprevMerchant = false;   
+    @track authNetprevMerchant = false;    
     
     handleOnselect(event) {
         var authtabContent = this.template.querySelector('[data-id="authorizeNetContentId"]');
@@ -179,89 +181,74 @@ export default class TabExample extends LightningElement {
         }
         
     }
-//store input value of merchant name
-    @track merchantName;
-    merchantNameinput(event) {
-        console.log('thi is inout :'+event.target.value);
-  this.merchantName = event.target.value;
-  console.log(this.merchantName);
-}
-//store input value of secret key 
-@track secretKey;
-secretKeyinput(event) {
-    console.log('thi is inout :'+event.target.value);
-this.secretKey = event.target.value;
-console.log(this.secretKey);
-}
-//store input value of publishable key
-@track publishKey;
-publishKeyinput(event) {
-    console.log('thi is inout :'+event.target.value);
-this.publishKey = event.target.value;
-console.log(this.publishKey);
-}
-
-@track resultresponse;
-response;
-error;
-callApexMethod() {
+    //store input value of merchant name//////////////////////////////////////////************input fileds of Authnet*******///////////////////////////////////////////////////////////////////////////////////////
    
+    @track authNetemerchantName;
+    authNetMerchantName(event) {
+        console.log('thi is inout :'+event.target.value);
+  this.authNetemerchantName = event.target.value;
+  console.log(this.authNetemerchantName);
+}
+//store input value of login id 
+@track authNetLoginId;
+authNetloginIdinput(event) {
+    console.log('thi is inout :'+event.target.value);
+this.authNetLoginId = event.target.value;
+console.log(this.authNetLoginId);
+}
+//store input value of transaction id
+@track authNetTransactoinId;
+authNetTransactionIdinput(event) {
+    console.log('thi is inout :'+event.target.value);
+this.authNetTransactoinId = event.target.value;
+console.log(this.authNetTransactoinId);
+}
+//store input value of merchant name//////////////////////////////////////////************calling authent merchant authentication function*******///////////////////////////////////////////////////////////////////////////////////////
+@track authNetcurrentstep = "1";
+@track authNetProgressError = false;
 
-    console.log('ftn is called');
-    
-/*
-    StripeAdminAuth({  
-        stripeMerchantName: this.merchantName,
-        stripeSecretApiKey: this.secretKey,
-        stripePublishableApiKey: this.publishKey })
+authNetresponse;
+error;
+AuthNethandleButtonClick() {
+   console.log('ftn is called');
+   authorizeNetAdminAuth({  
+    authorizeNetMerchantName: this.authNetemerchantName,
+    authorizeNetApiLoginId: this.authNetLoginId,
+    authorizeNetTransactionKey: this.authNetTransactoinId })
     .then(result => {
         // Handle the successful response
-        this.response = result;
-        this.error = null;
-      
-        
-
+        console.log('this is the retiurned result 1  :'+JSON.stringify(result));
+        console.log('this is the retiurned result 2 :'+result.messages.resultCode.toLowerCase());
        
-        
-        if(this.response.settings.dashboard.display_name != null  )
+        this.authNetresponse = result;
+        this.error = null;
+        this.authNetProgressError =false;
+        this.authNetcurrentstep = "2";
+ 
+        if(result.messages.resultCode != null && result.messages.resultCode.toLowerCase() == 'ok')
         {
-                        console.log('error is  null  and the display name is '+this.response.settings.dashboard.display_name);
-                        console.log('this is the input merchant name : '+this.merchantName);
+            console.log('in else if ');
+            this.authNetcurrentstep = "3";
+            const evt = new ShowToastEvent({
+                title: 'Success!',
+                message: 'Authentication successful',
+                variant: 'success',
+            });
+            this.dispatchEvent(evt);
 
-                        if(this.response.settings.dashboard.display_name === this.merchantName)
-                        {
-                            console.log('the  display name is correct and the merchant is authenticated');
-                            const evt = new ShowToastEvent({
-                                title: 'Success',
-                                message: 'Authentication successful',
-                                variant: 'success',
-                            });
-                            this.dispatchEvent(evt);
                         
-                        }
-                        else if(this.response.settings.dashboard.display_name != this.merchantName)
-                        {
-                            console.log('display name is not correct : '+this.merchantName);
-                            const evt = new ShowToastEvent({
-                                title: 'Toast Error',
-                                message: 'Merchant Name is Incorrect',
-                                variant: 'error',
-                                mode: 'dismissable'
-                            });
-                            this.dispatchEvent(evt);
-
-                        }
                     
         }
         // Handle the case where the authentication with Stripe resulted in an error
-        else if(this.response.error.message != null   )
+        else if(result.messages.resultCode != null && result.messages.resultCode.toLowerCase() == 'error' )
         {
-            
-            
-            console.log('error message  : '+this.response.error.message);
+            this.authNetcurrentstep = "3";
+            console.log('in else if  : '+result.messages.text);
+            this.authNetcurrentstep = "3";
+            this.authNetProgressError =true;
             const evt = new ShowToastEvent({
-                title: 'Toast Error',
-                message: this.response.error.message,
+                title: 'Error!',
+                message: result.messages.message[0].text,
                 variant: 'error',
                 mode: 'dismissable'
             });
@@ -274,38 +261,122 @@ callApexMethod() {
     })
     .catch(error => {
         // Handle any errors
+        console.log('in cach error ');
+        this.authNetcurrentstep = "2";
+        this.authNetProgressError = true;
         this.response = null;
         this.error = error;
     });
-*/
-    
+  }
 
-    /*StripeAdminAuth({ 
-        stripeMerchantName: this.merchantName,
-        stripeSecretApiKey: this.secretKey,
-        stripePublishableApiKey: this.publishKey
-            })
-                .then(result => {
-                    console.log('this is result'+result);
-                    this.resultresponse = result;
-                    
-                    console.log('this is result stringify :'+ JSON.stringify(this.resultresponse));
-                    if (result === 'Success') {
+//store input value of merchant name//////////////////////////////////////////************input fileds of stripe*******///////////////////////////////////////////////////////////////////////////////////////
+    @track stripemerchantName;
+    stripemerchantNameinput(event) {
+        console.log('thi is inout :'+event.target.value);
+  this.stripemerchantName = event.target.value;
+  console.log(this.stripemerchantName);
+}
+//store input value of secret key 
+@track stripesecretKey;
+stripesecretKeyinput(event) {
+    console.log('thi is inout :'+event.target.value);
+this.stripesecretKey = event.target.value;
+console.log(this.stripesecretKey);
+}
+//store input value of publishable key
+@track stripepublishKey;
+stripepublishKeyinput(event) {
+    console.log('thi is inout :'+event.target.value);
+this.stripepublishKey = event.target.value;
+console.log(this.stripepublishKey);
+}
+////////////////////////////////////////////////////////////////////calling stripe merchant authenticatioin funtion ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@track currentstep = "1";
+@track stripeProgressError = false;
+
+response;
+error;
+StripehandleButtonClick() {
+   console.log('ftn is called'+ this.current_step);
+    StripeAdminAuth({  
+        stripeMerchantName: this.stripemerchantName,
+        stripeSecretApiKey: this.stripesecretKey,
+        stripePublishableApiKey: this.stripepublishKey })
+    .then(result => {
+        // Handle the successful response
+        console.log('this is the retiurned result 1  :'+JSON.stringify(result));
+        console.log('this is the retiurned result 2 :'+result.error);
+        console.log('this is the retiurned result 3 :'+result.settings);
+        this.response = result;
+        this.error = null;
+        this.stripeProgressError =false;
+ 
+        if(result.settings != 'undefined' && result.settings != undefined )
+        {
+                        console.log('error is  null  and the display name is ');
+                        console.log('this is the input merchant name : '+this.merchantName);
+
+                        if(this.response.settings.dashboard.display_name === this.merchantName)
+                        {
+                            this.currentstep = "3";
+                            this.stripeProgressError = false;
+                            console.log('the  display name is correct and the merchant is authenticated');
+                            const evt = new ShowToastEvent({
+                                title: 'Success!',
+                                message: 'Authentication successful',
+                                variant: 'success',
+                            });
+                            this.dispatchEvent(evt);
+                           
                         
-                        // Show a success toast message
-                        const evt = new ShowToastEvent({
-                            title: 'Success',
-                            message: 'Apex method was successful',
-                            variant: 'success',
-                        });
-                        this.dispatchEvent(evt);
-                    } else {
-                        // Handle other cases as needed
-                    }
-                })
-                .catch(error => {
-                    // Handle errors
-                    console.error(error);
-                });*/
+                        }
+                        else if(this.response.settings.dashboard.display_name != this.merchantName)
+                        {   
+                            this.currentstep = "3";
+                            this.stripeProgressError = true;
+                            console.log('display name is not correct : '+this.merchantName);
+                            const evt = new ShowToastEvent({
+                                title: 'Error!',
+                                message: 'Merchant Name is Incorrect',
+                                variant: 'error',
+                                mode: 'dismissable'
+                            });
+                            this.dispatchEvent(evt);
+                          
+
+                        }
+                    
         }
+        // Handle the case where the authentication with Stripe resulted in an error
+        else if(this.response.error !== 'undefined' && this.response.error !== undefined  )
+        {
+            this.currentstep = "2";
+            console.log('error and current step is  : '+this.currentstep);
+            console.log('error message  : '+this.response.error.message);
+            const evt = new ShowToastEvent({
+                title: 'Error!',
+                message: this.response.error.message,
+                variant: 'error',
+                mode: 'dismissable'
+            });
+            this.dispatchEvent(evt);
+            
+            
+
+        }
+        console.log('final response that is retuned  : ');
+       
+    })
+    .catch(error => {
+        // Handle any errors
+        this.currentstep = "2";
+        this.stripeProgressError = true;
+        this.response = null;
+        this.error = error;
+    });
+  }
+//store input value of merchant name//////////////////////////////////////////************stripe merchant authentication funtion end*******///////////////////////////////////////////////////////////////////////////////////////
+  
+  
 }
