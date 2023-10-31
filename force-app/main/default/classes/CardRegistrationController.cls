@@ -37,7 +37,7 @@ public with sharing class CardRegistrationController {
 
     //Method to authenticate Global Payment Card Details
     @AuraEnabled
-    public static GlobalPayGetPaymentIDToCardInfoWrapper globalPaymentCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV )
+    public static GlobalPayGetPaymentIDToCardInfoWrapper globalPaymentCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId )
     {
         try 
         {
@@ -49,7 +49,7 @@ public with sharing class CardRegistrationController {
             // Non Static context for generateGlobalPayGetPaymentID is due to its private variables
             GlobalPayGetPaymentIDToCardInfo globalPayInstance = new GlobalPayGetPaymentIDToCardInfo();
             // Call the generateGlobalPayGetPaymentID method on the instance
-            GlobalPayGetPaymentIDToCardInfoWrapper globalPayAPIResponse = globalPayInstance.generateGlobalPayGetPaymentID(cardNumber, cardExpirationDate, cardCVV);
+            GlobalPayGetPaymentIDToCardInfoWrapper globalPayAPIResponse = globalPayInstance.generateGlobalPayGetPaymentID(cardNumber, cardExpirationDate, cardCVV, accountId);
             if (globalPayAPIResponse.error_code == null) 
                 {
                     System.debug('Response::'+globalPayAPIResponse);

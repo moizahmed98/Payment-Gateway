@@ -20,7 +20,6 @@ export default class AddCardScreen extends LightningElement {
     // Use wire service to get the Account record
     @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id'] })
     account;
-    console.log('Account :: '+ account);
     // this.account.data.fields.Id.value
 
 
@@ -312,7 +311,7 @@ export default class AddCardScreen extends LightningElement {
     //This function handles card submission, updates the request indicator, and triggers different toast events
     handleSubmitClick() {
 
-        
+        console.log('Account Id:', this.account.data.fields.Id.value);
 
 
         this.error = false;
@@ -347,7 +346,7 @@ export default class AddCardScreen extends LightningElement {
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
                 // Call the Apex method when the "Fetch Data" button is clicked
-                getGlobalPaymentCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput })
+                getGlobalPaymentCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId:  this.account.data.fields.Id.value})
                     .then(result => {
                         this.currentStepRequestIndicator = "2";
                         this.resultdata = result;

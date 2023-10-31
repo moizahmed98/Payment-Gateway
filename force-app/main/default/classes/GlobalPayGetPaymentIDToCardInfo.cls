@@ -27,13 +27,13 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
         }
     
         //HTTP Request to generate Payment Id
-        public GlobalPayGetPaymentIDToCardInfoWrapper generateGlobalPayGetPaymentID(String cardNumber, String cardExpirationDate, String cardCVV) 
+        public GlobalPayGetPaymentIDToCardInfoWrapper generateGlobalPayGetPaymentID(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId) 
         {
             GlobalPayGetPaymentIDToCardInfoWrapper response = new GlobalPayGetPaymentIDToCardInfoWrapper();
 
 
             //Get Token
-            GlobalPayAdminWrapper globalPaymentAPIResponse= AuthenticateGlobalPaymentAdmin.authenticateGlobalPaymentAdminAPI(globalPaymentMerchantName, globalPaymentAppId, globalPaymentAppKey );
+            GlobalPayAdminWrapper globalPaymentAPIResponse= AuthenticateGlobalPaymentAdmin.authenticateGlobalPaymentAdminAPI(globalPaymentMerchantName, globalPaymentAppId, globalPaymentAppKey);
             if(globalPaymentAPIResponse.error_code== null)
             {
                 List<String> dateParts = cardExpirationDate.split('/');
@@ -71,7 +71,7 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
                 {
                     System.debug('GlobalPayGetPaymentIDToCardInfo response::'+response);
                     System.debug('Payment Id : '+response.id);
-                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c='0011y00000jitwrAAA',logicpayment__Card__c=response.card.masked_number_last4);
+                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c=accountId,logicpayment__Card__c=response.card.masked_number_last4);
                     insert newPaymentMethod;
                 } 
                 else 
