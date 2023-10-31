@@ -199,10 +199,10 @@ export default class AddCardScreen extends LightningElement {
     }
 
     //It validates input in a credit card CVV (Card Verification Value) field. It checks if the pressed key is a number and displays an error message if not, preventing non-numeric input.
-    handleKeyPressCCVV(event) {
+    handleKeyPressCVV(event) {
         const keyPressed = event.key;
-        const cardNumberInput = this.template.querySelector('.card-cvv').value;
-
+        const cardNumberInput = this.template.querySelector('.card-cvv');
+        
         // Check if the pressed key is not a number
         if (isNaN(keyPressed)) {
             // Show error message
@@ -274,10 +274,10 @@ export default class AddCardScreen extends LightningElement {
     //This function sets CVV
     handleCVVChange(event) {
 
-        let formattedNumber = this.template.querySelector('.card-cvv').value;
+        let formattedNumber = event.target.value;
         // Check if the input is empty, if yes, set the default placeholder text
         if (formattedNumber.length === 0) {
-            formattedNumber = 'CVV';
+            formattedNumber = 'XXX';
         }
 
         // Update the outputCardNumber with the formatted number
