@@ -296,7 +296,7 @@ export default class AddCardScreen extends LightningElement {
         const cardExpiryInput = this.template.querySelector('.expiry-data').value;
 
         //Invalid or incomplete Card Number
-        if (cardNumberInput == '' || cardNumberInput == null || cardNumberInput.length != 16) {
+        if (cardNumberInput == '' || cardNumberInput == null ) {
             const toastRequestRecievedErrorEvent = new ShowToastEvent({
                 title: 'Error!',
                 message: 'Invalid Card Number.',

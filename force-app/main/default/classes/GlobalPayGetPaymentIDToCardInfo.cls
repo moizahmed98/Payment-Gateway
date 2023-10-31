@@ -71,7 +71,7 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
                 {
                     System.debug('GlobalPayGetPaymentIDToCardInfo response::'+response);
                     System.debug('Payment Id : '+response.id);
-                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c='0011y00000jitwrAAA');
+                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c='0011y00000jitwrAAA',logicpayment__Card__c=response.card.masked_number_last4);
                     insert newPaymentMethod;
                 } 
                 else 
