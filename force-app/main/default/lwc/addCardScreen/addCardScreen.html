@@ -195,7 +195,7 @@
                 </div>
                 <div class="card-data">
                     <lightning-input class="input-fields-setter-small expiry-data" type="text" placeholder="MM/YY" onchange={handleMMYYChange} max-length="5" onkeypress={handleKeyPressCExpiry}></lightning-input>
-                    <lightning-input class="input-fields-setter-small card-cvv" type="text" placeholder="CVV" max-length="3" onkeypress={handleKeyPressCVV} onchange={handleCVVChange}></lightning-input>
+                    <lightning-input class="input-fields-setter-small card-cvv" type="text" placeholder="CVV" max-length="3" onkeypress={handleKeyPressCVV} onchange={handleCVVChange} disabled={isInputDisabled}></lightning-input>
                 </div>
                 <!-- Submit Button -->
                 <div class="input-fields-setter submit-setter mobile-submit-setter">
