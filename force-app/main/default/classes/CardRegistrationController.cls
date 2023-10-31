@@ -41,6 +41,9 @@ public with sharing class CardRegistrationController {
     {
         try 
         {
+            system.debug('cardNumber'+cardNumber);
+            system.debug('cardExpirationDate'+cardExpirationDate);
+            system.debug('cardCVV'+cardCVV);
              // Create an instance of GlobalPayGetPaymentIDToCardInfo
              // We are doing this because Non static method cannot be referenced from a static context
             // Non Static context for generateGlobalPayGetPaymentID is due to its private variables

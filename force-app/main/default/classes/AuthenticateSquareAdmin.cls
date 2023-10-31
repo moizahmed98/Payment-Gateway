@@ -20,6 +20,7 @@ public with sharing class AuthenticateSquareAdmin {
         HttpResponse res = http.send(req);
 
 
+
         // Process the JSON response and store it in the SquareAdminWrapper object
         SquareAdminWrapper response = (SquareAdminWrapper) JSON.deserialize(res.getBody(), SquareAdminWrapper.class);
         System.debug('response::' + response);

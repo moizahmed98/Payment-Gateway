@@ -88,7 +88,7 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
                 System.debug('Error Description : '+globalPaymentAPIResponse.detailed_error_description);
             }
             
-            
+            system.debug('Response:' + response);
            
             return response;
         }

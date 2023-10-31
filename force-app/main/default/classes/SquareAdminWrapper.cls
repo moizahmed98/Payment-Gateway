@@ -1,4 +1,8 @@
 public with sharing class SquareAdminWrapper {
+    
+    public List<Merchant> merchant { get; set; }
+    public List<Error> errors { get; set; }
+
     public class Merchant {
         public String id { get; set; }
         public String business_name { get; set; }
@@ -16,6 +20,4 @@ public with sharing class SquareAdminWrapper {
         public String detail { get; set; }
     }
 
-    public List<Merchant> merchant { get; set; }
-    public List<Error> errors { get; set; }
 }

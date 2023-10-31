@@ -69,4 +69,39 @@ public with sharing class AdminAuthenticationController
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    //Method to authenticate Square Merchant account
+    @AuraEnabled
+    public static SquareAdminWrapper squareAdminAuth(String squareMerchantName, String squareApplicationId, String squareAccessToken)
+    {
+        try 
+        {
+            SquareAdminWrapper squareAPIResponse= AuthenticateSquareAdmin.authenticateSquareAdminAPI(squareMerchantName, squareApplicationId, squareAccessToken);
+            System.debug('squareAPIResponse::'+squareAPIResponse);
+            // Check if the authentication with Square was successful (result code is 'Ok')
+            if(squareAPIResponse.errors== null )
+            {
+                // Retrieve the org-level default Custom Setting record for Square
+                logicpayment__Square_CustomSettings__c	 squareCustomSetting = logicpayment__Square_CustomSettings__c.getOrgDefaults();
+
+                // Update the Custom Setting fields with the provided Square information
+                squareCustomSetting.logicpayment__Merchant_Name__c = squareMerchantName;
+                squareCustomSetting.logicpayment__Application_Id__c = squareApplicationId;
+                squareCustomSetting.logicpayment__Access_Token__c = squareAccessToken;
+                upsert squareCustomSetting;
+            }
+            // Handle the case where the authentication with Square resulted in an error
+            else
+            {
+                System.debug('Error : '+squareAPIResponse.errors[0].code);
+                System.debug('Error Description : '+squareAPIResponse.errors[0].detail);
+            }
+            return squareAPIResponse;
+            
+        } 
+        catch (Exception e) 
+        {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
