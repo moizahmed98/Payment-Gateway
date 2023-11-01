@@ -359,7 +359,7 @@ export default class AddCardScreen extends LightningElement {
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
                 // Call the Apex method when the "Fetch Data" button is clicked
-                getGlobalPaymentCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, Type: currentGateway })
+                getGlobalPaymentCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, type: currentGateway })
                     .then(result => {
                         this.currentStepRequestIndicator = "2";
                         this.resultdata = result;
@@ -464,11 +464,9 @@ export default class AddCardScreen extends LightningElement {
                             console.log('Message is :'+this.resultdata);
                             if (this.resultdata.messages.resultCode == 'Ok') {
                                 console.log('Card Added Successfully');
-                                // Get the last 4 digits of the card number
-                                let lastFourDigits = this.cardNumberInput.slice(-4);
-
-                                // Create a masked card number with 'x' characters
-                                let maskedCardNumber = 'xxxxxxxxxxxx' + lastFourDigits;
+                                console.log(cardNumberInput);
+                                const maskedCardNumber = "xxxxxxxxxxxx" + cardNumberInput.toString().slice(-4);
+                                console.log(maskedCardNumber);
                                 const cardAddedSuccessfully = new ShowToastEvent({
                                     title: 'Card Added Successfully!',
                                     message: ('with the number ' + maskedCardNumber),
@@ -489,6 +487,7 @@ export default class AddCardScreen extends LightningElement {
                                         this.outputCVV = 'CVV';
                                     }, 2500);
                                 }, 1200);
+                                console.log('Card AddModule End');
                             }
                             else 
                             {
