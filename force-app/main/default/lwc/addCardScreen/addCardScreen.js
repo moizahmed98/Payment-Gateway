@@ -444,7 +444,7 @@ export default class AddCardScreen extends LightningElement {
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
                 // Call the Apex method when the "Fetch Data" button is clicked
-                getAuthorizeNetCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.data.fields.Id.value, Type: currentGateway })
+                getAuthorizeNetCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, type: currentGateway })
                     .then(result => {
                         this.currentStepRequestIndicator = "2";
                         this.resultdata = result;
@@ -460,7 +460,8 @@ export default class AddCardScreen extends LightningElement {
                             this.dispatchEvent(responseRecievedSuccessfully);
                             this.currentStepRequestIndicator = "2";
 
-
+                            console.log('Response Recieved');
+                            console.log('Message is :'+this.resultdata);
                             if (this.resultdata.messages.resultCode == 'Ok') {
                                 console.log('Card Added Successfully');
                                 // Get the last 4 digits of the card number

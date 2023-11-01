@@ -1,16 +1,17 @@
-public class AuthNetCustomerIDToCardInforWrapper 
+public with sharing class AuthNetCustomerIDToCardInforWrapper 
 {
-        public String customerProfileId;
-        public List<String> customerPaymentProfileIdList;
-        public Messages messages;
+    @AuraEnabled public String customerProfileId;
+    @AuraEnabled public List<String> customerPaymentProfileIdList;
+    @AuraEnabled public Messages messages;
     
-        public class Messages {
-            public String resultCode;
-            public List<Message> message;
+    public class Messages {
+        @AuraEnabled  public String resultCode;
+        @AuraEnabled  public List<Message> message;
         }
     
         public class Message {
-            public String code;
-            public String text;
+            @AuraEnabled public String code;
+            @AuraEnabled public String text;
+
         }
 }

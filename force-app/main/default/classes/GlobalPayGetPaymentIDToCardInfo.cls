@@ -27,7 +27,7 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
         }
     
         //HTTP Request to generate Payment Id
-        public GlobalPayGetPaymentIDToCardInfoWrapper generateGlobalPayGetPaymentID(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId, String Type) 
+        public GlobalPayGetPaymentIDToCardInfoWrapper generateGlobalPayGetPaymentID(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId, String type) 
         {
             GlobalPayGetPaymentIDToCardInfoWrapper response = new GlobalPayGetPaymentIDToCardInfoWrapper();
 
@@ -76,7 +76,7 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
         
                     // Create a masked card number with 'x' characters
                     String maskedCardNumber = 'xxxxxxxxxxxx' + lastFourDigits;
-                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c=accountId,logicpayment__Card__c=maskedCardNumber,logicpayment__Type__c=Type);
+                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c=accountId,logicpayment__Card__c=maskedCardNumber,logicpayment__Type__c=type);
                     insert newPaymentMethod;
                 } 
                 else 
