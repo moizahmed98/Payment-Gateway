@@ -27,8 +27,9 @@ public class AuthNetGetCustomerIDToCardInfo
     }
 
     //HTTP Request to generate Customer Id
-    public AuthNetCustomerIDToCardInforWrapper generateAuthNetCustomerId(String cardNumber, String cardExpirationDate, String cardCVV) 
+    public AuthNetCustomerIDToCardInforWrapper generateAuthNetCustomerId(String cardNumber, String cardExpirationDate, String cardCVV,Id accountId, String type) 
     {
+        system.debug('In Main Ok');
         String endpointUrl = 'https://apitest.authorize.net/xml/v1/request.api'; 
 
         // Construct the request body as a string
@@ -76,6 +77,26 @@ public class AuthNetGetCustomerIDToCardInfo
             }
             AuthNetCustomerIDToCardInforWrapper response = (AuthNetCustomerIDToCardInforWrapper)JSON.deserialize(responseBody, AuthNetCustomerIDToCardInforWrapper.class);
             System.debug('AuthNetGetCustomerIDToCardInfo response::'+response);
+            if(response.Messages.resultCode != null && response.Messages.resultCode.toLowerCase() == 'ok')
+            {
+                // Get the last 4 digits of the card number
+            String lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
+            system.debug(response);
+            // Create a masked card number with 'x' characters
+            String maskedCardNumber = 'xxxxxxxxxxxx' + lastFourDigits;
+            logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Customer_Payment_Id__c=response.customerProfileId,logicpayment__Payment_Id__c=response.customerPaymentProfileIdList[0],logicpayment__Account__c=accountId,logicpayment__Card__c=maskedCardNumber,logicpayment__Type__c=Type);
+            system.debug(newPaymentMethod);
+            insert newPaymentMethod;
+            }
+            // Handle the case where the authentication with Authorize.Net resulted in an error
+            else if(response.Messages.resultCode != null && response.Messages.resultCode.toLowerCase() == 'error')
+            {
+                System.debug('Error::'+response.Messages.message[0].text);
+            }
+
+
+
+            
             return response;
         } 
         else 

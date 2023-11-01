@@ -2,17 +2,18 @@ public with sharing class CardRegistrationController {
 
     //Method to authenticate Authorize.net Card Details
     @AuraEnabled
-    public static void authorizeNetCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV )
+    public static void authorizeNetCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV , Id accountId, String type )
     {
         try 
         {
+            system.debug('In system debug Ok');
             // Create an instance of AuthNetGetCustomerIDToCardInfo
             // We are doing this because Non static method cannot be referenced from a static context
             // Non Static context for generateAuthNetCustomerId is due to its private variables
             AuthNetGetCustomerIDToCardInfo authNetInstance = new AuthNetGetCustomerIDToCardInfo();
 
             // Call the generateAuthNetCustomerId method on the instance
-            AuthNetCustomerIDToCardInforWrapper authNetAPIResponse = authNetInstance.generateAuthNetCustomerId(cardNumber, cardExpirationDate, cardCVV);
+            AuthNetCustomerIDToCardInforWrapper authNetAPIResponse = authNetInstance.generateAuthNetCustomerId(cardNumber, cardExpirationDate, cardCVV, accountId, type);
             if(authNetAPIResponse.Messages.resultCode != null && authNetAPIResponse.Messages.resultCode.toLowerCase() == 'ok')
             {
                 System.debug('New Customer Profile Id::'+authNetAPIResponse.customerProfileId);
@@ -37,7 +38,7 @@ public with sharing class CardRegistrationController {
 
     //Method to authenticate Global Payment Card Details
     @AuraEnabled
-    public static GlobalPayGetPaymentIDToCardInfoWrapper globalPaymentCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId )
+    public static GlobalPayGetPaymentIDToCardInfoWrapper globalPaymentCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId, String Type )
     {
         try 
         {
@@ -49,7 +50,7 @@ public with sharing class CardRegistrationController {
             // Non Static context for generateGlobalPayGetPaymentID is due to its private variables
             GlobalPayGetPaymentIDToCardInfo globalPayInstance = new GlobalPayGetPaymentIDToCardInfo();
             // Call the generateGlobalPayGetPaymentID method on the instance
-            GlobalPayGetPaymentIDToCardInfoWrapper globalPayAPIResponse = globalPayInstance.generateGlobalPayGetPaymentID(cardNumber, cardExpirationDate, cardCVV, accountId);
+            GlobalPayGetPaymentIDToCardInfoWrapper globalPayAPIResponse = globalPayInstance.generateGlobalPayGetPaymentID(cardNumber, cardExpirationDate, cardCVV, accountId, Type);
             if (globalPayAPIResponse.error_code == null) 
                 {
                     System.debug('Response::'+globalPayAPIResponse);
