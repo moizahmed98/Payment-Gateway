@@ -78,7 +78,7 @@ public with sharing class CardRegistrationController {
 
     //Method to authenticate Stripe Card Details
     @AuraEnabled
-    public static void stripeCardAuthentication(String cardNumber, Integer expMonth, Integer expYear, String cvc)
+    public static StripeGetCustomerIDWrapper stripeCardAuthentication(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId, String type)
     {
         try 
         {
@@ -88,10 +88,17 @@ public with sharing class CardRegistrationController {
             StripeGetTokenID stripeInstance = new StripeGetTokenID();
 
             // Call the generateAuthNetCustomerId method on the instance
-            StripeGetCustomerIDWrapper stripeResponse = stripeInstance.createStripeToken(cardNumber, expMonth, expYear, cvc);
+            StripeGetCustomerIDWrapper stripeResponse = stripeInstance.createStripeToken(cardNumber, cardExpirationDate, cardCVV, accountId, type);
             if(stripeResponse.error == null)
             {
                 System.debug('New Customer Profile Id::'+stripeResponse.id);
+                // Get the last 4 digits of the card number
+            String lastFourDigits = cardNumber.substring(cardNumber.length() - 4);
+        
+            // Create a masked card number with 'x' characters
+            String maskedCardNumber = 'xxxxxxxxxxxx' + lastFourDigits;
+            logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Customer_Payment_Id__c=stripeResponse.id,logicpayment__Account__c=accountId,logicpayment__Card__c=maskedCardNumber,logicpayment__Type__c=type);
+            insert newPaymentMethod;
                
             }
             // Handle the case where the authentication with Authorize.Net resulted in an error
@@ -99,6 +106,7 @@ public with sharing class CardRegistrationController {
                 {
                     System.debug('Error::'+stripeResponse.error.message);
                 }
+                return stripeResponse;
         } 
         catch (Exception e) 
         {

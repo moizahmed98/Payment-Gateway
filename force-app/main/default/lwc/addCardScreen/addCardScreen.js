@@ -3,6 +3,7 @@ import { getRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGlobalPaymentCardController from '@salesforce/apex/CardRegistrationController.globalPaymentCardAuthentication';
 import getAuthorizeNetCardController from '@salesforce/apex/CardRegistrationController.authorizeNetCardAuthentication';
+import getStripeCardController from '@salesforce/apex/CardRegistrationController.stripeCardAuthentication';
 
 
 export default class AddCardScreen extends LightningElement {
@@ -378,9 +379,12 @@ export default class AddCardScreen extends LightningElement {
 
                             if (this.resultdata.error_code == 'undefined' || this.resultdata.error_code == undefined || this.resultdata.error_code == null) {
                                 console.log('Card Added Successfully');
+                                console.log(cardNumberInput);
+                                const maskedCardNumber = "xxxxxxxxxxxx" + cardNumberInput.toString().slice(-4);
+                                console.log(maskedCardNumber);
                                 const cardAddedSuccessfully = new ShowToastEvent({
                                     title: 'Card Added Successfully!',
-                                    message: ('with the number ' + this.resultdata.card.masked_number_last4),
+                                    message: ('with the number ' + maskedCardNumber),
                                     variant: 'success', // 'success', 'warning', 'error', or 'info'
                                     mode: 'dismissible' // 'dismissable' or 'pester'
                                 });
@@ -517,6 +521,95 @@ export default class AddCardScreen extends LightningElement {
                         const toastRequestRecievedError = new ShowToastEvent({
                             title: 'Error code: ' + error.status,
                             message: error.body.message,
+                            variant: 'error', // 'success', 'warning', 'error', or 'info'
+                            mode: 'dismissible' // 'dismissable' or 'pester'
+                        });
+                        this.currentStepRequestIndicator = "2";
+                        this.error = true;
+                        this.dispatchEvent(toastRequestRecievedError);
+                        console.error('Error fetching data: ', error);
+                    });
+            }
+            else if (currentGateway == 'Stripe') {
+                console.log('In'+currentGateway);
+                console.log(cardNumberInput);
+                console.log(cardExpiryInput);
+                console.log(cardCVVInput);
+                // Call the Apex method when the "Fetch Data" button is clicked
+                getStripeCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, type: currentGateway })
+                    .then(result => {
+                        this.currentStepRequestIndicator = "2";
+                        this.resultdata = result;
+                        console.log(result);
+                        if (this.resultdata != null || this.resultdata != undefined || this.resultdata != 'undefined' ) {
+                            console.log('Response Recieved');
+                            const responseRecievedSuccessfully = new ShowToastEvent({
+                                title: 'Response Recieved Successfully!',
+                                message: ('The response has been received.'),
+                                variant: 'info', // 'success', 'warning', 'error', or 'info'
+                                mode: 'dismissible' // 'dismissable' or 'pester'
+                            });
+                            this.dispatchEvent(responseRecievedSuccessfully);
+                            this.currentStepRequestIndicator = "2";
+
+                            console.log('Response Recieved');
+                            console.log('Message is :'+this.resultdata);
+                            if (this.resultdata.error == null) {
+                                console.log('Card Added Successfully');
+                                console.log(cardNumberInput);
+                                const maskedCardNumber = "xxxxxxxxxxxx" + cardNumberInput.toString().slice(-4);
+                                console.log(maskedCardNumber);
+                                const cardAddedSuccessfully = new ShowToastEvent({
+                                    title: 'Card Added Successfully!',
+                                    message: ('with the number ' + maskedCardNumber),
+                                    variant: 'success', // 'success', 'warning', 'error', or 'info'
+                                    mode: 'dismissible' // 'dismissable' or 'pester'
+                                });
+                                setTimeout(() => {
+                                    this.currentStepRequestIndicator = "3";
+                                    this.error = false;
+                                    this.dispatchEvent(cardAddedSuccessfully);
+                                    setTimeout(() => {
+                                        this.currentStepRequestIndicator = "1";
+                                        this.template.querySelector('.card-number-input').value = '';
+                                        this.template.querySelector('.card-cvv').value = '';
+                                        this.template.querySelector('.expiry-data').value = '';
+                                        this.outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
+                                        this.outputMMYY = 'MM/YY';
+                                        this.outputCVV = 'CVV';
+                                    }, 2500);
+                                }, 1200);
+                                console.log('Card AddModule End');
+                            }
+                            else 
+                            {
+                                
+                                console.log('Error Recieved');
+                                const toastRequestRecievedError = new ShowToastEvent({
+                                    title: this.resultdata.error.code,
+                                    message: this.resultdata.error.message,
+                                    variant: 'error', // 'success', 'warning', 'error', or 'info'
+                                    mode: 'dismissible' // 'dismissable' or 'pester'
+                                });
+                                setTimeout(() => {
+                                    this.currentStepRequestIndicator = "3";
+                                    this.error = true;
+                                    this.dispatchEvent(toastRequestRecievedError);
+                                }, 1200);
+                            }
+
+                        }
+                        else {
+                            this.currentStepRequestIndicator = "2";
+                            this.error = true;
+                        }
+
+                    })
+                    .catch(error => {
+                        // Handle errors
+                        const toastRequestRecievedError = new ShowToastEvent({
+                            title: 'Error code: ' + error.code,
+                            message: error.message,
                             variant: 'error', // 'success', 'warning', 'error', or 'info'
                             mode: 'dismissible' // 'dismissable' or 'pester'
                         });
