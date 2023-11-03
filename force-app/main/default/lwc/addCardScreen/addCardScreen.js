@@ -4,9 +4,40 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getGlobalPaymentCardController from '@salesforce/apex/CardRegistrationController.globalPaymentCardAuthentication';
 import getAuthorizeNetCardController from '@salesforce/apex/CardRegistrationController.authorizeNetCardAuthentication';
 import getStripeCardController from '@salesforce/apex/CardRegistrationController.stripeCardAuthentication';
+import getCustomSettingDataChecker from '@salesforce/apex/CustomSettingController.getCustomSettingDataChecker';
+
+
 
 
 export default class AddCardScreen extends LightningElement {
+
+    @track customSettingNames = [];
+
+    connectedCallback() {
+        this.loadCustomSettingData();
+    }
+
+    loadCustomSettingData() {
+        getCustomSettingDataChecker()
+            .then(result => {
+                this.customSettingNames = result;
+                this.filterLiElements();
+            })
+            .catch(error => {
+                console.error('Error retrieving custom setting data', error);
+            });
+    }
+
+    filterLiElements() {
+        const liElements = this.template.querySelectorAll('.slds-box_xx-small');
+        
+        liElements.forEach(liElement => {
+            const liText = liElement.innerText.trim();
+            const shouldDisplay = this.customSettingNames.includes(liText);
+            liElement.style.display = shouldDisplay ? 'block' : 'none';
+        });
+    }
+
 
     @track outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
     @api recordId;
@@ -18,7 +49,7 @@ export default class AddCardScreen extends LightningElement {
     
     error = false;
     account;
-
+    
     // Use wire service to get the Account record
     @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id', 'Account.Name'] })
     wiredAccount({ error, data }) {
@@ -29,6 +60,7 @@ export default class AddCardScreen extends LightningElement {
             console.log('Account Name:', this.account.fields.Name.value);
             this.accountName = this.account.fields.Name.value;
             
+
 
         } else if (error) {
             console.error('Error loading account data', error);
