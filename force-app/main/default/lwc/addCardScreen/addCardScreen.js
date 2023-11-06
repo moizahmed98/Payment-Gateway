@@ -10,13 +10,12 @@ import getCustomSettingDataChecker from '@salesforce/apex/CustomSettingControlle
 
 
 export default class AddCardScreen extends LightningElement {
-/*
+
+
     @track customSettingNames = [];
 
     connectedCallback() {
         this.loadCustomSettingData();
-
-
     }
 
     loadCustomSettingData() {
@@ -31,47 +30,39 @@ export default class AddCardScreen extends LightningElement {
     }
 
     filterLiElements() {
-        const liElements = this.template.querySelectorAll('.slds-box_xx-small');
-        //console.log('-----------'+liElements[0]).textContent.trim();
+        const liElements = this.template.querySelectorAll('.li-elements');
+        console.log('this.customSettingNames' + this.customSettingNames);
         liElements.forEach(liElement => {
             const liText = liElement.innerText.trim();
+            console.log('liText' + liText);
             const shouldDisplay = this.customSettingNames.includes(liText);
+            console.log('shouldDisplay' + shouldDisplay);
             liElement.style.display = shouldDisplay ? 'block' : 'none';
-           
-   
+            console.log('liElement.style.display' + liElement.style.display);
+
+            const visibleLiElements = this.template.querySelectorAll('.slds-box_xx-small li[style*="display: block"]');
+            let firstLiValue = null;
+
+            if (visibleLiElements.length > 0) {
+                const firstLi = visibleLiElements[0];
+                firstLiValue = firstLi.textContent.trim();
+                console.log('firstLiValue'+firstLiValue);
+                if (firstLiValue === 'Authorize.net') {
+                    this.replacetoAuthSVG();
+                }
+                else if(firstLiValue === 'Global Payments') {
+                    this.replacetoGPSVG();
+                }
+                else if(firstLiValue === 'Stripe') {
+                    this.replacetoStripeSVG();
+                }
+            }
+
+
+
+
         });
     }
-
-    */
-@track customSettingNames = [];
-
-connectedCallback() {
-    this.loadCustomSettingData();
-}
-
-loadCustomSettingData() {
-    getCustomSettingDataChecker()
-        .then(result => {
-            this.customSettingNames = result;
-            this.filterLiElements();
-        })
-        .catch(error => {
-            console.error('Error retrieving custom setting data', error);
-        });
-}
-
-filterLiElements() {
-    const liElements = this.template.querySelectorAll('.li-elements');
-    console.log('this.customSettingNames'+this.customSettingNames);
-    liElements.forEach(liElement => {
-        const liText = liElement.innerText.trim();
-        console.log('liText'+liText);
-        const shouldDisplay = this.customSettingNames.includes(liText);
-        console.log('shouldDisplay'+shouldDisplay);
-        liElement.style.display = shouldDisplay ? 'block' : 'none';
-        console.log('liElement.style.display'+liElement.style.display);
-    });
-}
 
     @track outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
     @api recordId;
@@ -80,10 +71,10 @@ filterLiElements() {
     @track outputCVV = 'CVV';
     @track currentStepRequestIndicator = "1";
     @track accountName;
-    
+
     error = false;
     account;
-    
+
     // Use wire service to get the Account record
     @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id', 'Account.Name'] })
     wiredAccount({ error, data }) {
@@ -93,14 +84,14 @@ filterLiElements() {
             console.log('Account Id:', this.account.fields.Id.value);
             console.log('Account Name:', this.account.fields.Name.value);
             this.accountName = this.account.fields.Name.value;
-            
+
 
 
         } else if (error) {
             console.error('Error loading account data', error);
         }
     }
-    
+
 
 
     //This function replaces logos with Global Payment logo and changes the text of dropdown button
@@ -390,8 +381,8 @@ filterLiElements() {
     //This function handles card submission, updates the request indicator, and triggers different toast events
     handleSubmitClick() {
         const currentGateway = this.template.querySelector('.dropdown-button-text').innerHTML;
-        console.log('In Submit CLick'+currentGateway);
-        this.resultdata='';
+        console.log('In Submit CLick' + currentGateway);
+        this.resultdata = '';
 
         this.error = false;
         const cardNumberInput = this.template.querySelector('.card-number-input').value;
@@ -419,9 +410,9 @@ filterLiElements() {
         }
         //Input card details are complete
         else {
-            
+
             if (currentGateway == 'Global Payments') {
-                console.log('In'+currentGateway);
+                console.log('In' + currentGateway);
                 console.log(cardNumberInput);
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
@@ -509,7 +500,7 @@ filterLiElements() {
                     });
             }
             else if (currentGateway == 'Authorize.Net') {
-                console.log('In'+currentGateway);
+                console.log('In' + currentGateway);
                 console.log(cardNumberInput);
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
@@ -519,7 +510,7 @@ filterLiElements() {
                         this.currentStepRequestIndicator = "2";
                         this.resultdata = result;
                         console.log(result);
-                        if (this.resultdata != null || this.resultdata != undefined || this.resultdata != 'undefined' || this.resultdata.Messages.resultCode.toLowerCase() == 'ok' ) {
+                        if (this.resultdata != null || this.resultdata != undefined || this.resultdata != 'undefined' || this.resultdata.Messages.resultCode.toLowerCase() == 'ok') {
                             console.log('Response Recieved');
                             const responseRecievedSuccessfully = new ShowToastEvent({
                                 title: 'Response Recieved Successfully!',
@@ -531,7 +522,7 @@ filterLiElements() {
                             this.currentStepRequestIndicator = "2";
 
                             console.log('Response Recieved');
-                            console.log('Message is :'+this.resultdata);
+                            console.log('Message is :' + this.resultdata);
                             if (this.resultdata.messages.resultCode == 'Ok') {
                                 console.log('Card Added Successfully');
                                 console.log(cardNumberInput);
@@ -559,8 +550,7 @@ filterLiElements() {
                                 }, 1200);
                                 console.log('Card AddModule End');
                             }
-                            else 
-                            {
+                            else {
                                 console.log('Error Recieved');
                                 const toastRequestRecievedError = new ShowToastEvent({
                                     title: this.resultdata.messages.message[0].code,
@@ -597,7 +587,7 @@ filterLiElements() {
                     });
             }
             else if (currentGateway == 'Stripe') {
-                console.log('In'+currentGateway);
+                console.log('In' + currentGateway);
                 console.log(cardNumberInput);
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
@@ -607,7 +597,7 @@ filterLiElements() {
                         this.currentStepRequestIndicator = "2";
                         this.resultdata = result;
                         console.log(result);
-                        if (this.resultdata != null || this.resultdata != undefined || this.resultdata != 'undefined' ) {
+                        if (this.resultdata != null || this.resultdata != undefined || this.resultdata != 'undefined') {
                             console.log('Response Recieved');
                             const responseRecievedSuccessfully = new ShowToastEvent({
                                 title: 'Response Recieved Successfully!',
@@ -619,7 +609,7 @@ filterLiElements() {
                             this.currentStepRequestIndicator = "2";
 
                             console.log('Response Recieved');
-                            console.log('Message is :'+this.resultdata);
+                            console.log('Message is :' + this.resultdata);
                             if (this.resultdata.error == null) {
                                 console.log('Card Added Successfully');
                                 console.log(cardNumberInput);
@@ -647,9 +637,8 @@ filterLiElements() {
                                 }, 1200);
                                 console.log('Card AddModule End');
                             }
-                            else 
-                            {
-                                
+                            else {
+
                                 console.log('Error Recieved');
                                 const toastRequestRecievedError = new ShowToastEvent({
                                     title: this.resultdata.error.code,
