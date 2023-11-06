@@ -10,11 +10,13 @@ import getCustomSettingDataChecker from '@salesforce/apex/CustomSettingControlle
 
 
 export default class AddCardScreen extends LightningElement {
-
+/*
     @track customSettingNames = [];
 
     connectedCallback() {
         this.loadCustomSettingData();
+
+
     }
 
     loadCustomSettingData() {
@@ -30,14 +32,46 @@ export default class AddCardScreen extends LightningElement {
 
     filterLiElements() {
         const liElements = this.template.querySelectorAll('.slds-box_xx-small');
-        
+        //console.log('-----------'+liElements[0]).textContent.trim();
         liElements.forEach(liElement => {
             const liText = liElement.innerText.trim();
             const shouldDisplay = this.customSettingNames.includes(liText);
             liElement.style.display = shouldDisplay ? 'block' : 'none';
+           
+   
         });
     }
 
+    */
+@track customSettingNames = [];
+
+connectedCallback() {
+    this.loadCustomSettingData();
+}
+
+loadCustomSettingData() {
+    getCustomSettingDataChecker()
+        .then(result => {
+            this.customSettingNames = result;
+            this.filterLiElements();
+        })
+        .catch(error => {
+            console.error('Error retrieving custom setting data', error);
+        });
+}
+
+filterLiElements() {
+    const liElements = this.template.querySelectorAll('.li-elements');
+    console.log('this.customSettingNames'+this.customSettingNames);
+    liElements.forEach(liElement => {
+        const liText = liElement.innerText.trim();
+        console.log('liText'+liText);
+        const shouldDisplay = this.customSettingNames.includes(liText);
+        console.log('shouldDisplay'+shouldDisplay);
+        liElement.style.display = shouldDisplay ? 'block' : 'none';
+        console.log('liElement.style.display'+liElement.style.display);
+    });
+}
 
     @track outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
     @api recordId;
