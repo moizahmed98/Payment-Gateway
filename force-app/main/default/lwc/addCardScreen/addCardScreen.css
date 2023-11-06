@@ -8,6 +8,7 @@
     
     
 }
+
 .li-elements
 {
     display:none;
@@ -23,7 +24,7 @@
     height: 8%;
 }
 .slds-custom-button{
-    width: 95%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
 }
@@ -138,7 +139,7 @@ height: 70%;
 .step-descriptions{
     display: flex;
     justify-content: space-between;
-    width: 75%;
+    width: 72%;
     margin: 0 auto;
 }
 .dropdown-element-width-setter
@@ -148,7 +149,7 @@ height: 70%;
 .dropdown-menu
 {
     display: flex;
-    width: 50%;
+    width: 45%;
     justify-content: center;
     align-items: center;
     

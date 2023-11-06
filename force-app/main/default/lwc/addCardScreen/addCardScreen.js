@@ -8,15 +8,33 @@ import getCustomSettingDataChecker from '@salesforce/apex/CustomSettingControlle
 
 
 
-
 export default class AddCardScreen extends LightningElement {
-
 
     @track customSettingNames = [];
 
     connectedCallback() {
         this.loadCustomSettingData();
+       
+        
     }
+
+    renderedCallback() {
+        this.template.addEventListener('click', (event) => {
+            const targetClassList = event.target.classList;
+            console.log('Selected Class:'+ targetClassList.toString());
+            const hasSpecificClass = targetClassList.toString().indexOf('slds-is-open') !== -1;
+            
+            console.log('--------'+hasSpecificClass);
+            if(!(targetClassList.toString().indexOf('slds-is-open') !== -1 || targetClassList.toString().indexOf('dropdown-button-text') !== -1))
+            {
+                console.log(this.template.querySelector('.slds-is-open'));
+                this.template.querySelector('.slds-is-open').classList.remove("slds-is-open");;
+            }
+
+        });
+
+    }
+
 
     loadCustomSettingData() {
         getCustomSettingDataChecker()
@@ -31,19 +49,16 @@ export default class AddCardScreen extends LightningElement {
 
     filterLiElements() {
         const liElements = this.template.querySelectorAll('.li-elements');
-        console.log('this.customSettingNames' + this.customSettingNames);
         liElements.forEach(liElement => {
             const liText = liElement.innerText.trim();
-            console.log('liText' + liText);
             const shouldDisplay = this.customSettingNames.includes(liText);
-            console.log('shouldDisplay' + shouldDisplay);
             liElement.style.display = shouldDisplay ? 'block' : 'none';
-            console.log('liElement.style.display' + liElement.style.display);
 
             const visibleLiElements = this.template.querySelectorAll('.slds-box_xx-small li[style*="display: block"]');
             let firstLiValue = null;
 
-            if (visibleLiElements.length > 0) {
+            if (visibleLiElements.length > 0) 
+            {
                 const firstLi = visibleLiElements[0];
                 firstLiValue = firstLi.textContent.trim();
                 console.log('firstLiValue'+firstLiValue);
@@ -56,11 +71,13 @@ export default class AddCardScreen extends LightningElement {
                 else if(firstLiValue === 'Stripe') {
                     this.replacetoStripeSVG();
                 }
+                console.log(this.customSettingNames);
             }
-
-
-
-
+            if(this.customSettingNames.length ==0){
+                console.log('Nothing in List');
+                const updateMain = this.template.querySelector('.main');
+                updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;">   <div><span style="font-size: x-large;">To proceed with adding a new card, please <span style="font-weight: 600;">add at least one merchant</span> first.</span></div> <span>Thank you for your understanding and cooperation!</span> </div>      ';
+            }
         });
     }
 
@@ -92,6 +109,7 @@ export default class AddCardScreen extends LightningElement {
         }
     }
 
+   
 
 
     //This function replaces logos with Global Payment logo and changes the text of dropdown button
