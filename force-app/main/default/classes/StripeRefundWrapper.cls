@@ -13,14 +13,21 @@ public with sharing class StripeRefundWrapper {
     public String source_transfer_reversal;
     public String status;
     public String transfer_reversal;
+    @AuraEnabled
     public ErrorDetails error { get;  set; }
 
     public class ErrorDetails {
+        @AuraEnabled
         public String code { get;  set; }
+        @AuraEnabled
         public String doc_url { get;  set; }
+        @AuraEnabled
         public String message { get;  set; }
+        @AuraEnabled
         public String param { get;  set; }
+        @AuraEnabled
         public String request_log_url { get;  set; }
+        @AuraEnabled
         public String type { get;  set; }
     }
 }

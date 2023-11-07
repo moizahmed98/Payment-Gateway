@@ -39,7 +39,7 @@
 .logo-container {
     display: flex; /* Use flexbox to arrange children horizontally */
      /* Vertically center the children */
-    height: 10vh;}
+    height: 2vh;}
 .parent{
     display: flex;
     align-items: center;
@@ -198,7 +198,7 @@ div.slds-form-element[data-id="combobox-element"] label.slds-form-element__label
     border: 1px rgb(116, 116, 116);
     border-style: solid;
     border-radius: 7px;
-    font-size: 1.5em;
+    font-size: 20px;
     padding: 2px 9px 2px 2px;
 }
 .currencyinput input {

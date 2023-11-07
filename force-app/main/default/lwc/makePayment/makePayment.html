@@ -23,17 +23,17 @@
           <div class="centered-container">
             <p class="centered-text">Are you sure you want to </p>
             <template if:true={showSend}>
-              <p class="centered-text " style="font-weight: 900; margin-left: 1%;">send $250</p>
+              <p class="centered-text " style="font-weight: 900; margin-left: 1%;">send ${amount}</p>
             </template>
             <template if:true={showRefund}>
-              <p class="centered-text " style="font-weight: 900; margin-left: 1%;">refund $250</p>
+              <p class="centered-text " style="font-weight: 900; margin-left: 1%;">refund ${amount}</p>
             </template>
 
           </div>
           <div class="center-buttons">
-            <lightning-button label="No" title="Non-primary action" onclick={handleClick}
+            <lightning-button label="No" title="Non-primary action" onclick={hideModalBox}
               class="rounded-button"></lightning-button>
-            <lightning-button variant="brand" label="Yes" title="Primary action" onclick={handleClick}
+            <lightning-button variant="brand" label="Yes" title="Primary action" onclick={handleClickYes}
               class="rounded-button"></lightning-button>
           </div>
         </div>
@@ -43,7 +43,7 @@
 
       </div>
     </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
+   
   </template>
   <!--mainmontainer start --> 
 
@@ -67,8 +67,8 @@
         <div class="box box2">
             <div>
               <p class="slectcardFont"> Select card:</p>
-              <lightning-combobox name="cardSelection" value={selectedCard} options={cardOptions}
-                onchange={handleCardChange} data-id="combobox-element" class="labelMargin"></lightning-combobox>
+              <lightning-combobox name="cardSelection" value={selectedCreditCardId} options={creditCardOptions}
+                onchange={handleCreditCardChange} data-id="combobox-element" class="labelMargin"></lightning-combobox>
            </div>
                 <br />
                 <br />
@@ -76,13 +76,13 @@
               <div class="left-div">
                 <!-- Content for the left div goes here -->
                 <p class="amount"> Payment Type: </p>
-                <lightning-radio-group name="radioGroup" options={options} value={value} onchange={handleButtonClick}
+                <lightning-radio-group name="radioGroup"  options={options} value={value} onchange={handleButtonClick}
                   type="button"></lightning-radio-group>
               </div>
               <div class="right-div">
                 <!-- Content for the right div goes here -->
                 <p class="amount"> Amount:</p>
-                <span class="currencyinput">$<input oninput={handleInputChange} type="text"
+                <span class="currencyinput">$<input oninput={handleInputChange} required value={amount} onchange={handleInputAmount} type="text"
                     style="width: 35%;  outline: none;" name="currency"></span>
               </div>
             </div>
@@ -233,14 +233,14 @@
               </div>
             </template>
             <div class="paynow_button">
-              <lightning-button variant="brand" label="Pay Now" title="Primary action" onclick={showModalBox}
+              <lightning-button variant="brand" label="Pay Now" disabled={paynowdisabled} title="Primary action" onclick={showModalBox}
                 class="slds-m-right_x-small "></lightning-button>
             </div>
           </div>
         
       
       <!-- progress bar -->
-      <div class="box box3"><lightning-progress-indicator class="displaynone" current-step="1" type="base"
+      <div class="box box3"><lightning-progress-indicator class="displaynone" current-step={currentstep}  has-error={ProgressError} type="base"
           variant="base">
           <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
           <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>

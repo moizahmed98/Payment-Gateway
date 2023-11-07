@@ -7,6 +7,7 @@ public with sharing class GlobalPayAdminWrapper {
         public String time_created { get; set; }
         public Integer seconds_to_expire { get; set; }
         public String email { get; set; }
+        @AuraEnabled
         public String error_code { get; set; }
         public String detailed_error_code { get; set; }
         public String detailed_error_description { get; set; }

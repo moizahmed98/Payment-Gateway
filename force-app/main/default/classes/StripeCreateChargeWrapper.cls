@@ -42,6 +42,7 @@ public class StripeCreateChargeWrapper {
     public String status;
     public Map<String, Object> transfer_data;
     public String transfer_group;
+    @AuraEnabled
     public ErrorDetails error { get;  set; }
 
     public class BillingDetails {
@@ -51,11 +52,17 @@ public class StripeCreateChargeWrapper {
         public String phone;
     }
     public class ErrorDetails {
+        @AuraEnabled
         public String code { get;  set; }
+        @AuraEnabled
         public String doc_url { get;  set; }
+        @AuraEnabled
         public String message { get;  set; }
+        @AuraEnabled
         public String param { get;  set; }
+        @AuraEnabled
         public String request_log_url { get;  set; }
+        @AuraEnabled
         public String type { get;  set; }
     }
 

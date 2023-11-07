@@ -1,0 +1,29 @@
+:host {
+    --slds-c-card-color-background: rgb(255, 255, 255);
+  }
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1em 2em;
+    background-color: #ffffff ;
+    height: 100vh;
+}
+.sub-main-top{
+    display: flex;
+    flex-direction:row;
+    margin: 2em 0;
+}
+
+.st0{fill:#000000;}
+.st1{fill:#0075FF;}
+.st2{fill:#FFC300;}
+
+.main-top-logo
+{
+    width: 60%
+}
+.authorizenetwidth
+{
+    width: 45%
+}

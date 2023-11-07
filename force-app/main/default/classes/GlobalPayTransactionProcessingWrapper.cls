@@ -12,8 +12,11 @@ public with sharing class GlobalPayTransactionProcessingWrapper
         public String merchant_name { get; set; }
         public String account_id { get; set; }
         public String reference { get; set; }
+        @AuraEnabled
         public String error_code { get; set; }
+        @AuraEnabled
         public String detailed_error_code { get; set; }
+        @AuraEnabled
         public String detailed_error_description { get; set; }
         
         public PaymentMethod payment_method { get; set; }
