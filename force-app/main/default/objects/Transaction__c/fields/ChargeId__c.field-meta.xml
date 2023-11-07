@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Transaction_Key__c</fullName>
+    <fullName>ChargeId__c</fullName>
     <externalId>false</externalId>
-    <label>Transaction_Key</label>
+    <label>ChargeId</label>
     <length>255</length>
     <required>false</required>
     <trackTrending>false</trackTrending>
