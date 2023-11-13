@@ -176,12 +176,12 @@ public static StripeRefundWrapper stripeTransactionRefund(String transactionActi
         //Account transactionAccount = [Select id, name, paymentProfileId, customerProfileId From Account Where id =: recordId];
 
 
-        logicpayment__Transaction__c transactionlist = [Select id,logicpayment__ChargeId__c From logicpayment__Transaction__c Where logicpayment__Payment__c =: recordId];
+             list<logicpayment__Transaction__c>  transactionlist = [Select id,logicpayment__ChargeId__c From logicpayment__Transaction__c Where logicpayment__Payment__c =: recordId order by createddate desc];
                 System.debug('transaction list ::'+transactionlist);
                 
                 if (transactionlist != null)
                 {StripeRefund refund = new StripeRefund(); // Create an instance of StripeRrefund
-                String chargeId = transactionlist.logicpayment__ChargeId__c;
+                String chargeId = transactionlist[0].logicpayment__ChargeId__c;
                 Decimal amount = transactionAmount; // Replace with the actual amount
                 
                 StripeRefundWrapper StripeRefundAPIResponse = refund.refundCharge(chargeId, amount);
@@ -192,7 +192,7 @@ public static StripeRefundWrapper stripeTransactionRefund(String transactionActi
 
                     // Create a new Custom_Object__Transaction record
                     logicpayment__Transaction__c Transactions = new logicpayment__Transaction__c();
-                    Transactions.logicpayment__ChargeId__c = StripeRefundAPIResponse.id; // Set the charge id  field value
+                    Transactions.logicpayment__ChargeId__c = chargeId; // Set the charge id  field value
                     Transactions.logicpayment__TransactionId__c = StripeRefundAPIResponse.balance_transaction;
                     Transactions.logicpayment__Payment__c = recordId;
                        // Insert the record into the database

@@ -143,32 +143,22 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <enableActivities>true</enableActivities>
+    <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>true</enableHistory>
+    <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
-<<<<<<<< HEAD:force-app/main/default/objects/Payment__c/Payment__c.object-meta.xml
-    <label>Payment</label>
-    <nameField>
-        <label>Payment Name</label>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-    </nameField>
-    <pluralLabel>Payments</pluralLabel>
-========
     <label>Transaction</label>
     <nameField>
         <label>Transaction_Key Name</label>
         <type>Text</type>
     </nameField>
     <pluralLabel>Transactions</pluralLabel>
->>>>>>>> origin/Zabeeh1:force-app/main/default/objects/Transaction__c/Transaction__c.object-meta.xml
     <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>

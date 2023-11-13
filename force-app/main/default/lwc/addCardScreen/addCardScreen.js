@@ -11,76 +11,6 @@ import getCustomSettingDataChecker from '@salesforce/apex/CustomSettingControlle
 export default class AddCardScreen extends LightningElement {
 
     @track customSettingNames = [];
-
-    connectedCallback() {
-        this.loadCustomSettingData();
-       
-        
-    }
-
-    renderedCallback() {
-        this.template.addEventListener('click', (event) => {
-            const targetClassList = event.target.classList;
-            console.log('Selected Class:'+ targetClassList.toString());
-            const hasSpecificClass = targetClassList.toString().indexOf('slds-is-open') !== -1;
-            
-            console.log('--------'+hasSpecificClass);
-            if(!(targetClassList.toString().indexOf('slds-is-open') !== -1 || targetClassList.toString().indexOf('dropdown-button-text') !== -1))
-            {
-                console.log(this.template.querySelector('.slds-is-open'));
-                this.template.querySelector('.slds-is-open').classList.remove("slds-is-open");;
-            }
-
-        });
-
-    }
-
-
-    loadCustomSettingData() {
-        getCustomSettingDataChecker()
-            .then(result => {
-                this.customSettingNames = result;
-                this.filterLiElements();
-            })
-            .catch(error => {
-                console.error('Error retrieving custom setting data', error);
-            });
-    }
-
-    filterLiElements() {
-        const liElements = this.template.querySelectorAll('.li-elements');
-        liElements.forEach(liElement => {
-            const liText = liElement.innerText.trim();
-            const shouldDisplay = this.customSettingNames.includes(liText);
-            liElement.style.display = shouldDisplay ? 'block' : 'none';
-
-            const visibleLiElements = this.template.querySelectorAll('.slds-box_xx-small li[style*="display: block"]');
-            let firstLiValue = null;
-
-            if (visibleLiElements.length > 0) 
-            {
-                const firstLi = visibleLiElements[0];
-                firstLiValue = firstLi.textContent.trim();
-                console.log('firstLiValue'+firstLiValue);
-                if (firstLiValue === 'Authorize.net') {
-                    this.replacetoAuthSVG();
-                }
-                else if(firstLiValue === 'Global Payments') {
-                    this.replacetoGPSVG();
-                }
-                else if(firstLiValue === 'Stripe') {
-                    this.replacetoStripeSVG();
-                }
-                console.log(this.customSettingNames);
-            }
-            if(this.customSettingNames.length ==0){
-                console.log('Nothing in List');
-                const updateMain = this.template.querySelector('.main');
-                updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;">   <div><span style="font-size: x-large;">To proceed with adding a new card, please <span style="font-weight: 600;">add at least one merchant</span> first.</span></div> <span>Thank you for your understanding and cooperation!</span> </div>      ';
-            }
-        });
-    }
-
     @track outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
     @api recordId;
     @api isInputDisabled = false;
@@ -88,9 +18,119 @@ export default class AddCardScreen extends LightningElement {
     @track outputCVV = 'CVV';
     @track currentStepRequestIndicator = "1";
     @track accountName;
-
     error = false;
     account;
+    resultdata;
+
+    connectedCallback() {
+        // Call a function to load custom setting data when the component is connected to the DOM
+        this.loadCustomSettingData();
+    }
+
+    renderedCallback() {
+        // Add a click event listener to the component's template
+        this.template.addEventListener('click', (event) => {
+            // Get the class list of the clicked element
+            const clickedElementClassList = event.target.classList;
+
+            // Log the selected class for debugging purposes
+            console.log('Selected Class: ' + clickedElementClassList.toString());
+
+            // Check if the clicked element has the 'slds-is-open' or 'dropdown-button-text' class
+            const hasOpenClass = clickedElementClassList.contains('slds-is-open');
+            const hasButtonTextClass = clickedElementClassList.contains('dropdown-button-text');
+
+            console.log('--------' + hasOpenClass);
+
+            // If the clicked element does not have the specified classes, close any open dropdown
+            if (!(hasOpenClass || hasButtonTextClass)) {
+                const openDropdown = this.template.querySelector('.slds-is-open');
+
+                // Check if an open dropdown exists before attempting to remove the class
+                if (openDropdown) {
+                    openDropdown.classList.remove('slds-is-open');
+                }
+            }
+        });
+    }
+
+
+    loadCustomSettingData() {
+        // Call the getCustomSettingDataChecker function to retrieve custom setting data
+        getCustomSettingDataChecker()
+            .then(result => {
+                // Update the component property with the retrieved custom setting data
+                this.customSettingNames = result;
+
+                // Call a function to filter the <li> elements based on the custom setting data
+                this.filterLiElements();
+            })
+            .catch(error => {
+                // Log an error message if there's an issue retrieving custom setting data
+                console.error('Error retrieving custom setting data', error);
+            });
+    }
+
+
+    clearErrors() {
+        console.log('In Clear errors');
+
+        // Clear custom validation messages for card input fields
+        this.template.querySelector('.card-cvv').setCustomValidity('');
+        this.template.querySelector('.expiry-data').setCustomValidity('');
+        this.template.querySelector('.card-number-input').setCustomValidity('');
+
+        // Report validity to trigger revalidation and update UI
+        this.template.querySelector('.card-cvv').reportValidity();
+        this.template.querySelector('.expiry-data').reportValidity();
+        this.template.querySelector('.card-number-input').reportValidity();
+    }
+
+    filterLiElements() {
+        // Get all <li> elements with the class 'li-elements'
+        const liElements = this.template.querySelectorAll('.li-elements');
+
+        liElements.forEach(liElement => {
+            // Get the text content of the <li> element and trim any leading or trailing spaces
+            const liText = liElement.innerText.trim();
+
+            // Check if the custom setting names include the text of the current <li> element
+            const shouldDisplay = this.customSettingNames.includes(liText);
+
+            // Set the display style based on whether the <li> element should be displayed or not
+            liElement.style.display = shouldDisplay ? 'block' : 'none';
+
+            // Check if there are visible <li> elements
+            const visibleLiElements = this.template.querySelectorAll('.slds-box_xx-small li[style*="display: block"]');
+            let firstLiValue = null;
+
+            if (visibleLiElements.length > 0) {
+                // Get the text content of the first visible <li> element
+                const firstLi = visibleLiElements[0];
+                firstLiValue = firstLi.textContent.trim();
+                console.log('firstLiValue' + firstLiValue);
+
+                // Replace SVG based on the first visible <li> element's text content
+                if (firstLiValue === 'Authorize.net') {
+                    this.replacetoAuthSVG();
+                } else if (firstLiValue === 'Global Payments') {
+                    this.replacetoGPSVG();
+                } else if (firstLiValue === 'Stripe') {
+                    this.replacetoStripeSVG();
+                }
+
+                console.log(this.customSettingNames);
+            }
+
+            // If there are no custom setting names, display a message in the main container
+            if (this.customSettingNames.length === 0) {
+                console.log('Nothing in List');
+                const updateMain = this.template.querySelector('.main');
+                updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;">   <div><span style="font-size: x-large;">To proceed with adding a new card, please <span style="font-weight: 600;">add at least one merchant</span> first.</span></div> <span>Thank you for your understanding and cooperation!</span> </div>      ';
+            }
+        });
+    }
+
 
     // Use wire service to get the Account record
     @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id', 'Account.Name'] })
@@ -108,9 +148,6 @@ export default class AddCardScreen extends LightningElement {
             console.error('Error loading account data', error);
         }
     }
-
-   
-
 
     //This function replaces logos with Global Payment logo and changes the text of dropdown button
     replacetoGPSVG() {
@@ -250,13 +287,15 @@ export default class AddCardScreen extends LightningElement {
         console.log('In listClick');
         const liElement = event.currentTarget;
         const title = liElement.getAttribute('title');
-
+        this.clearErrors();
         console.log('Title is: ', title);
-
+        this.currentStepRequestIndicator = "1";
+        this.error = false;
         // Check the title attribute and perform actions accordingly
         if (title === 'Global Payments') {
             this.replacetoGPSVG();
             console.log('Replacing with Global Payments SVG');
+
         } else if (title === 'Authorize.net') {
             this.replacetoAuthSVG();
             console.log('Clicked on Authorize.net');
@@ -278,7 +317,7 @@ export default class AddCardScreen extends LightningElement {
         const cardNumberInput = this.template.querySelector('.card-number-input');
 
         // Check if the pressed key is not a number
-        if (isNaN(keyPressed)) {
+        if (isNaN(keyPressed) || keyPressed === ' ') {
             // Show error message
             cardNumberInput.setCustomValidity('Only numbers are allowed');
             cardNumberInput.reportValidity();
@@ -286,6 +325,7 @@ export default class AddCardScreen extends LightningElement {
         } else {
             // Clear the error message if the input is numeric
             cardNumberInput.setCustomValidity('');
+            cardNumberInput.reportValidity();
         }
     }
 
@@ -295,7 +335,7 @@ export default class AddCardScreen extends LightningElement {
         const expInput = this.template.querySelector('.expiry-data');
 
         // Check if the pressed key is not a number
-        if (isNaN(keyPressed)) {
+        if (isNaN(keyPressed) || keyPressed === ' ') {
             // Show error message
             expInput.setCustomValidity('Only numbers are allowed');
             expInput.reportValidity();
@@ -303,6 +343,7 @@ export default class AddCardScreen extends LightningElement {
         } else {
             // Clear the error message if the input is numeric
             expInput.setCustomValidity('');
+            expInput.reportValidity();
         }
     }
 
@@ -312,7 +353,7 @@ export default class AddCardScreen extends LightningElement {
         const cardNumberInput = this.template.querySelector('.card-cvv');
 
         // Check if the pressed key is not a number
-        if (isNaN(keyPressed)) {
+        if (isNaN(keyPressed) || keyPressed === ' ') {
             // Show error message
             cardNumberInput.setCustomValidity('Only numbers are allowed');
             cardNumberInput.reportValidity();
@@ -320,6 +361,7 @@ export default class AddCardScreen extends LightningElement {
         } else {
             // Clear the error message if the input is numeric
             cardNumberInput.setCustomValidity('');
+            cardNumberInput.reportValidity();
         }
     }
 
@@ -393,15 +435,13 @@ export default class AddCardScreen extends LightningElement {
 
     }
 
-
-    resultdata;
-
     //This function handles card submission, updates the request indicator, and triggers different toast events
     handleSubmitClick() {
         const currentGateway = this.template.querySelector('.dropdown-button-text').innerHTML;
         console.log('In Submit CLick' + currentGateway);
         this.resultdata = '';
-
+        this.currentStepRequestIndicator = "1";
+        this.clearErrors();
         this.error = false;
         const cardNumberInput = this.template.querySelector('.card-number-input').value;
         const cardCVVInput = this.template.querySelector('.card-cvv').value;
@@ -428,14 +468,14 @@ export default class AddCardScreen extends LightningElement {
         }
         //Input card details are complete
         else {
-
-            if (currentGateway == 'Global Payments') {
+            console.log(currentGateway);
+            if (currentGateway == 'Global Payment') {
                 console.log('In' + currentGateway);
                 console.log(cardNumberInput);
                 console.log(cardExpiryInput);
                 console.log(cardCVVInput);
                 // Call the Apex method when the "Fetch Data" button is clicked
-                getGlobalPaymentCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, type: currentGateway })
+                getGlobalPaymentCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, type: 'Global Payments' })
                     .then(result => {
                         this.currentStepRequestIndicator = "2";
                         this.resultdata = result;

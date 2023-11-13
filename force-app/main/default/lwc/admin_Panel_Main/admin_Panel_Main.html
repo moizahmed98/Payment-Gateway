@@ -240,7 +240,7 @@
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
-            App Id: </label>
+            App login Id: </label>
           <div class="slds-form-element__control">
             <input type="text" onchange={authNetloginIdinput} id="text-input-id-2" value={authNetLoginId}  class="slds-input inputwidth rcorners2" />
           </div>
@@ -248,7 +248,7 @@
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
-            Secret Key: </label>
+            Transaction Key: </label>
           <div class="slds-form-element__control">
             <input type="password" onchange={authNetTransactionIdinput} id="text-input-id-3" value={authNetTransactoinId}  class="slds-input inputwidth rcorners2" />
           </div>
@@ -597,7 +597,7 @@
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
-            Secret Key: </label>
+            APP Key: </label>
           <div class="slds-form-element__control">
             <input type="password" onchange={globalPaymentTransactionIdinput} value={globalPaymentTransactoinId} class="slds-input inputwidth rcorners2" />
           </div>
@@ -609,7 +609,7 @@
 
       <br />
       <br />
-      <lightning-progress-indicator class="displaynone" current-step={globalPaymentcurrentstep}  has-error={authNetProgressError} type="base" variant="base">
+      <lightning-progress-indicator class="displaynone" current-step={globalPaymentcurrentstep}  has-error={globalPaymenterror} type="base" variant="base">
         <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
         <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
         <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>

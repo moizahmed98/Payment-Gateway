@@ -232,9 +232,15 @@ export default class TabExample extends LightningElement {
 
   @track authNetemerchantName = null;
   authNetMerchantName(event) {
-    console.log("thi is inout :" + event.target.value);
-    this.authNetemerchantName = event.target.value;
-    console.log(this.authNetemerchantName);
+    const inputValue = event.target.value;
+  
+    // Check if the input is not a single space
+    if (inputValue.trim() !== "") {
+      this.authNetemerchantName = inputValue;
+      console.log("Updated merchant name:", this.authNetemerchantName);
+    } else {
+      console.log("Invalid input. Merchant name must not be a single space.");
+    }
   }
   //store input value of login id
   @track authNetLoginId = null;
@@ -258,6 +264,18 @@ export default class TabExample extends LightningElement {
   error;
   AuthNethandleButtonClick() {
     console.log("ftn is called");
+
+    if( this.authNetemerchantName == null || this.authNetLoginId == null || this.authNetTransactoinId== null)
+    {
+      const evt = new ShowToastEvent({
+        title: "Error!",
+        message: "Please fill all the Input Fields",
+        variant: "error",
+        mode: "dismissable"
+      });
+      this.dispatchEvent(evt);
+    }
+    else{
     authorizeNetAdminAuth({
       authorizeNetMerchantName: this.authNetemerchantName,
       authorizeNetApiLoginId: this.authNetLoginId,
@@ -289,10 +307,16 @@ export default class TabExample extends LightningElement {
             variant: "success"
           });
           this.dispatchEvent(evt);
-          this.authNetemerchantName = null;
-          this.authNetLoginId =null;
-          this.authNetTransactoinId = null;
-          this.authNetcurrentstep = "1";
+          ///////////////////////////////////
+          setTimeout(() => {
+            this.callauthNetPrevMerchantName();
+            this.authNetemerchantName = null;
+            this.authNetLoginId =null;
+            this.authNetTransactoinId = null;
+            this.authNetcurrentstep = "1";
+        }, 2500);
+          /////////////////////////////////
+       
           
         }
         // Handle the case where the authentication with AUthrize NET resulted in an error
@@ -300,7 +324,7 @@ export default class TabExample extends LightningElement {
           result.messages.resultCode != null &&
           result.messages.resultCode.toLowerCase() == "error"
         ) {
-          this.authNetcurrentstep = "3";
+          
           console.log("in else if  : " + result.messages.text);
           this.authNetcurrentstep = "3";
           this.authNetProgressError = true;
@@ -317,20 +341,34 @@ export default class TabExample extends LightningElement {
       .catch((error) => {
         // Handle any errors
         console.log("in cach error ");
+        const evt = new ShowToastEvent({
+          title: "Error!",
+          message: "The response was not recived",
+          variant: "error",
+          mode: "dismissable"
+        });
+        this.dispatchEvent(evt);
         this.authNetcurrentstep = "2";
         this.authNetProgressError = true;
         this.response = null;
         this.error = error;
       });
   }
+}
 
   //store input value of merchant name//////////////////////////////////////////*********calling globalNEt merchant authentication function**********///////////////////////////////////////////////////////////////////////////////////////
 
   @track globalPaymentemerchantName =null;
   globalPaymentMerchantName(event) {
-    console.log("thi is inout :" + event.target.value);
-    this.globalPaymentemerchantName = event.target.value;
-    console.log(this.globalPaymentemerchantName);
+    const inputValue = event.target.value;
+  
+    // Check if the input is not a single space
+    if (inputValue.trim() !== "") {
+      this.globalPaymentemerchantName = inputValue;
+      console.log("Updated merchant name:", this.globalPaymentemerchantName);
+    } else {
+      console.log("Invalid input. Merchant name must not be a single space.");
+    }
   }
   //store input value of login id
   @track globalPaymentLoginId = null;
@@ -348,12 +386,25 @@ export default class TabExample extends LightningElement {
   }
   //store input value of merchant name//////////////////////////////////////////************calling authent merchant authentication function*******///////////////////////////////////////////////////////////////////////////////////////
   @track globalPaymentcurrentstep = "1";
-  @track globalPaymentProgressError = false;
+  @track globalPaymenterror = false;
 
   globalPaymentresponse;
-  globalPaymenterror;
+  
+
+ 
   globalPaymenthandleButtonClick() {
     console.log("ftn is called");
+    if( this.globalPaymentemerchantName == null || this.globalPaymentLoginId == null || this.globalPaymentTransactoinId== null)
+    {
+      const evt = new ShowToastEvent({
+        title: "Error!",
+        message: "Please fill all the Input Fields",
+        variant: "error",
+        mode: "dismissable"
+      });
+      this.dispatchEvent(evt);
+    }
+    else{
     globalPaymentAdminAuth({
       globalPaymentMerchantName: this.globalPaymentemerchantName,
       globalPaymentAppId: this.globalPaymentLoginId,
@@ -379,10 +430,16 @@ export default class TabExample extends LightningElement {
             variant: "success"
           });
           this.dispatchEvent(evt);
-          this.globalPaymentemerchantName = null;
-          this.globalPaymentLoginId =null;
-          this.globalPaymentTransactoinId = null;
-          this.globalPaymentcurrentstep = "1";
+          //////////////////////////////////
+          setTimeout(() => {
+            this.globalPaymentemerchantName = null;
+            this.callglobalPaymentPrevMerchantName();
+            this.globalPaymentLoginId =null;
+            this.globalPaymentTransactoinId = null;
+            this.globalPaymentcurrentstep = "1";
+        }, 2500);
+          /////////////////////////////////
+       
         }
         // Handle the case where the authentication with GP resulted in an error
         else {
@@ -401,19 +458,34 @@ export default class TabExample extends LightningElement {
       .catch((error) => {
         // Handle any errors
         console.log("in cach error ");
+        const evt = new ShowToastEvent({
+          title: "Error!",
+          message: "The response was not recived",
+          variant: "error",
+          mode: "dismissable"
+        });
+        this.dispatchEvent(evt);
         this.globalPaymentcurrentstep = "2";
         this.globalPaymenterror = true;
         this.response = null;
         this.error = error;
       });
   }
+}
 
   //store input value of merchant name//////////////////////////////////////////************input fileds of stripe*******///////////////////////////////////////////////////////////////////////////////////////
   @track stripemerchantName =null;
   stripemerchantNameinput(event) {
-    console.log("thi is inout :" + event.target.value);
-    this.stripemerchantName = event.target.value;
-    console.log(this.stripemerchantName);
+
+    const inputValue = event.target.value;
+  
+    // Check if the input is not a single space
+    if (inputValue.trim() !== "") {
+      this.stripemerchantName = inputValue;
+      console.log("Updated merchant name:", this.stripemerchantName);
+    } else {
+      console.log("Invalid input. Merchant name must not be a single space.");
+    }
   }
   //store input value of secret key
   @track stripesecretKey =null;
@@ -438,6 +510,17 @@ export default class TabExample extends LightningElement {
   error;
   StripehandleButtonClick() {
     console.log("ftn is called" + this.current_step);
+    if( this.stripemerchantName == null || this.stripesecretKey == null || this.stripepublishKey == null)
+    {
+      const evt = new ShowToastEvent({
+        title: "Error!",
+        message: "Please fill all the Input Fields",
+        variant: "error",
+        mode: "dismissable"
+      });
+      this.dispatchEvent(evt);
+    }
+    else{
     stripeAdminAuth({
       stripeMerchantName: this.stripemerchantName,
       stripeSecretApiKey: this.stripesecretKey,
@@ -453,7 +536,7 @@ export default class TabExample extends LightningElement {
         this.response = result;
         this.error = null;
         this.stripeProgressError = false;
-
+        this.currentstep = "2";
         if (result.settings != "undefined" && result.settings != undefined) {
           console.log("error is  null  and the display name is ");
           console.log(
@@ -475,10 +558,15 @@ export default class TabExample extends LightningElement {
               variant: "success"
             });
             this.dispatchEvent(evt);
-            this.stripemerchantName = null;
-          this.stripesecretKey =null;
-          this.stripepublishKey = null;
-          this.currentstep = "1";
+            setTimeout(() => {
+              this.callstripePrevMerchantName();
+              this.stripemerchantName = null;
+            this.stripesecretKey =null;
+            this.stripepublishKey = null;
+            this.currentstep = "1";
+          }, 2500);
+            /////////////////////////////////
+        
           } else if (
             this.response.settings.dashboard.display_name !=
             this.stripemerchantName
@@ -502,7 +590,8 @@ export default class TabExample extends LightningElement {
           this.response.error !== "undefined" &&
           this.response.error !== undefined
         ) {
-          this.currentstep = "2";
+          this.currentstep = "3";
+          this.stripeProgressError = true;
           console.log("error and current step is  : " + this.currentstep);
           console.log("error message  : " + this.response.error.message);
           const evt = new ShowToastEvent({
@@ -518,10 +607,19 @@ export default class TabExample extends LightningElement {
       .catch((error) => {
         // Handle any errors
         this.currentstep = "2";
+        const evt = new ShowToastEvent({
+          title: "Error!",
+          message:"The response was not recived",
+          variant: "error",
+          mode: "dismissable"
+        });
+        this.dispatchEvent(evt);
         this.stripeProgressError = true;
         this.response = null;
         this.error = error;
       });
   }
+}
   //store input value of merchant name//////////////////////////////////////////************stripe merchant authentication funtion end*******///////////////////////////////////////////////////////////////////////////////////////
+
 }

@@ -54,7 +54,7 @@
       <!-- acount holder -->
       <span class="output-field ">Account Holder:</span>
 
-      <span class="output-value">Ali Shehroze</span>
+      <span class="output-value">{accountName}</span>
 
     </div>
     <!-- Payment Content div  -->
@@ -82,7 +82,7 @@
               <div class="right-div">
                 <!-- Content for the right div goes here -->
                 <p class="amount"> Amount:</p>
-                <span class="currencyinput">$<input oninput={handleInputChange} required value={amount} onchange={handleInputAmount} type="text"
+                <span class="currencyinput">$<input oninput={handleInputChange} required value={amount}  type="text"
                     style="width: 35%;  outline: none;" name="currency"></span>
               </div>
             </div>

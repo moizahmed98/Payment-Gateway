@@ -1,5 +1,6 @@
 import { LightningElement,track,api,wire } from 'lwc';
 import backgroundImage from '@salesforce/resourceUrl/makepaymentbg';
+import { getRecord } from 'lightning/uiRecordApi';
 import getCreditCards from '@salesforce/apex/MakePayment.getCreditCards';
 import stripeTransaction from '@salesforce/apex/TransactionProcessingController.stripeTransaction';
 import globalPaymentTransaction from '@salesforce/apex/TransactionProcessingController.globalPaymentTransaction';
@@ -40,6 +41,7 @@ export default class MakePayment extends LightningElement {
     @track globalPayment = false;
     @track paymentGatewayType;
     @track paynowdisabled = true;
+    @track amount ='';
     handleCreditCardChange(event) {
         console.log('this is card value : '+event.detail.value);
         this.selectedCreditCardId = event.detail.value;
@@ -111,19 +113,24 @@ export default class MakePayment extends LightningElement {
   handleInputChange(event) {
         // Get the input value
         let inputValue = event.target.value;
-
+        this.amount = event.target.value;
+        console.log('Entered Amountttttt :');
+       
         // Remove non-numeric characters using a regular expression
         inputValue = inputValue.replace(/[^0-9.]/g, '');
 
         // Update the input field value with only numeric characters
         event.target.value = inputValue;
+        console.log('Entered event.target.value :'+event.target.value);
+        this.amount = event.target.value;
+        this.paynowdisabled = this.amount === '' ? true : false;
     }
-    @track amount = null;
+
     handleInputAmount(event) {
        
          this.amount = event.target.value;
         console.log(`Entered Amount : `+this.amount);
-        
+            
     }
     @track selectedOption = '';
     option1Class = 'radio-button';
@@ -155,6 +162,8 @@ export default class MakePayment extends LightningElement {
 
     showModalBox() {  
         this.isShowModal = true;
+        this.currentstep = '1';
+        this.ProgressError = false;
     }
 
     hideModalBox() {  
@@ -201,10 +210,17 @@ handleClickYes() {
             this.currentstep = "3";
             const evt = new ShowToastEvent({
               title: "Success!",
-              message: "Authentication successful",
+              message: "Payment successful",
               variant: "success"
             });
             this.dispatchEvent(evt);
+            this.isShowModal = false;
+            this.selectedCreditCardId = null;
+            this.currentstep = "1";
+            this.amount = '';
+            this.selectedAction = 'Pay';
+            this.currentstep = "1";
+            this.paynowdisabled = true;
           }
           // Handle the case where the authentication with AUthrize NET resulted in an error
           else if (
@@ -213,7 +229,7 @@ handleClickYes() {
           ) {
             this.currentstep = "3";
             console.log("in else if  : " + result.messages.text);
-            this.currentstep = "3";
+          
             this.ProgressError = true;
             const evt = new ShowToastEvent({
               title: "Error!",
@@ -230,15 +246,19 @@ handleClickYes() {
           // Handle any errors
           console.log("in cach error ");
           this.currentstep = "2";
+          const evt = new ShowToastEvent({
+            title: "Error!",
+            message:"The response was not recived",
+            variant: "error",
+            mode: "dismissable"
+          });
+          this.dispatchEvent(evt);
           this.ProgressError = true;
           this.response = null;
           this.error = error;
         });
                   console.log("final response that is retuned  : ");
-                  this.isShowModal = false;
-                  this.selectedCreditCardId = null;
-                  this.amount = null;
-                  this.selectedAction = 'Pay';
+                 
                 
             
         }
@@ -261,56 +281,40 @@ handleClickYes() {
             "this is the retiurned result 1  :" + JSON.stringify(result)
           );
           console.log("this is the retiurned result 2 :" + result.error);
-          console.log("this is the retiurned result 3 :" + result.settings);
+         // console.log("this is the retiurned result 3 :" + result.settings);
           this.response = result;
           this.error = null;
           this.ProgressError = false;
   
-          if (result.settings != "undefined" && result.settings != undefined) {
+          if (result.error == null ) {
             console.log("error is  null  and the display name is ");
             console.log(
-              "this is the input merchant name : " + this.stripemerchantName
+              "this is the input merchant name : " 
             );
   
-            if (
-              this.response.settings.dashboard.display_name ===
-              this.stripemerchantName
-            ) {
-              this.currentstep = "3";
-              this.ProgressError = false;
-              console.log(
-                "the  display name is correct and the merchant is authenticated"
-              );
-              const evt = new ShowToastEvent({
-                title: "Success!",
-                message: "Authentication successful",
-                variant: "success"
-              });
-              this.dispatchEvent(evt);
-            } else if (
-              this.response.settings.dashboard.display_name !=
-              this.stripemerchantName
-            ) {
-              this.currentstep = "3";
-              this.ProgressError = true;
-              console.log(
-                "display name is not correct : " + this.stripemerchantName
-              );
-              const evt = new ShowToastEvent({
-                title: "Error!",
-                message: "Merchant Name is Incorrect",
-                variant: "error",
-                mode: "dismissable"
-              });
-              this.dispatchEvent(evt);
+            
+            const evt = new ShowToastEvent({
+              title: "Success!",
+              message: "Payment successful",
+              variant: "success"
+            });
+            this.dispatchEvent(evt);
+            this.isShowModal = false;
+            this.selectedCreditCardId = null;
+            this.currentstep = "1";
+            this.amount = '';
+            this.selectedAction = 'Pay';
+            this.currentstep = "1";
+            this.paynowdisabled = true;
             }
-          }
+          
           // Handle the case where the authentication with Stripe resulted in an error
           else if (
-            this.response.error !== "undefined" &&
-            this.response.error !== undefined
+            result.error !== "undefined" &&
+          result.error !== undefined
           ) {
             this.currentstep = "2";
+            this.ProgressError = true;
             console.log("error and current step is  : " + this.currentstep);
             console.log("error message  : " + this.response.error.message);
             const evt = new ShowToastEvent({
@@ -320,23 +324,31 @@ handleClickYes() {
               mode: "dismissable"
             });
             this.dispatchEvent(evt);
-            this.isShowModal = false;
-            this.selectedCreditCardId = null;
-            this.amount = null;
-            this.selectedAction = 'Pay';
-            this.currentstep = "1";
+           
           }
           console.log("final response that is retuned  : ");
         })
         .catch((error) => {
           // Handle any errors
           this.currentstep = "2";
+          const evt = new ShowToastEvent({
+            title: "Error!",
+            message:"The response was not recived",
+            variant: "error",
+            mode: "dismissable"
+          });
+          this.dispatchEvent(evt);
           this.ProgressError = true;
           this.response = null;
           this.error = error;
         });
 
-                 
+        this.isShowModal = false;
+        this.selectedCreditCardId = null;
+        this.amount = '';
+        this.selectedAction = 'Pay';
+        this.paynowdisabled = true;
+        this.currentstep = "1";         
 
         }
     
@@ -354,49 +366,30 @@ handleClickYes() {
             "this is the retiurned result 1  :" + JSON.stringify(result)
           );
           console.log("this is the retiurned result 2 :" + result.error);
-          console.log("this is the retiurned result 3 :" + result.settings);
+          //console.log("this is the retiurned result 3 :" + result.settings);
           this.response = result;
           this.error = null;
-          this.stripeProgressError = false;
+          this.ProgressError = false;
   
-          if (result.settings != "undefined" && result.settings != undefined) {
+          if (result.error == null) {
             console.log("error is  null  and the display name is ");
             console.log(
-              "this is the input merchant name : " + this.stripemerchantName
+              "this is the input merchant name :"
             );
-  
-            if (
-              this.response.settings.dashboard.display_name ===
-              this.stripemerchantName
-            ) {
-              this.currentstep = "3";
-              this.stripeProgressError = false;
-              console.log(
-                "the  display name is correct and the merchant is authenticated"
-              );
-              const evt = new ShowToastEvent({
-                title: "Success!",
-                message: "Authentication successful",
-                variant: "success"
-              });
-              this.dispatchEvent(evt);
-            } else if (
-              this.response.settings.dashboard.display_name !=
-              this.stripemerchantName
-            ) {
-              this.currentstep = "3";
-              this.stripeProgressError = true;
-              console.log(
-                "display name is not correct : " + this.stripemerchantName
-              );
-              const evt = new ShowToastEvent({
-                title: "Error!",
-                message: "Merchant Name is Incorrect",
-                variant: "error",
-                mode: "dismissable"
-              });
-              this.dispatchEvent(evt);
-            }
+            const evt = new ShowToastEvent({
+              title: "Success!",
+              message: "Refund successful",
+              variant: "success"
+            });
+            this.dispatchEvent(evt);
+            this.isShowModal = false;
+            this.selectedCreditCardId = null;
+            this.currentstep = "1";
+            this.amount = '';
+            this.selectedAction = 'Pay';
+            this.currentstep = "1";
+            this.paynowdisabled = true;
+                
           }
           // Handle the case where the authentication with Stripe resulted in an error
           else if (
@@ -404,6 +397,7 @@ handleClickYes() {
             this.response.error !== undefined
           ) {
             this.currentstep = "2";
+            this.ProgressError =true;
             console.log("error and current step is  : " + this.currentstep);
             console.log("error message  : " + this.response.error.message);
             const evt = new ShowToastEvent({
@@ -419,11 +413,20 @@ handleClickYes() {
         .catch((error) => {
           // Handle any errors
           this.currentstep = "2";
-          this.stripeProgressError = true;
+          const evt = new ShowToastEvent({
+            title: "Error!",
+            message:"The response was not recived",
+            variant: "error",
+            mode: "dismissable"
+          });
+          this.dispatchEvent(evt);
+          this.ProgressError = true;
           this.response = null;
           this.error = error;
         });
+      
     }
+
     }
         else if(this.paymentGatewayType == 'Square'){
             
@@ -447,23 +450,28 @@ handleClickYes() {
           this.authNetresponse = result;
           this.error = null;
           this.ProgressError = false;
-          this.globalPaymentcurrentstep = "2";
+          this.currentstep = "2";
   
           if (result.error_code == null) {
             console.log("in  if ");
-            this.globalPaymentcurrentstep = "3";
+            this.currentstep = "3";
             const evt = new ShowToastEvent({
               title: "Success!",
-              message: "Authentication successful",
+              message: "Payment successful",
               variant: "success"
             });
             this.dispatchEvent(evt);
+            this.isShowModal = false;
+            this.selectedCreditCardId = null;
+            this.currentstep = "1";
+            this.amount = '';
+            this.selectedAction = 'Pay';
+            this.currentstep = "1";
+            this.paynowdisabled = true;
           }
           // Handle the case where the authentication with GP resulted in an error
           else {
-            this.authNetcurrentstep = "3";
-  
-            this.authNetcurrentstep = "3";
+            this.currentstep = "3";
             this.ProgressError = true;
             const evt = new ShowToastEvent({
               title: "Error!",
@@ -472,22 +480,27 @@ handleClickYes() {
               mode: "dismissable"
             });
             this.dispatchEvent(evt);
-            this.isShowModal = false;
-            this.selectedCreditCardId = null;
-            this.amount = null;
-            this.selectedAction = 'Pay';
-            this.currentstep = "1";
+            
           }
           console.log("final response that is retuned  : ");
+        
         })
         .catch((error) => {
           // Handle any errors
           console.log("in cach error ");
-          this.authNetcurrentstep = "2";
+          const evt = new ShowToastEvent({
+            title: "Error!",
+            message:"The response was not recived",
+            variant: "error",
+            mode: "dismissable"
+          });
+          this.dispatchEvent(evt);
+          this.currentstep = "2";
           this.ProgressError = true;
           this.response = null;
           this.error = error;
         });
+        
                   
         }
     
@@ -495,5 +508,23 @@ handleClickYes() {
 
   
 }
+
+@track  accountName;
+  // Use wire service to get the Account record
+  @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id', 'Account.Name'] })
+  wiredAccount({ error, data }) {
+      if (data) {
+          this.account = data;
+          console.log(data);
+          console.log('Account Id:', this.account.fields.Id.value);
+          console.log('Account Name:', this.account.fields.Name.value);
+          this.accountName = this.account.fields.Name.value;
+
+
+
+      } else if (error) {
+          console.error('Error loading account data', error);
+      }
+  }
 
 }
