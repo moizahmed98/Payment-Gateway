@@ -25,7 +25,7 @@
 <name>CustomObject</name>
 </types>
 <types>
-<members>logicpayment__Stripe_CustomSettings__c</members>
+<members>logicpayment__stripe_CustomSetting__c</members>
 <name>CustomObject</name>
 </types>
 <types>
