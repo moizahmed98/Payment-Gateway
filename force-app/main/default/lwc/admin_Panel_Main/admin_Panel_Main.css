@@ -12,6 +12,14 @@
 .onlyonmob{
     display: none;
 }
+.exampleHolder{
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+    width: 55px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
 
 
 /* Styles for SVG elements with class st0, st1, st2 */
@@ -42,6 +50,11 @@
     margin: 0 auto;
     width: 10.3%;
     margin-top: 2%;
+}
+
+.spacebetween{
+    display: flex;
+    justify-content: space-between;
 }
 
 /* Styles for logos with class square_page_logo */
@@ -94,11 +107,11 @@
 
 
 /* Styles for step descriptions */
-.step-descriptions {
+.step-descriptions{
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 16px; /* Adjust the margin as needed */
+    width: 72%;
+    margin: 0 auto;
 }
 
 /* Styles for elements with class Response */
@@ -179,6 +192,14 @@
         margin-left: 10%;
         width: 80%;
         margin-right: 10%;
+    }
+    .exampleHolder{
+        position: relative;
+        display: inline-block;
+        margin-left: 15px;
+        width: 55px;
+        vertical-align: middle;
+        white-space: nowrap;
     }
     .displaynone {
         display: none; /* Hide the element when the screen width is <= 768px */

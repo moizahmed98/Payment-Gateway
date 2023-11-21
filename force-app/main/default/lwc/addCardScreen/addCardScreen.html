@@ -191,11 +191,11 @@
                     <lightning-input type="text" placeholder={accountName} disabled></lightning-input>
                 </div>
                 <div class="lgc-bg input-fields-setter">
-                    <lightning-input class="card-number-input" type="text" maxlength="16" placeholder="Card Number" onchange={handleCardNumberChange} onkeypress={handleKeyPressCNumber}></lightning-input>
+                    <lightning-input class="card-number-input" type="text" maxlength="16" placeholder="Card Number" onpaste={handlePaste} onchange={handleCardNumberChange} onkeypress={handleKeyPressCNumber}></lightning-input>
                 </div>
                 <div class="card-data">
-                    <lightning-input class="input-fields-setter-small expiry-data" type="text" placeholder="MM/YY" onchange={handleMMYYChange} max-length="5" onkeypress={handleKeyPressCExpiry}></lightning-input>
-                    <lightning-input class="input-fields-setter-small card-cvv" type="text" placeholder="CVV" max-length="3" onkeypress={handleKeyPressCVV} onchange={handleCVVChange} disabled={isInputDisabled}></lightning-input>
+                    <lightning-input class="input-fields-setter-small expiry-data" type="text" placeholder="MM/YY" onpaste={handlePasteExpiry} onchange={handleMMYYChange} max-length="5" onkeypress={handleKeyPressCExpiry}></lightning-input>
+                    <lightning-input class="input-fields-setter-small card-cvv" type="text" placeholder="CVV" onpaste={handlePaste} max-length="3" onkeypress={handleKeyPressCVV} onchange={handleCVVChange} disabled={isInputDisabled}></lightning-input>
                 </div>
                 <!-- Submit Button -->
                 <div class="input-fields-setter submit-setter mobile-submit-setter">

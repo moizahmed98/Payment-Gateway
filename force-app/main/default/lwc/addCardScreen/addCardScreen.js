@@ -21,10 +21,17 @@ export default class AddCardScreen extends LightningElement {
     error = false;
     account;
     resultdata;
+    barControllerArray = [];
 
     connectedCallback() {
         // Call a function to load custom setting data when the component is connected to the DOM
         this.loadCustomSettingData();
+        this.barControllerArray = [
+            ['Global Payment', '"1"', 'false'],
+            ['Authorize.Net', '"1"', 'false'],
+            ['Stripe', '"1"', 'false']
+        ];
+        console.log(this.barControllerArray);
     }
 
     renderedCallback() {
@@ -288,19 +295,28 @@ export default class AddCardScreen extends LightningElement {
         const liElement = event.currentTarget;
         const title = liElement.getAttribute('title');
         this.clearErrors();
+        console.log(this.barControllerArray[0][0]+'-----'+this.barControllerArray[0][1]+'-----'+this.barControllerArray[0][2]);
+        console.log(this.barControllerArray[1][0]+'-----'+this.barControllerArray[1][1]+'-----'+this.barControllerArray[1][2]);
+        console.log(this.barControllerArray[2][0]+'-----'+this.barControllerArray[2][1]+'-----'+this.barControllerArray[2][2]);
         console.log('Title is: ', title);
-        this.currentStepRequestIndicator = "1";
-        this.error = false;
         // Check the title attribute and perform actions accordingly
         if (title === 'Global Payments') {
             this.replacetoGPSVG();
+            console.log('Indicator Setter : '+this.barControllerArray[0][1]);
+            console.log('Error Setter : '+this.barControllerArray[0][2]);
+            this.currentStepRequestIndicator=this.barControllerArray[0][1];
+            this.error=this.barControllerArray[0][2];
             console.log('Replacing with Global Payments SVG');
 
         } else if (title === 'Authorize.net') {
             this.replacetoAuthSVG();
+            this.currentStepRequestIndicator=this.barControllerArray[1][1];
+            this.error=this.barControllerArray[1][2];
             console.log('Clicked on Authorize.net');
         } else if (title === 'Stripe') {
             this.replacetoStripeSVG();
+            this.currentStepRequestIndicator=this.barControllerArray[2][1];
+            this.error=this.barControllerArray[2][2];
             console.log('Clicked on Stripe');
         } else if (title === 'Square') {
             this.replacetoSquareSVG();
@@ -434,7 +450,37 @@ export default class AddCardScreen extends LightningElement {
         this.outputCVV = formattedNumber;
 
     }
+    handlePaste(event) {
+    // Prevent the default paste behavior
+    event.preventDefault();
 
+    // Get the pasted text
+    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+
+    // Remove non-numeric characters using a regular expression
+    const numericText = pastedText.replace(/[^0-9]/g, '');
+
+    // Insert the modified text back into the input field
+    document.execCommand('insertText', false, numericText);
+  }
+  handlePasteExpiry(event) {
+    // Prevent the default paste behavior
+    event.preventDefault();
+
+    // Get the pasted text
+    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+
+    // Remove non-numeric characters using a regular expression
+    let numericText = pastedText.replace(/[^0-9]/g, '');
+
+    // Trim to only 4 characters if the length is greater than 4
+    if (numericText.length > 4) {
+      numericText = numericText.substring(0, 4);
+    }
+
+    // Insert the modified text back into the input field
+    document.execCommand('insertText', false, numericText);
+  }
     //This function handles card submission, updates the request indicator, and triggers different toast events
     handleSubmitClick() {
         const currentGateway = this.template.querySelector('.dropdown-button-text').innerHTML;
@@ -490,7 +536,7 @@ export default class AddCardScreen extends LightningElement {
                             });
                             this.dispatchEvent(responseRecievedSuccessfully);
                             this.currentStepRequestIndicator = "2";
-
+                            this.barControllerArray[0][1]=this.currentStepRequestIndicator;
 
                             if (this.resultdata.error_code == 'undefined' || this.resultdata.error_code == undefined || this.resultdata.error_code == null) {
                                 console.log('Card Added Successfully');
@@ -506,6 +552,8 @@ export default class AddCardScreen extends LightningElement {
                                 setTimeout(() => {
                                     this.currentStepRequestIndicator = "3";
                                     this.error = false;
+                                    this.barControllerArray[0][1]=this.currentStepRequestIndicator;
+                                    this.barControllerArray[0][2]=this.error;
                                     this.dispatchEvent(cardAddedSuccessfully);
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
@@ -529,6 +577,8 @@ export default class AddCardScreen extends LightningElement {
                                 setTimeout(() => {
                                     this.currentStepRequestIndicator = "3";
                                     this.error = true;
+                                    this.barControllerArray[0][1]=this.currentStepRequestIndicator;
+                                    this.barControllerArray[0][2]=this.error;
                                     this.dispatchEvent(toastRequestRecievedError);
                                 }, 1200);
                             }
@@ -540,6 +590,8 @@ export default class AddCardScreen extends LightningElement {
                             console.log('Response Not Recieved');
                             this.currentStepRequestIndicator = "2";
                             this.error = true;
+                            this.barControllerArray[0][1]=this.currentStepRequestIndicator;
+                                    this.barControllerArray[0][2]=this.error;
                         }
 
                     })
@@ -551,11 +603,12 @@ export default class AddCardScreen extends LightningElement {
                             variant: 'error', // 'success', 'warning', 'error', or 'info'
                             mode: 'dismissible' // 'dismissable' or 'pester'
                         });
-                        this.currentStepRequestIndicator = "2";
                         this.error = true;
                         this.dispatchEvent(toastRequestRecievedError);
                         console.error('Error fetching data: ', error);
                     });
+                console.log('this.currentStepRequestIndicator'+this.currentStepRequestIndicator);
+                console.log('this.error'+this.error);
             }
             else if (currentGateway == 'Authorize.Net') {
                 console.log('In' + currentGateway);
@@ -638,11 +691,12 @@ export default class AddCardScreen extends LightningElement {
                             variant: 'error', // 'success', 'warning', 'error', or 'info'
                             mode: 'dismissible' // 'dismissable' or 'pester'
                         });
-                        this.currentStepRequestIndicator = "2";
                         this.error = true;
                         this.dispatchEvent(toastRequestRecievedError);
                         console.error('Error fetching data: ', error);
                     });
+                this.barControllerArray[1][1]=this.currentStepRequestIndicator;
+                this.barControllerArray[1][2]=this.error;
             }
             else if (currentGateway == 'Stripe') {
                 console.log('In' + currentGateway);
@@ -721,16 +775,17 @@ export default class AddCardScreen extends LightningElement {
                     .catch(error => {
                         // Handle errors
                         const toastRequestRecievedError = new ShowToastEvent({
-                            title: 'Error code: ' + error.code,
-                            message: error.message,
+                            title: 'Error code: ' + error.status,
+                            message: error.body.message,
                             variant: 'error', // 'success', 'warning', 'error', or 'info'
                             mode: 'dismissible' // 'dismissable' or 'pester'
                         });
-                        this.currentStepRequestIndicator = "2";
                         this.error = true;
                         this.dispatchEvent(toastRequestRecievedError);
                         console.error('Error fetching data: ', error);
                     });
+                this.barControllerArray[2][1]=this.currentStepRequestIndicator;
+                this.barControllerArray[2][2]=this.error;
             }
 
         }

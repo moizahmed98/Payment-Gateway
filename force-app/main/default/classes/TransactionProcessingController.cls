@@ -24,6 +24,22 @@ public class TransactionProcessingController {
             if(authNetAPIResponse.Messages.resultCode != null && authNetAPIResponse.Messages.resultCode.toLowerCase() == 'ok')
             {
                 System.debug('Succesfull::'+authNetAPIResponse.TransactionResponse.messages[0].description);
+                logicpayment__Transaction__c Transactions = new logicpayment__Transaction__c();
+                //Transactions.logicpayment__ChargeId__c = globalPayAPIResponse.id; // Set the charge id  field value
+                Transactions.logicpayment__TransactionId__c = authNetAPIResponse.transactionResponse.transId;
+                Transactions.logicpayment__Payment__c = recordId;
+                Transactions.logicpayment__Transaction_Amount__c = Decimal.valueOf(transactionAmount) ;
+                if(transactionAction == 'Pay')
+                Transactions.logicpayment__Transaction_Type__c = 'Payment';
+                else if (transactionAction == 'refund')
+                Transactions.logicpayment__Transaction_Type__c = 'Refund';
+                   // Insert the record into the database
+                   try {
+                       insert Transactions;
+                       System.debug('Record inserted successfully.');
+                   } catch (DmlException e) {
+                       System.debug('Error inserting record: ' + e.getMessage());
+                   }
             }
             // Handle the case where the authentication with Authorize.Net resulted in an error
             else if(authNetAPIResponse.Messages.resultCode != null && authNetAPIResponse.Messages.resultCode.toLowerCase() == 'error')
@@ -31,7 +47,24 @@ public class TransactionProcessingController {
                 System.debug('Error::'+authNetAPIResponse.Messages.message[0].text);
                 if(authNetAPIResponse.Messages.message[0].text.toLowerCase() == 'the transaction was unsuccessful.')
                 {
+                    system.debug('populating custom error ');
                     // Throw Error: A duplicate transaction has been submitted. Wait 2 minutes for to perform same transaction.
+                    AuthNetTransactionProcessingWrapper errorResponse = new AuthNetTransactionProcessingWrapper();
+
+                    // Make sure Messages and message list are initialized before accessing their properties
+                    errorResponse.Messages = new AuthNetTransactionProcessingWrapper.Messages();
+                    errorResponse.Messages.resultCode = 'Error';
+
+                    // Initialize the message list
+                    errorResponse.Messages.message = new List<AuthNetTransactionProcessingWrapper.Message>();
+
+                    // Add a new Message to the list
+                    AuthNetTransactionProcessingWrapper.Message errorMessage = new AuthNetTransactionProcessingWrapper.Message();
+                    errorMessage.code = 'Duplicate Transaction';
+                    errorMessage.text = 'A duplicate transaction has been submitted. Wait 2 minutes to perform the same transaction.';
+                    errorResponse.Messages.message.add(errorMessage);
+
+                    return errorResponse;
                 }
             }
 
@@ -51,6 +84,14 @@ public class TransactionProcessingController {
         System.debug('STRIPEaction::'+transactionAction);
         System.debug('STRIPEamount::'+transactionAmount);
         System.debug('STRIPErecordid::'+recordId);
+         // Convert cents to dollars
+         Integer transactionAmountInCents = (Integer)(transactionAmount * 100);
+
+         // Display the result
+         System.debug('Transaction Amount in Cents: ' + transactionAmountInCents);
+         
+         // Now, transactionAmount holds the value in dollars
+         System.debug('Amount in cents: ' + transactionAmountInCents);
         try 
         {
             //Fetch CustomerProfileId & PaymentProfileId related to that Account
@@ -68,7 +109,7 @@ public class TransactionProcessingController {
             
                 StripeCreateCharge charge = new StripeCreateCharge(); // Create an instance of StripeCreateCharge
                 String customerId = paymentlist.logicpayment__Customer_Payment_Id__c;
-                Decimal amount = transactionAmount; // Replace with the actual amount
+                Decimal amount = transactionAmountInCents; // Replace with the actual amount
                 String currencyusd = 'USD'; // Replace with the actual currency
 
                 StripeCreateChargeWrapper StripeCreateChargeAPIResponse = charge.chargeCustomer(customerId, amount, currencyusd);
@@ -84,6 +125,8 @@ public class TransactionProcessingController {
                     Transactions.logicpayment__ChargeId__c = StripeCreateChargeAPIResponse.id; // Set the charge id  field value
                     Transactions.logicpayment__TransactionId__c = StripeCreateChargeAPIResponse.balance_transaction;
                     Transactions.logicpayment__Payment__c = recordId;
+                    Transactions.logicpayment__Transaction_Amount__c = transactionAmount;
+                    Transactions.logicpayment__Transaction_Type__c = 'Payment';
                        // Insert the record into the database
                        try {
                            insert Transactions;
@@ -145,6 +188,22 @@ public class TransactionProcessingController {
             {
                 System.debug('Succesfull::'+globalPayAPIResponse);
                 System.debug('Transaction Id : '+globalPayAPIResponse.id);
+                logicpayment__Transaction__c Transactions = new logicpayment__Transaction__c();
+                    //Transactions.logicpayment__ChargeId__c = globalPayAPIResponse.id; // Set the charge id  field value
+                    Transactions.logicpayment__TransactionId__c = globalPayAPIResponse.id;
+                    Transactions.logicpayment__Payment__c = recordId;
+                    Transactions.logicpayment__Transaction_Amount__c = Decimal.valueOf(transactionAmount) ;
+                    if(transactionAction == 'Pay')
+                    Transactions.logicpayment__Transaction_Type__c = 'Payment';
+                    else if (transactionAction == 'refund')
+                    Transactions.logicpayment__Transaction_Type__c = 'Refund';
+                       // Insert the record into the database
+                       try {
+                           insert Transactions;
+                           System.debug('Record inserted successfully.');
+                       } catch (DmlException e) {
+                           System.debug('Error inserting record: ' + e.getMessage());
+                       }
             } 
             else 
             {
@@ -170,19 +229,28 @@ public static StripeRefundWrapper stripeTransactionRefund(String transactionActi
     System.debug('STRIPEaction::'+transactionAction);
     System.debug('STRIPEamount::'+transactionAmount);
     System.debug('STRIPErecordid::'+recordId);
+    // Convert cents to dollars
+    Integer transactionAmountInCents = (Integer)(transactionAmount * 100);
+
+// Display the result
+System.debug('Transaction Amount in Cents: ' + transactionAmountInCents);
+
+// Now, transactionAmount holds the value in dollars
+System.debug('Amount in cents: ' + transactionAmountInCents);
     try 
     {
         //Fetch CustomerProfileId & PaymentProfileId related to that Account
         //Account transactionAccount = [Select id, name, paymentProfileId, customerProfileId From Account Where id =: recordId];
 
 
-             list<logicpayment__Transaction__c>  transactionlist = [Select id,logicpayment__ChargeId__c From logicpayment__Transaction__c Where logicpayment__Payment__c =: recordId order by createddate desc];
+             list<logicpayment__Transaction__c>  transactionlist = [Select id,logicpayment__ChargeId__c From logicpayment__Transaction__c Where logicpayment__Payment__c =: recordId order by logicpayment__Transaction_Amount__c desc];
                 System.debug('transaction list ::'+transactionlist);
                 
-                if (transactionlist != null)
-                {StripeRefund refund = new StripeRefund(); // Create an instance of StripeRrefund
+                if (transactionlist.size() > 0)
+                {   System.debug('in loop');
+                    StripeRefund refund = new StripeRefund(); // Create an instance of StripeRrefund
                 String chargeId = transactionlist[0].logicpayment__ChargeId__c;
-                Decimal amount = transactionAmount; // Replace with the actual amount
+                Decimal amount = transactionAmountInCents; // Replace with the actual amount
                 
                 StripeRefundWrapper StripeRefundAPIResponse = refund.refundCharge(chargeId, amount);
 
@@ -195,6 +263,9 @@ public static StripeRefundWrapper stripeTransactionRefund(String transactionActi
                     Transactions.logicpayment__ChargeId__c = chargeId; // Set the charge id  field value
                     Transactions.logicpayment__TransactionId__c = StripeRefundAPIResponse.balance_transaction;
                     Transactions.logicpayment__Payment__c = recordId;
+                    Transactions.logicpayment__Transaction_Type__c = 'Refund';
+                    Transactions.logicpayment__Transaction_Amount__c = transactionAmount;
+
                        // Insert the record into the database
                        try {
                            insert Transactions;
@@ -222,9 +293,9 @@ public static StripeRefundWrapper stripeTransactionRefund(String transactionActi
                 }
                 else{
 
-                     StripeRefundWrapper errorResponse = new StripeRefundWrapper();
-                      errorResponse.error.code = 'Error';
-                      errorResponse.error.message = 'No Transaction History of selcted card';
+                    StripeRefundWrapper errorResponse = new StripeRefundWrapper();
+                    errorResponse.error.code = 'No SEND transacction found!';
+                    errorResponse.error.message = 'To process the refund, please initiate one or more send transactions. Thank you!.';
             
             return errorResponse;
                 }

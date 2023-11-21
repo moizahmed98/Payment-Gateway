@@ -51,14 +51,18 @@
 .image-container {
 
     background-image: url('/resource/makepaymentbg');
+    width: 30%;
     background-size: cover; /* Cover the entire container */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-position: center center
+    
+    
 }
 
 img {
     max-width: 100%;
     height: auto;
+    
 }
 
 .text-overlay {
@@ -90,6 +94,8 @@ img {
     font-size: 26px;
  
     font-weight: 900;
+    text-align: center;
+    width: 96%;
 
 }
 .modal-cross{
@@ -161,7 +167,7 @@ img {
     justify-content: space-between;
     align-items: center;
     margin-top: 1%;
-    max-width: 78%;
+    max-width: 76%;
     /* align-content: center; */
     flex-direction: row;
     margin-left: 11%;/* Adjust the margin as needed */
@@ -368,6 +374,8 @@ button.selected {
     font-size: 26px;
  
     font-weight: 900;
+    text-align: center;
+    width: 96%;
 
 }
 .imgheight{

@@ -44,4 +44,8 @@ public with sharing class StripeRefundWrapper {
         @AuraEnabled
         public String type { get;  set; }
     }
+    public StripeRefundWrapper() {
+        // Initialize the error object in the constructor
+        this.error = new ErrorDetails();
+    }
 }

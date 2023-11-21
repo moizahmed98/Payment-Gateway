@@ -23,10 +23,10 @@
           <div class="centered-container">
             <p class="centered-text">Are you sure you want to </p>
             <template if:true={showSend}>
-              <p class="centered-text " style="font-weight: 900; margin-left: 1%;">send ${amount}</p>
+              <p class="centered-text " style="font-weight: 500; margin-left: 1%;">send ${amount} ?</p>
             </template>
             <template if:true={showRefund}>
-              <p class="centered-text " style="font-weight: 900; margin-left: 1%;">refund ${amount}</p>
+              <p class="centered-text " style="font-weight: 500; margin-left: 1%;">refund ${amount} ?</p>
             </template>
 
           </div>
@@ -255,7 +255,7 @@
             <p class="inputFont">Processing Payment</p>
           </div>
           <div class="Verified displaynone">
-            <p class="inputFont">Sucess/Declined</p>
+            <p class="inputFont">Success</p>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ export default class TabExample extends LightningElement {
   @track authNetprevMerchant = false;
   @track authNetprevMerchantName;
   @track globalPaymentprevMerchant = false;
+  loaded = true;
 
   connectedCallback() {
     // This code will run when the component is connected to the DOM (i.e., when it loads).
@@ -28,6 +29,7 @@ export default class TabExample extends LightningElement {
           this.authNetprevMerchant = true;
           this.globalPaymentprevMerchant = false;
           this.stripeprevMerchant = false;
+          this.loaded = !this.loaded;
         } else {
           this.authNetprevMerchant = false;
         }
@@ -48,6 +50,7 @@ export default class TabExample extends LightningElement {
           this.stripeprevMerchant = true;
           this.globalPaymentprevMerchant = false;
           this.authNetprevMerchant = false;
+          this.loaded = true;
         } else {
           this.stripeprevMerchant = false;
         }
@@ -68,6 +71,7 @@ export default class TabExample extends LightningElement {
           this.globalPaymentprevMerchant = true;
           this.authNetprevMerchant = false;
           this.stripeprevMerchant = false;
+          this.loaded = true;
         } else {
           this.globalPaymentprevMerchant = false;
         }
@@ -78,6 +82,7 @@ export default class TabExample extends LightningElement {
       });
   }
   handleOnselect(event) {
+    
     var authtabContent = this.template.querySelector(
       '[data-id="authorizeNetContentId"]'
     );
@@ -164,6 +169,7 @@ export default class TabExample extends LightningElement {
 
     if (currentTabId === "authorizeNetId") {
       this.callauthNetPrevMerchantName();
+      this.loaded = !this.loaded;
       authorizeNetTab.classList.add("slds-is-active");
       skrillTab.classList.remove("slds-is-active");
       stripeTab.classList.remove("slds-is-active");
@@ -176,6 +182,7 @@ export default class TabExample extends LightningElement {
       squaretabContent.classList.add("slds-hide");
       gPtabContent.classList.add("slds-hide");
     } else if (currentTabId === "skrillId") {
+      this.loaded = !this.loaded;
       authorizeNetTab.classList.remove("slds-is-active");
       stripeTab.classList.remove("slds-is-active");
       squareTab.classList.remove("slds-is-active");
@@ -188,6 +195,7 @@ export default class TabExample extends LightningElement {
       stripetabContent.classList.add("slds-hide");
       authtabContent.classList.add("slds-hide");
     } else if (currentTabId === "stripetabId") {
+      this.loaded = !this.loaded;
       this.callstripePrevMerchantName();
       stripeTab.classList.add("slds-is-active");
       authorizeNetTab.classList.remove("slds-is-active");
@@ -201,6 +209,7 @@ export default class TabExample extends LightningElement {
       authtabContent.classList.add("slds-hide");
       skrilltabContent.classList.add("slds-hide");
     } else if (currentTabId === "squareId") {
+      this.loaded = !this.loaded;
       squareTab.classList.add("slds-is-active");
       stripeTab.classList.remove("slds-is-active");
       authorizeNetTab.classList.remove("slds-is-active");
@@ -214,7 +223,7 @@ export default class TabExample extends LightningElement {
       stripetabContent.classList.add("slds-hide");
     } else if (currentTabId === "globalPaymentId") {
       this.callglobalPaymentPrevMerchantName();
-
+      this.loaded = !this.loaded;
       globalPaymentTab.classList.add("slds-is-active");
       squareTab.classList.remove("slds-is-active");
       stripeTab.classList.remove("slds-is-active");
@@ -233,12 +242,13 @@ export default class TabExample extends LightningElement {
   @track authNetemerchantName = null;
   authNetMerchantName(event) {
     const inputValue = event.target.value;
-  
+
     // Check if the input is not a single space
     if (inputValue.trim() !== "") {
       this.authNetemerchantName = inputValue;
       console.log("Updated merchant name:", this.authNetemerchantName);
     } else {
+      this.authNetemerchantName = null;
       console.log("Invalid input. Merchant name must not be a single space.");
     }
   }
@@ -264,9 +274,14 @@ export default class TabExample extends LightningElement {
   error;
   AuthNethandleButtonClick() {
     console.log("ftn is called");
+    this.authNetcurrentstep ='1';
+    this.authNetProgressError=false;
 
-    if( this.authNetemerchantName == null || this.authNetLoginId == null || this.authNetTransactoinId== null)
-    {
+    if (
+      this.authNetemerchantName == null ||
+      this.authNetLoginId == null ||
+      this.authNetTransactoinId == null
+    ) {
       const evt = new ShowToastEvent({
         title: "Error!",
         message: "Please fill all the Input Fields",
@@ -274,99 +289,113 @@ export default class TabExample extends LightningElement {
         mode: "dismissable"
       });
       this.dispatchEvent(evt);
-    }
-    else{
-    authorizeNetAdminAuth({
-      authorizeNetMerchantName: this.authNetemerchantName,
-      authorizeNetApiLoginId: this.authNetLoginId,
-      authorizeNetTransactionKey: this.authNetTransactoinId
-    })
-      .then((result) => {
-        // Handle the successful response
-        console.log(
-          "this is the retiurned result 1  :" + JSON.stringify(result)
-        );
-        console.log(
-          "this is the retiurned result 2 :" +
-            result.messages.resultCode.toLowerCase()
-        );
-        this.authNetresponse = result;
-        this.error = null;
-        this.authNetProgressError = false;
-        this.authNetcurrentstep = "2";
-
-        if (
-          result.messages.resultCode != null &&
-          result.messages.resultCode.toLowerCase() == "ok"
-        ) {
-          console.log("in else if ");
-          this.authNetcurrentstep = "3";
-          const evt = new ShowToastEvent({
-            title: "Success!",
-            message: "Authentication successful",
-            variant: "success"
-          });
-          this.dispatchEvent(evt);
-          ///////////////////////////////////
-          setTimeout(() => {
-            this.callauthNetPrevMerchantName();
-            this.authNetemerchantName = null;
-            this.authNetLoginId =null;
-            this.authNetTransactoinId = null;
-            this.authNetcurrentstep = "1";
-        }, 2500);
-          /////////////////////////////////
-       
-          
-        }
-        // Handle the case where the authentication with AUthrize NET resulted in an error
-        else if (
-          result.messages.resultCode != null &&
-          result.messages.resultCode.toLowerCase() == "error"
-        ) {
-          
-          console.log("in else if  : " + result.messages.text);
-          this.authNetcurrentstep = "3";
-          this.authNetProgressError = true;
-          const evt = new ShowToastEvent({
-            title: "Error!",
-            message: result.messages.message[0].text,
-            variant: "error",
-            mode: "dismissable"
-          });
-          this.dispatchEvent(evt);
-        }
-        console.log("final response that is retuned  : ");
+    } else {
+      authorizeNetAdminAuth({
+        authorizeNetMerchantName: this.authNetemerchantName,
+        authorizeNetApiLoginId: this.authNetLoginId,
+        authorizeNetTransactionKey: this.authNetTransactoinId
       })
-      .catch((error) => {
-        // Handle any errors
-        console.log("in cach error ");
-        const evt = new ShowToastEvent({
-          title: "Error!",
-          message: "The response was not recived",
-          variant: "error",
-          mode: "dismissable"
+        .then((result) => {
+          // Handle the successful response
+          console.log(
+            "this is the retiurned result 1  :" + JSON.stringify(result)
+          );
+          console.log(
+            "this is the retiurned result 2 :" +
+              result.messages.resultCode.toLowerCase()
+          );
+          this.authNetresponse = result;
+          this.error = null;
+          this.authNetProgressError = false;
+          this.authNetcurrentstep = "2";
+          const responseRecievedSuccessfully = new ShowToastEvent({
+            title: "Response Recieved Successfully!",
+            message: "The response has been received.",
+            variant: "info", // 'success', 'warning', 'error', or 'info'
+            mode: "dismissible" // 'dismissable' or 'pester'
+          });
+          this.dispatchEvent(responseRecievedSuccessfully);
+
+          if (
+            result.messages.resultCode != null &&
+            result.messages.resultCode.toLowerCase() == "ok"
+          ) {
+            console.log("in else if ");
+            ////////////////////////////////
+
+            setTimeout(() => {
+              this.authNetcurrentstep = "3";
+              const evt = new ShowToastEvent({
+                title: "Success!",
+                message: "Authentication successful",
+                variant: "success"
+              });
+              this.dispatchEvent(evt);
+              ///////////////////////////////////
+              setTimeout(() => {
+                this.callauthNetPrevMerchantName();
+                this.authNetemerchantName = null;
+                this.authNetLoginId = null;
+                this.authNetTransactoinId = null;
+                this.authNetcurrentstep = "1";
+              }, 2500);
+            }, 1500);
+
+            ////////////////////////////////
+
+            /////////////////////////////////
+          }
+          // Handle the case where the authentication with AUthrize NET resulted in an error
+          else if (
+            result.messages.resultCode != null &&
+            result.messages.resultCode.toLowerCase() == "error"
+          ) {
+            console.log("in else if  : " + result.messages.text);
+
+            const evt = new ShowToastEvent({
+              title: "Error!",
+              message: result.messages.message[0].text,
+              variant: "error",
+              mode: "dismissable"
+            });
+            setTimeout(() => {
+              this.dispatchEvent(evt);
+              this.authNetcurrentstep = "3";
+              this.authNetProgressError = true;
+            }, 1500);
+          }
+          console.log("final response that is retuned  : ");
+        })
+        .catch((error) => {
+          // Handle any errors
+          console.log("in cach error ");
+          const evt = new ShowToastEvent({
+            title: 'Error code: ' + error.status,
+            message: error.body.message,
+            variant: 'error', // 'success', 'warning', 'error', or 'info'
+            mode: 'dismissible' 
+          });
+          this.dispatchEvent(evt);
+          this.authNetcurrentstep = "1";
+          this.authNetProgressError = true;
+          this.response = null;
+          this.error = error;
         });
-        this.dispatchEvent(evt);
-        this.authNetcurrentstep = "2";
-        this.authNetProgressError = true;
-        this.response = null;
-        this.error = error;
-      });
+    }
   }
-}
 
   //store input value of merchant name//////////////////////////////////////////*********calling globalNEt merchant authentication function**********///////////////////////////////////////////////////////////////////////////////////////
 
-  @track globalPaymentemerchantName =null;
+  @track globalPaymentemerchantName = null;
   globalPaymentMerchantName(event) {
     const inputValue = event.target.value;
-  
+
     // Check if the input is not a single space
     if (inputValue.trim() !== "") {
       this.globalPaymentemerchantName = inputValue;
       console.log("Updated merchant name:", this.globalPaymentemerchantName);
     } else {
+      this.globalPaymentemerchantName = null;
       console.log("Invalid input. Merchant name must not be a single space.");
     }
   }
@@ -378,7 +407,7 @@ export default class TabExample extends LightningElement {
     console.log(this.globalPaymentLoginId);
   }
   //store input value of transaction id
-  @track globalPaymentTransactoinId =null;
+  @track globalPaymentTransactoinId = null;
   globalPaymentTransactionIdinput(event) {
     console.log("thi is inout :" + event.target.value);
     this.globalPaymentTransactoinId = event.target.value;
@@ -389,13 +418,16 @@ export default class TabExample extends LightningElement {
   @track globalPaymenterror = false;
 
   globalPaymentresponse;
-  
 
- 
   globalPaymenthandleButtonClick() {
+    this.globalPaymenterror = false;
+    this.globalPaymentcurrentstep ='1';
     console.log("ftn is called");
-    if( this.globalPaymentemerchantName == null || this.globalPaymentLoginId == null || this.globalPaymentTransactoinId== null)
-    {
+    if (
+      this.globalPaymentemerchantName == null ||
+      this.globalPaymentLoginId == null ||
+      this.globalPaymentTransactoinId == null
+    ) {
       const evt = new ShowToastEvent({
         title: "Error!",
         message: "Please fill all the Input Fields",
@@ -403,99 +435,109 @@ export default class TabExample extends LightningElement {
         mode: "dismissable"
       });
       this.dispatchEvent(evt);
-    }
-    else{
-    globalPaymentAdminAuth({
-      globalPaymentMerchantName: this.globalPaymentemerchantName,
-      globalPaymentAppId: this.globalPaymentLoginId,
-      globalPaymentAppKey: this.globalPaymentTransactoinId
-    })
-      .then((result) => {
-        // Handle the successful response
-        console.log(
-          "this is the retiurned result 1  :" + JSON.stringify(result)
-        );
-        console.log("this is the retiurned result 2 :" + result.error_code);
-        this.authNetresponse = result;
-        this.error = null;
-        this.globalPaymenterror = false;
-        this.globalPaymentcurrentstep = "2";
-
-        if (result.error_code == null) {
-          console.log("in  if ");
-          this.globalPaymentcurrentstep = "3";
-          const evt = new ShowToastEvent({
-            title: "Success!",
-            message: "Authentication successful",
-            variant: "success"
-          });
-          this.dispatchEvent(evt);
-          //////////////////////////////////
-          setTimeout(() => {
-            this.globalPaymentemerchantName = null;
-            this.callglobalPaymentPrevMerchantName();
-            this.globalPaymentLoginId =null;
-            this.globalPaymentTransactoinId = null;
-            this.globalPaymentcurrentstep = "1";
-        }, 2500);
-          /////////////////////////////////
-       
-        }
-        // Handle the case where the authentication with GP resulted in an error
-        else {
-          this.globalPaymentcurrentstep = "3";
-          this.globalPaymenterror = true;
-          const evt = new ShowToastEvent({
-            title: "Error!",
-            message: result.error_code,
-            variant: "error",
-            mode: "dismissable"
-          });
-          this.dispatchEvent(evt);
-        }
-        console.log("final response that is retuned  : ");
+    } else {
+      globalPaymentAdminAuth({
+        globalPaymentMerchantName: this.globalPaymentemerchantName,
+        globalPaymentAppId: this.globalPaymentLoginId,
+        globalPaymentAppKey: this.globalPaymentTransactoinId
       })
-      .catch((error) => {
-        // Handle any errors
-        console.log("in cach error ");
-        const evt = new ShowToastEvent({
-          title: "Error!",
-          message: "The response was not recived",
-          variant: "error",
-          mode: "dismissable"
+        .then((result) => {
+          // Handle the successful response
+          console.log(
+            "this is the retiurned result 1  :" + JSON.stringify(result)
+          );
+          console.log("this is the retiurned result 2 :" + result.error_code);
+          //////////////////////////////////////////
+
+          this.globalPaymentcurrentstep = "2";
+          const responseRecievedSuccessfully = new ShowToastEvent({
+            title: "Response Recieved Successfully!",
+            message: "The response has been received.",
+            variant: "info", // 'success', 'warning', 'error', or 'info'
+            mode: "dismissible" // 'dismissable' or 'pester'
+          });
+          this.dispatchEvent(responseRecievedSuccessfully);
+          /////////////////////////////////////////
+
+          if (result.error_code == null) {
+            console.log("in  if ");
+            setTimeout(() => {
+              this.globalPaymentcurrentstep = "3";
+              const evt = new ShowToastEvent({
+                title: "Success!",
+                message: "Authentication successful",
+                variant: "success"
+              });
+              this.dispatchEvent(evt);
+              //////////////////////////////////
+              setTimeout(() => {
+                this.globalPaymentemerchantName = null;
+                this.callglobalPaymentPrevMerchantName();
+                this.globalPaymentLoginId = null;
+                this.globalPaymentTransactoinId = null;
+                this.globalPaymentcurrentstep = "1";
+              }, 2500);
+            }, 1500);
+
+            /////////////////////////////////
+          }
+          // Handle the case where the authentication with GP resulted in an error
+          else {
+            const evt = new ShowToastEvent({
+              title: "Error!",
+              message: result.error_code,
+              variant: "error",
+              mode: "dismissable"
+            });
+            setTimeout(() => {
+              this.dispatchEvent(evt);
+              this.globalPaymentcurrentstep = "3";
+              this.globalPaymenterror = true;
+            }, 1500);
+          }
+          console.log("final response that is retuned  : ");
+        })
+        .catch((error) => {
+          // Handle any errors
+          console.log("in cach error ");
+          const evt = new ShowToastEvent({
+            title: 'Error code: ' + error.status,
+            message: error.body.message,
+            variant: 'error', // 'success', 'warning', 'error', or 'info'
+            mode: 'dismissible' 
+          });
+          this.dispatchEvent(evt);
+          this.globalPaymentcurrentstep = "1";
+          this.globalPaymenterror = true;
+          this.response = null;
+          this.error = error;
         });
-        this.dispatchEvent(evt);
-        this.globalPaymentcurrentstep = "2";
-        this.globalPaymenterror = true;
-        this.response = null;
-        this.error = error;
-      });
+    }
   }
-}
 
   //store input value of merchant name//////////////////////////////////////////************input fileds of stripe*******///////////////////////////////////////////////////////////////////////////////////////
-  @track stripemerchantName =null;
+  @track stripemerchantName = null;
   stripemerchantNameinput(event) {
-
     const inputValue = event.target.value;
-  
+
     // Check if the input is not a single space
     if (inputValue.trim() !== "") {
       this.stripemerchantName = inputValue;
       console.log("Updated merchant name:", this.stripemerchantName);
     } else {
+      this.stripemerchantName = null;
       console.log("Invalid input. Merchant name must not be a single space.");
     }
   }
   //store input value of secret key
-  @track stripesecretKey =null;
+  @track stripesecretKey = null;
   stripesecretKeyinput(event) {
     console.log("thi is inout :" + event.target.value);
     this.stripesecretKey = event.target.value;
     console.log(this.stripesecretKey);
   }
   //store input value of publishable key
-  @track stripepublishKey =null;
+  @track stripepublishKey = null;
   stripepublishKeyinput(event) {
     console.log("thi is inout :" + event.target.value);
     this.stripepublishKey = event.target.value;
@@ -509,9 +551,14 @@ export default class TabExample extends LightningElement {
   response;
   error;
   StripehandleButtonClick() {
+    this.currentstep = '1';
+    this.stripeProgressError = false;
     console.log("ftn is called" + this.current_step);
-    if( this.stripemerchantName == null || this.stripesecretKey == null || this.stripepublishKey == null)
-    {
+    if (
+      this.stripemerchantName == null ||
+      this.stripesecretKey == null ||
+      this.stripepublishKey == null
+    ) {
       const evt = new ShowToastEvent({
         title: "Error!",
         message: "Please fill all the Input Fields",
@@ -519,107 +566,121 @@ export default class TabExample extends LightningElement {
         mode: "dismissable"
       });
       this.dispatchEvent(evt);
-    }
-    else{
-    stripeAdminAuth({
-      stripeMerchantName: this.stripemerchantName,
-      stripeSecretApiKey: this.stripesecretKey,
-      stripePublishableApiKey: this.stripepublishKey
-    })
-      .then((result) => {
-        // Handle the successful response
-        console.log(
-          "this is the retiurned result 1  :" + JSON.stringify(result)
-        );
-        console.log("this is the retiurned result 2 :" + result.error);
-        console.log("this is the retiurned result 3 :" + result.settings);
-        this.response = result;
-        this.error = null;
-        this.stripeProgressError = false;
-        this.currentstep = "2";
-        if (result.settings != "undefined" && result.settings != undefined) {
-          console.log("error is  null  and the display name is ");
+    } else {
+      stripeAdminAuth({
+        stripeMerchantName: this.stripemerchantName,
+        stripeSecretApiKey: this.stripesecretKey,
+        stripePublishableApiKey: this.stripepublishKey
+      })
+        .then((result) => {
+          // Handle the successful response
           console.log(
-            "this is the input merchant name : " + this.stripemerchantName
+            "this is the retiurned result 1  :" + JSON.stringify(result)
           );
+          console.log("this is the retiurned result 2 :" + result.error);
+          console.log("this is the retiurned result 3 :" + result.settings);
+          this.response = result;
+          this.error = null;
+          this.stripeProgressError = false;
+          this.currentstep = "2";
+          const responseRecievedSuccessfully = new ShowToastEvent({
+            title: "Response Recieved Successfully!",
+            message: "The response has been received.",
+            variant: "info", // 'success', 'warning', 'error', or 'info'
+            mode: "dismissible" // 'dismissable' or 'pester'
+          });
+          this.dispatchEvent(responseRecievedSuccessfully);
+          if (result.settings != "undefined" && result.settings != undefined) {
+            console.log("error is  null  and the display name is ");
+            console.log(
+              "this is the input merchant name : " + this.stripemerchantName
+            );
 
-          if (
-            this.response.settings.dashboard.display_name ===
-            this.stripemerchantName
+           
+            /////////////////////////////////////////
+            if (
+              this.response.settings.dashboard.display_name ===
+              this.stripemerchantName
+            ) {
+              setTimeout(() => {
+                this.currentstep = "3";
+                this.stripeProgressError = false;
+                console.log(
+                  "the  display name is correct and the merchant is authenticated"
+                );
+                const evt = new ShowToastEvent({
+                  title: "Success!",
+                  message: "Authentication successful",
+                  variant: "success"
+                });
+                this.dispatchEvent(evt);
+                setTimeout(() => {
+                  this.callstripePrevMerchantName();
+                  this.stripemerchantName = null;
+                  this.stripesecretKey = null;
+                  this.stripepublishKey = null;
+                  this.currentstep = "1";
+                }, 2500);
+              }, 1500);
+              /////////////////////////////////
+            } else if (
+              this.response.settings.dashboard.display_name !=
+              this.stripemerchantName
+            ) {
+             
+              console.log(
+                "display name is not correct : " + this.stripemerchantName
+              );
+              const evt = new ShowToastEvent({
+                title: "Error!",
+                message: "Merchant Name is Incorrect",
+                variant: "error",
+                mode: "dismissable"
+              });
+
+              setTimeout(() => {
+                this.dispatchEvent(evt);
+                this.currentstep = "3";
+                this.stripeProgressError = true;
+              }, 1500);
+            }
+          }
+          // Handle the case where the authentication with Stripe resulted in an error
+          else if (
+            this.response.error !== "undefined" &&
+            this.response.error !== undefined
           ) {
-            this.currentstep = "3";
-            this.stripeProgressError = false;
-            console.log(
-              "the  display name is correct and the merchant is authenticated"
-            );
-            const evt = new ShowToastEvent({
-              title: "Success!",
-              message: "Authentication successful",
-              variant: "success"
-            });
-            this.dispatchEvent(evt);
-            setTimeout(() => {
-              this.callstripePrevMerchantName();
-              this.stripemerchantName = null;
-            this.stripesecretKey =null;
-            this.stripepublishKey = null;
-            this.currentstep = "1";
-          }, 2500);
-            /////////////////////////////////
-        
-          } else if (
-            this.response.settings.dashboard.display_name !=
-            this.stripemerchantName
-          ) {
-            this.currentstep = "3";
-            this.stripeProgressError = true;
-            console.log(
-              "display name is not correct : " + this.stripemerchantName
-            );
+            console.log("error and current step is  : " + this.currentstep);
+            console.log("error message  : " + this.response.error.message);
             const evt = new ShowToastEvent({
               title: "Error!",
-              message: "Merchant Name is Incorrect",
+              message: this.response.error.message,
               variant: "error",
               mode: "dismissable"
             });
-            this.dispatchEvent(evt);
+            setTimeout(() => {
+              this.dispatchEvent(evt);
+              this.currentstep = "3";
+              this.stripeProgressError = true;
+            }, 1500);
           }
-        }
-        // Handle the case where the authentication with Stripe resulted in an error
-        else if (
-          this.response.error !== "undefined" &&
-          this.response.error !== undefined
-        ) {
-          this.currentstep = "3";
-          this.stripeProgressError = true;
-          console.log("error and current step is  : " + this.currentstep);
-          console.log("error message  : " + this.response.error.message);
+          console.log("final response that is retuned  : ");
+        })
+        .catch((error) => {
+          // Handle any errors
+          this.currentstep = "1";
           const evt = new ShowToastEvent({
-            title: "Error!",
-            message: this.response.error.message,
-            variant: "error",
-            mode: "dismissable"
+            title: 'Error code: ' + error.status,
+            message: error.body.message,
+            variant: 'error', // 'success', 'warning', 'error', or 'info'
+            mode: 'dismissible' 
           });
           this.dispatchEvent(evt);
-        }
-        console.log("final response that is retuned  : ");
-      })
-      .catch((error) => {
-        // Handle any errors
-        this.currentstep = "2";
-        const evt = new ShowToastEvent({
-          title: "Error!",
-          message:"The response was not recived",
-          variant: "error",
-          mode: "dismissable"
+          this.stripeProgressError = true;
+          this.response = null;
+          this.error = error;
         });
-        this.dispatchEvent(evt);
-        this.stripeProgressError = true;
-        this.response = null;
-        this.error = error;
-      });
+    }
   }
-}
   //store input value of merchant name//////////////////////////////////////////************stripe merchant authentication funtion end*******///////////////////////////////////////////////////////////////////////////////////////
-
 }

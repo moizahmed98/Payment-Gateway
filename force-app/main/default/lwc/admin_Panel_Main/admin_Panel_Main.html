@@ -129,6 +129,11 @@
     </ul>
     <!-- Tabs ofAll the Gateways END-->
     <!-- Authorize.net Tab content -->
+   
+        <template if:false={loaded}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+    
     <div data-id="authorizeNetContentId" data-tab-content="tab-default-1" class="slds-tabs_default__content slds-show "
       role="tabpanel" aria-labelledby="tab-default-1__item">
       <div class="logo-container">
@@ -240,7 +245,7 @@
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
-            App login Id: </label>
+            App Login Id: </label>
           <div class="slds-form-element__control">
             <input type="text" onchange={authNetloginIdinput} id="text-input-id-2" value={authNetLoginId}  class="slds-input inputwidth rcorners2" />
           </div>
@@ -267,16 +272,22 @@
 
       </lightning-progress-indicator>
       <div class="step-descriptions displaynone">
-        <div class="Request displaynone">
-          <p class="inputFont ">Request Sent</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Request Sent
+            </p>
         </div>
-        <div class="Response displaynone">
-          <p class="inputFont">Response Recived</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Response Received
+            </p>
         </div>
-        <div class="Verified displaynone">
-          <p class="inputFont">Verified</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Verified
+            </p>
         </div>
-      </div>
+    </div>
     </div>
     <!-- Skrill Tab content -->
  
@@ -349,16 +360,22 @@
 
       </lightning-progress-indicator>
       <div class="step-descriptions displaynone">
-        <div class="Request displaynone">
-          <p class="inputFont ">Request Sent</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Request Sent
+            </p>
         </div>
-        <div class="Response displaynone">
-          <p class="inputFont">Response Recived</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Response Received
+            </p>
         </div>
-        <div class="Verified displaynone">
-          <p class="inputFont">Verified</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Verified
+            </p>
         </div>
-      </div>
+    </div>
 
     </div>
     <!-- Stripe Tab Content -->
@@ -416,7 +433,7 @@
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
-            Secret Key: </label>
+            Secret Key(API Key): </label>
           <div class="slds-form-element__control">
             <input type="password" onchange={stripesecretKeyinput} value={stripesecretKey} class="slds-input inputwidth rcorners2" />
           </div>
@@ -434,16 +451,22 @@
 
       </lightning-progress-indicator>
       <div class="step-descriptions displaynone">
-        <div class="Request displaynone">
-          <p class="inputFont">Request Sent</p>
-        </div>
-        <div class="Response displaynone">
-          <p class="inputFont">Response Recived</p>
-        </div>
-        <div class="Verified displaynone">
-          <p class="inputFont">Verified</p>
-        </div>
-      </div>
+                <div class="step-description">
+                    <p class="inputFont">
+                        Request Sent
+                    </p>
+                </div>
+                <div class="step-description">
+                    <p class="inputFont">
+                        Response Received
+                    </p>
+                </div>
+                <div class="step-description">
+                    <p class="inputFont">
+                        Verified
+                    </p>
+                </div>
+            </div>
 
     </div>
     <!-- Square Tab Content -->
@@ -533,16 +556,22 @@
 
       </lightning-progress-indicator>
       <div class="step-descriptions displaynone">
-        <div class="Request displaynone">
-          <p class="inputFont">Request Sent</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Request Sent
+            </p>
         </div>
-        <div class="Response displaynone">
-          <p class="inputFont">Response Recived</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Response Received
+            </p>
         </div>
-        <div class="Verified displaynone">
-          <p class="inputFont">Verified</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Verified
+            </p>
         </div>
-      </div>
+    </div>
 
     </div>
     <!-- Global Payment Tab content  -->
@@ -597,7 +626,7 @@
         <br />
         <div class="slds-form-element inputFont">
           <label class="slds-form-element__label inputFont inputwidth" for="text-input-id-47">
-            APP Key: </label>
+            API Key: </label>
           <div class="slds-form-element__control">
             <input type="password" onchange={globalPaymentTransactionIdinput} value={globalPaymentTransactoinId} class="slds-input inputwidth rcorners2" />
           </div>
@@ -609,23 +638,31 @@
 
       <br />
       <br />
+      <div class="progresswidth">
       <lightning-progress-indicator class="displaynone" current-step={globalPaymentcurrentstep}  has-error={globalPaymenterror} type="base" variant="base">
         <lightning-progress-step label="Step 1" value="1"></lightning-progress-step>
         <lightning-progress-step label="Step 2" value="2"></lightning-progress-step>
         <lightning-progress-step label="Step 3" value="3"></lightning-progress-step>
-
+      
       </lightning-progress-indicator>
+    </div>
       <div class="step-descriptions displaynone">
-        <div class="Request displaynone">
-          <p class="inputFont">Request Sent</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Request Sent
+            </p>
         </div>
-        <div class="Response displaynone">
-          <p class="inputFont">Response Recived</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Response Received
+            </p>
         </div>
-        <div class="Verified displaynone">
-          <p class="inputFont">Verified</p>
+        <div class="step-description">
+            <p class="inputFont">
+                Verified
+            </p>
         </div>
-      </div>
+    </div>
 
 
 
