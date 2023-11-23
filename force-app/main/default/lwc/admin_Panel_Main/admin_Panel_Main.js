@@ -29,9 +29,10 @@ export default class TabExample extends LightningElement {
           this.authNetprevMerchant = true;
           this.globalPaymentprevMerchant = false;
           this.stripeprevMerchant = false;
-          this.loaded = !this.loaded;
+          this.loaded = true;
         } else {
           this.authNetprevMerchant = false;
+          this.loaded = true;
         }
       })
       .catch((error) => {
@@ -53,6 +54,7 @@ export default class TabExample extends LightningElement {
           this.loaded = true;
         } else {
           this.stripeprevMerchant = false;
+          this.loaded = true;
         }
       })
       .catch((error) => {
@@ -74,6 +76,7 @@ export default class TabExample extends LightningElement {
           this.loaded = true;
         } else {
           this.globalPaymentprevMerchant = false;
+          this.loaded = true;
         }
       })
       .catch((error) => {
@@ -182,7 +185,7 @@ export default class TabExample extends LightningElement {
       squaretabContent.classList.add("slds-hide");
       gPtabContent.classList.add("slds-hide");
     } else if (currentTabId === "skrillId") {
-      this.loaded = !this.loaded;
+      
       authorizeNetTab.classList.remove("slds-is-active");
       stripeTab.classList.remove("slds-is-active");
       squareTab.classList.remove("slds-is-active");
@@ -209,7 +212,7 @@ export default class TabExample extends LightningElement {
       authtabContent.classList.add("slds-hide");
       skrilltabContent.classList.add("slds-hide");
     } else if (currentTabId === "squareId") {
-      this.loaded = !this.loaded;
+      
       squareTab.classList.add("slds-is-active");
       stripeTab.classList.remove("slds-is-active");
       authorizeNetTab.classList.remove("slds-is-active");
