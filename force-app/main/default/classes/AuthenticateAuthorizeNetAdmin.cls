@@ -13,6 +13,9 @@ public with sharing class AuthenticateAuthorizeNetAdmin
 
         Http http = new Http();
         HttpResponse res = http.send(req);
+        // Authorize.Net - Add Card
+        APILogsManager.fillAPILogsData('Authorize.Net', 'Add Card', endPoint, requestBody, String.valueOf(res), String.valueOf(res.getStatusCode()));
+
 
         if (res.getStatusCode() == 200) 
         {
