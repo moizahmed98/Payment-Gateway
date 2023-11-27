@@ -64,7 +64,9 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
                 System.debug('requestBody::'+requestBody);
                 Http http = new Http();
                 HttpResponse res = http.send(request);
-    
+                // Global Payments - Add Card
+                APILogsManager.fillAPILogsData('Global Payments', 'Add Card', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+
                 // Process the JSON response and store it in the GlobalPayGetPaymentIDToCardInfoWrapper object
                 response = (GlobalPayGetPaymentIDToCardInfoWrapper)JSON.deserialize(res.getBody(), GlobalPayGetPaymentIDToCardInfoWrapper.class);
                 if (res.getStatusCode() == 200) 

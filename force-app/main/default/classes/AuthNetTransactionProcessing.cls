@@ -53,6 +53,8 @@ public class AuthNetTransactionProcessing {
         System.debug('AuthNetTransactionProcessing requestBody::'+requestBody);
         Http http = new Http();
         HttpResponse res = http.send(request);
+        // Authorize.Net - Transaction Processing
+        APILogsManager.fillAPILogsData('Authorize.Net', 'Transaction Processing', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
         if (res.getStatusCode() == 200) 
         {

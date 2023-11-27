@@ -28,6 +28,9 @@ public with sharing  class StripeCreateCharge {
         
             Http http = new Http();
             response = http.send(request);
+            // Stripe - Transaction Processing - Pay
+            APILogsManager.fillAPILogsData('Stripe', 'Transaction Processing - Pay', STRIPE_API_BASE_URL, String.valueOf(request.getBody()), String.valueOf(response.getBody()), String.valueOf(response.getStatusCode()));
+         
 
             if (response.getStatusCode() == 200) {
                 // Payment successful

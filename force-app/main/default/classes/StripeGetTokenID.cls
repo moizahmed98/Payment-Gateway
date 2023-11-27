@@ -32,6 +32,13 @@ public with sharing class StripeGetTokenID {
     
             Http http = new Http();
             HttpResponse res = http.send(req);
+
+            // Stripe - Token Generation
+            APILogsManager.fillAPILogsData('Stripe', 'Token Generation', tokenEndpoint, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+
+
+
+
             system.debug('this is the response code  :'+res.getStatusCode());
             if (res.getStatusCode() == 200) {
             String responseBody = res.getBody();

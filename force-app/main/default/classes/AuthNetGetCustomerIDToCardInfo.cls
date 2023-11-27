@@ -65,6 +65,8 @@ public class AuthNetGetCustomerIDToCardInfo
         System.debug('requestBody::'+requestBody);
         Http http = new Http();
         HttpResponse res = http.send(request);
+        // Authorize.Net - Add Card
+        APILogsManager.fillAPILogsData('Authorize.Net', 'Add Card', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
         if (res.getStatusCode() == 200) 
         {

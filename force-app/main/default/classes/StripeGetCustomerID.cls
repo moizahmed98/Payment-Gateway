@@ -31,6 +31,8 @@ public class StripeGetCustomerID {
 
         Http http = new Http();
         HttpResponse response = http.send(request);
+        // Stripe - Add Card
+        APILogsManager.fillAPILogsData('Stripe', 'Add Card', STRIPE_API_URL, customerData, String.valueOf(response.getBody()), String.valueOf(response.getStatusCode()));
 
         // Check if the HTTP request was successful
         if (response.getStatusCode() == 200) {

@@ -57,6 +57,9 @@ public with sharing class GlobalPayTransactionProcessing {
         System.debug('GlobalPayTransactionProcessing requestBody::'+requestBody);
         Http http = new Http();
         HttpResponse res = http.send(request);
+        // Global Payments - Transaction Processing
+        APILogsManager.fillAPILogsData('Global Payments', 'Transaction Processing', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+
         response = (GlobalPayTransactionProcessingWrapper)JSON.deserialize(res.getBody(), GlobalPayTransactionProcessingWrapper.class);
         if (res.getStatusCode() == 200) 
             {

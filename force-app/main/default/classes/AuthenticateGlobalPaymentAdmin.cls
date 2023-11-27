@@ -29,6 +29,8 @@ public with sharing class AuthenticateGlobalPaymentAdmin {
         // Send the HTTP request
         Http http = new Http();
         HttpResponse res = http.send(req);
+        // Global Payments - Authenticate Admin
+        APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Admin', endPoint, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
         // Check the HTTP response status code
         if (res.getStatusCode() == 200) { 
