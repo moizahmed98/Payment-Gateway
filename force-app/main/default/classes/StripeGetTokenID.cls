@@ -1,7 +1,5 @@
 public with sharing class StripeGetTokenID {
     private String stripeApiPublishableKey;
-
-    //Constructor to intialize secret key 
     public StripeGetTokenID() 
     {
         // Initialize custom settings
@@ -32,9 +30,7 @@ public with sharing class StripeGetTokenID {
     
             Http http = new Http();
             HttpResponse res = http.send(req);
-
-            // Stripe - Token Generation
-            APILogsManager.fillAPILogsData('Stripe', 'Token Generation', tokenEndpoint, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+            
 
 
 
@@ -52,7 +48,11 @@ public with sharing class StripeGetTokenID {
             StripeGetCustomerID customerIDInstance = new StripeGetCustomerID();
 
             StripeGetCustomerIDWrapper responseCustomerId = customerIDInstance.createStripeCustomer(response.id);
-            
+            // Stripe - Token Generation
+            APILogsManager.fillAPILogsData('Stripe', 'Token Generation', tokenEndpoint, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+            // Stripe - Add Card
+            APILogsManager.fillAPILogsData('Stripe', 'Add Card', StripeGetCustomerID.tempURL, StripeGetCustomerID.tempRequestBody, StripeGetCustomerID.tempResponseBody, StripeGetCustomerID.tempStatus);
+
             system.debug('this is the customer id funtion called from token class : '+response.id);
             return responseCustomerId;
             } 

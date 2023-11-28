@@ -68,7 +68,7 @@ public static GlobalPayAdminWrapper globalPaymentAdminAuth(String globalPaymentM
     @AuraEnabled
     public static StripeAdminWrapper stripeAdminAuth(String stripeMerchantName, String stripeSecretApiKey, String stripePublishableApiKey )
     {
-       StripeAdminWrapper stripeAPIResponse= AuthenticateStripeAdmin.authenticateStripeAdminAPI(stripeMerchantName, stripeSecretApiKey);
+       StripeAdminWrapper stripeAPIResponse= AuthenticateStripeAdmin.authenticateStripeAdminAPIForAdmin(stripeMerchantName, stripeSecretApiKey);
             System.debug('stripeAPIResponse::      '+stripeAPIResponse);
           // Check if the authentication with Stripe was successful (result code is 'Ok')
         

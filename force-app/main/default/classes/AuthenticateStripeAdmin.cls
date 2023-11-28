@@ -1,5 +1,6 @@
 public with sharing class AuthenticateStripeAdmin 
 {
+    
     public static StripeAdminWrapper authenticateStripeAdminAPI(String stripeMerchantName, String stripeSecretApiKey) 
     {
         String endPoint = 'https://api.stripe.com/v1/account';

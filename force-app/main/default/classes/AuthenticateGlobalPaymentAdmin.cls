@@ -4,7 +4,6 @@ public with sharing class AuthenticateGlobalPaymentAdmin {
     public static String tempRequestBody;
     public static String tempResponseBody;
     public static String tempStatus;
-    //public static APILogsManager tempLogs;
 
     public static GlobalPayAdminWrapper authenticateGlobalPaymentAdminAPIForAdmin(String globalPaymentMerchantName, String globalPaymentAppId, String globalPaymentAppKey) {
         

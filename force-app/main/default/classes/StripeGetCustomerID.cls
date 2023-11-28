@@ -1,5 +1,10 @@
 public class StripeGetCustomerID {
     private String stripeApiSecretKey;
+    public static String tempURL;
+    public static String tempRequestBody;
+    public static String tempResponseBody;
+    public static String tempStatus;
+
     public final String STRIPE_API_URL = 'https://api.stripe.com/v1/customers';
 
     //Constructor to intialize secret key 
@@ -31,8 +36,10 @@ public class StripeGetCustomerID {
 
         Http http = new Http();
         HttpResponse response = http.send(request);
-        // Stripe - Add Card
-        APILogsManager.fillAPILogsData('Stripe', 'Add Card', STRIPE_API_URL, customerData, String.valueOf(response.getBody()), String.valueOf(response.getStatusCode()));
+        tempURL = STRIPE_API_URL;
+        tempRequestBody = customerData;
+        tempResponseBody = String.valueOf(response.getBody());
+        tempStatus = String.valueOf(response.getStatusCode()); 
 
         // Check if the HTTP request was successful
         if (response.getStatusCode() == 200) {
