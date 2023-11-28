@@ -25,6 +25,18 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
             String guid = guidHex.substring(0, 20);
             return guid;
         }
+
+        // Method to insert a new payment method
+    private void insertPaymentMethod(String paymentId, String reference, Id accountId, String maskedCardNumber, String type) {
+        logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(
+            logicpayment__Payment_Id__c = paymentId,
+            logicpayment__Reference__c = reference,
+            logicpayment__Account__c = accountId,
+            logicpayment__Card__c = maskedCardNumber,
+            logicpayment__Type__c = type
+        );
+        insert newPaymentMethod;
+    }
     
         //HTTP Request to generate Payment Id
         public GlobalPayGetPaymentIDToCardInfoWrapper generateGlobalPayGetPaymentID(String cardNumber, String cardExpirationDate, String cardCVV, Id accountId, String type) 
@@ -34,6 +46,9 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
 
             //Get Token
             GlobalPayAdminWrapper globalPaymentAPIResponse= AuthenticateGlobalPaymentAdmin.authenticateGlobalPaymentAdminAPI(globalPaymentMerchantName, globalPaymentAppId, globalPaymentAppKey);
+            system.debug('globalPaymentAPIResponse ::::: '+ globalPaymentAPIResponse);
+            
+            system.debug('Token :::: '+globalPaymentAPIResponse.token);
             if(globalPaymentAPIResponse.error_code== null)
             {
                 List<String> dateParts = cardExpirationDate.split('/');
@@ -64,6 +79,8 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
                 System.debug('requestBody::'+requestBody);
                 Http http = new Http();
                 HttpResponse res = http.send(request);
+                // Global Payments - Authenticate Admin
+                APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Admin', AuthenticateGlobalPaymentAdmin.tempURL, AuthenticateGlobalPaymentAdmin.tempRequestBody, AuthenticateGlobalPaymentAdmin.tempResponseBody, AuthenticateGlobalPaymentAdmin.tempStatus);
                 // Global Payments - Add Card
                 APILogsManager.fillAPILogsData('Global Payments', 'Add Card', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
@@ -78,8 +95,9 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
         
                     // Create a masked card number with 'x' characters
                     String maskedCardNumber = 'xxxxxxxxxxxx' + lastFourDigits;
-                    logicpayment__Payment__c newPaymentMethod = new logicpayment__Payment__c(logicpayment__Payment_Id__c=response.id,logicpayment__Reference__c=response.reference,logicpayment__Account__c=accountId,logicpayment__Card__c=maskedCardNumber,logicpayment__Type__c=type);
-                    insert newPaymentMethod;
+                    // Call the method to insert the new payment method
+                    insertPaymentMethod(response.id, response.reference, accountId, maskedCardNumber, type);
+        
                 } 
                 else 
                 {

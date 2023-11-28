@@ -10,6 +10,7 @@ public with sharing class GlobalPayTransactionProcessing {
          globalPaymentMerchantName = globalPaymentCustomSetting.logicpayment__Merchant_Name__c;
          globalPaymentAppId = globalPaymentCustomSetting.logicpayment__App_Id__c;
          globalPaymentAppKey = globalPaymentCustomSetting.logicpayment__App_Key__c;
+
     }
 
     

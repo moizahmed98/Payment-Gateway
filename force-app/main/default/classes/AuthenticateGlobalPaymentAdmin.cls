@@ -1,5 +1,19 @@
 public with sharing class AuthenticateGlobalPaymentAdmin {
 
+    public static String tempURL;
+    public static String tempRequestBody;
+    public static String tempResponseBody;
+    public static String tempStatus;
+    //public static APILogsManager tempLogs;
+
+    public static GlobalPayAdminWrapper authenticateGlobalPaymentAdminAPIForAdmin(String globalPaymentMerchantName, String globalPaymentAppId, String globalPaymentAppKey) {
+        
+        GlobalPayAdminWrapper tempWrapper = authenticateGlobalPaymentAdminAPI(globalPaymentMerchantName,globalPaymentAppId,globalPaymentAppKey);
+        // Global Payments - Authenticate Admin
+        APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Admin', tempURL, tempRequestBody, tempResponseBody, tempStatus);
+        return tempWrapper;
+    }
+
     // Method to authenticate Global Payment Admin using API
     public static GlobalPayAdminWrapper authenticateGlobalPaymentAdminAPI(String globalPaymentMerchantName, String globalPaymentAppId, String globalPaymentAppKey) {
         // Generate a random nonce
@@ -29,14 +43,17 @@ public with sharing class AuthenticateGlobalPaymentAdmin {
         // Send the HTTP request
         Http http = new Http();
         HttpResponse res = http.send(req);
-        // Global Payments - Authenticate Admin
-        APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Admin', endPoint, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
-
+        
+         tempURL = endPoint;
+         tempRequestBody = requestBody;
+         tempResponseBody = String.valueOf(res.getBody());
+         tempStatus = String.valueOf(res.getStatusCode());
         // Check the HTTP response status code
         if (res.getStatusCode() == 200) { 
             // Process the JSON response and store it in the GlobalPayAdminWrapper object
             GlobalPayAdminWrapper response = (GlobalPayAdminWrapper) JSON.deserialize(res.getBody(), GlobalPayAdminWrapper.class);
             System.debug('response::' + response);
+
             return response;
         } else {
             // Handle HTTP errors here

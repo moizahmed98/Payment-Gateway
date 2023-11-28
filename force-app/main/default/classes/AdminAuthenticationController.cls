@@ -39,7 +39,7 @@ public static GlobalPayAdminWrapper globalPaymentAdminAuth(String globalPaymentM
 {
     try 
     {
-        GlobalPayAdminWrapper globalPaymentAPIResponse= AuthenticateGlobalPaymentAdmin.authenticateGlobalPaymentAdminAPI(globalPaymentMerchantName, globalPaymentAppId, globalPaymentAppKey );
+        GlobalPayAdminWrapper globalPaymentAPIResponse= AuthenticateGlobalPaymentAdmin.authenticateGlobalPaymentAdminAPIForAdmin(globalPaymentMerchantName, globalPaymentAppId, globalPaymentAppKey );
         System.debug('globalPaymentAPIResponse::'+globalPaymentAPIResponse);
         // Check if the authentication with Global Payment was successful (result code is 'Ok')
         if(globalPaymentAPIResponse.error_code== null )

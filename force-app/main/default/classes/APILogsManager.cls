@@ -1,5 +1,5 @@
 public with sharing class APILogsManager {
-
+    
 // Function to fill API logs data
 public static void fillAPILogsData(String gatewayType, String action, String url, 
                                 String requestBody, String responseBody, String status) {
