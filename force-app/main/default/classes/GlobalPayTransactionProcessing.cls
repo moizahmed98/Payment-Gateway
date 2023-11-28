@@ -58,8 +58,10 @@ public with sharing class GlobalPayTransactionProcessing {
         System.debug('GlobalPayTransactionProcessing requestBody::'+requestBody);
         Http http = new Http();
         HttpResponse res = http.send(request);
+        // Global Payments - Authenticate Admin
+        APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Token Keys', AuthenticateGlobalPaymentAdmin.tempURL, AuthenticateGlobalPaymentAdmin.tempRequestBody, AuthenticateGlobalPaymentAdmin.tempResponseBody, AuthenticateGlobalPaymentAdmin.tempStatus);
         // Global Payments - Transaction Processing
-        APILogsManager.fillAPILogsData('Global Payments', 'Transaction Processing', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+        APILogsManager.fillAPILogsData('Global Payments', 'Transaction Processing - '+(transactionAction=='SALE'?'Pay':'Refund'), endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
         response = (GlobalPayTransactionProcessingWrapper)JSON.deserialize(res.getBody(), GlobalPayTransactionProcessingWrapper.class);
         if (res.getStatusCode() == 200) 

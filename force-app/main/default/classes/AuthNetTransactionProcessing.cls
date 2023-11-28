@@ -54,7 +54,7 @@ public class AuthNetTransactionProcessing {
         Http http = new Http();
         HttpResponse res = http.send(request);
         // Authorize.Net - Transaction Processing
-        APILogsManager.fillAPILogsData('Authorize.Net', 'Transaction Processing', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+        APILogsManager.fillAPILogsData('Authorize.Net', 'Transaction Processing - '+(transactionAction=='authCaptureTransaction'?'Pay':'Refund'), endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
         if (res.getStatusCode() == 200) 
         {

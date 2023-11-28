@@ -80,7 +80,7 @@ public with sharing class GlobalPayGetPaymentIDToCardInfo {
                 Http http = new Http();
                 HttpResponse res = http.send(request);
                 // Global Payments - Authenticate Admin
-                APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Admin', AuthenticateGlobalPaymentAdmin.tempURL, AuthenticateGlobalPaymentAdmin.tempRequestBody, AuthenticateGlobalPaymentAdmin.tempResponseBody, AuthenticateGlobalPaymentAdmin.tempStatus);
+                APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Token Keys', AuthenticateGlobalPaymentAdmin.tempURL, AuthenticateGlobalPaymentAdmin.tempRequestBody, AuthenticateGlobalPaymentAdmin.tempResponseBody, AuthenticateGlobalPaymentAdmin.tempStatus);
                 // Global Payments - Add Card
                 APILogsManager.fillAPILogsData('Global Payments', 'Add Card', endpointUrl, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 

@@ -10,7 +10,7 @@ public with sharing class AuthenticateGlobalPaymentAdmin {
         
         GlobalPayAdminWrapper tempWrapper = authenticateGlobalPaymentAdminAPI(globalPaymentMerchantName,globalPaymentAppId,globalPaymentAppKey);
         // Global Payments - Authenticate Admin
-        APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Admin', tempURL, tempRequestBody, tempResponseBody, tempStatus);
+        APILogsManager.fillAPILogsData('Global Payments', 'Authenticate Token Keys', tempURL, tempRequestBody, tempResponseBody, tempStatus);
         return tempWrapper;
     }
 

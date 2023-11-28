@@ -14,7 +14,7 @@ public with sharing class AuthenticateStripeAdmin
         Http http = new Http();
         HttpResponse res = http.send(req);
         // Stripe - Authenticate Admin
-        APILogsManager.fillAPILogsData('Stripe', 'Authenticate Admin', endPoint, String.valueOf(req), String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+        APILogsManager.fillAPILogsData('Stripe', 'Authenticate Token Keys', endPoint, String.valueOf(req), String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
 
         if (res.getStatusCode() == 200) 
         {
