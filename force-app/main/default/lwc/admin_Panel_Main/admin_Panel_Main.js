@@ -556,7 +556,7 @@ export default class TabExample extends LightningElement {
   StripehandleButtonClick() {
     this.currentstep = '1';
     this.stripeProgressError = false;
-    console.log("ftn is called" + this.current_step);
+    console.log("ftn is called" );
     if (
       this.stripemerchantName == null ||
       this.stripesecretKey == null ||
