@@ -318,7 +318,7 @@ export default class AddCardScreen extends LightningElement {
 
         } else if (title === 'Authorize.net') {
             this.replacetoAuthSVG();
-            if (this.barControllerArray[1][2] == 'false' || this.barControllerArray[0][2] == false ) {
+            if (this.barControllerArray[1][2] == 'false' || this.barControllerArray[1][2] == false ) {
                 this.error = false;
             } else {
                 this.error = true;
@@ -328,7 +328,7 @@ export default class AddCardScreen extends LightningElement {
             console.log('Clicked on Authorize.net');
         } else if (title === 'Stripe') {
             this.replacetoStripeSVG();
-            if (this.barControllerArray[2][2] == 'false' || this.barControllerArray[0][2] == false ) {
+            if (this.barControllerArray[2][2] == 'false' || this.barControllerArray[2][2] == false ) {
                 this.error = false;
             } else {2
                 this.error = true;
@@ -575,6 +575,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.dispatchEvent(cardAddedSuccessfully);
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
+                                        this.barControllerArray[0][1]=this.currentStepRequestIndicator;
                                         this.template.querySelector('.card-number-input').value = '';
                                         this.template.querySelector('.card-cvv').value = '';
                                         this.template.querySelector('.expiry-data').value = '';
