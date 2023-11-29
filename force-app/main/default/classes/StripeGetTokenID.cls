@@ -61,6 +61,9 @@ public with sharing class StripeGetTokenID {
                 String responseBody = res.getBody();
                 StripeGetCustomerIDWrapper response = (StripeGetCustomerIDWrapper)JSON.deserialize(responseBody, StripeGetCustomerIDWrapper.class);
                 system.debug('this is the error from wrapper : '+response.error.message);
+                // Stripe - Token Generation
+            APILogsManager.fillAPILogsData('Stripe', 'Token Generation', tokenEndpoint, requestBody, String.valueOf(res.getBody()), String.valueOf(res.getStatusCode()));
+
                 return response;// Error handling
             }
 
