@@ -45,10 +45,10 @@ export default class AddCardScreen extends LightningElement {
 
             // Check if the clicked element has the 'slds-is-open' or 'dropdown-button-text' class
             const hasOpenClass = clickedElementClassList.contains('slds-is-open');
-            const hasButtonTextClass = clickedElementClassList.contains('dropdown-button-text');
+            const hasButtonTextClass = (clickedElementClassList.contains('dropdown-button-text') || clickedElementClassList.contains('slds-custom-button'));
 
             console.log('--------' + hasOpenClass);
-
+            console.log('--------' + hasButtonTextClass);
             // If the clicked element does not have the specified classes, close any open dropdown
             if (!(hasOpenClass || hasButtonTextClass)) {
                 const openDropdown = this.template.querySelector('.slds-is-open');
@@ -276,6 +276,7 @@ export default class AddCardScreen extends LightningElement {
 
     //This function toggles the dropdown menu
     changeClass(event) {
+
         // Get the current class list of the clicked element
         const classes = event.currentTarget.classList;
 
@@ -304,19 +305,34 @@ export default class AddCardScreen extends LightningElement {
             this.replacetoGPSVG();
             console.log('Indicator Setter : '+this.barControllerArray[0][1]);
             console.log('Error Setter : '+this.barControllerArray[0][2]);
-            this.error=Boolean.valueOf(this.barControllerArray[0][2]);
+            console.log('Type of Error Setter : '+typeof this.barControllerArray[0][2]);
+            //this.error=this.barControllerArray[0][2]=='false'?false:true;
+            if (this.barControllerArray[0][2] == 'false' || this.barControllerArray[0][2] == false ) {
+                this.error = false;
+            } else {
+                this.error = true;
+            }
+            console.log('Error Setted : '+this.error);
             this.currentStepRequestIndicator=this.barControllerArray[0][1];
             console.log('Replacing with Global Payments SVG');
 
         } else if (title === 'Authorize.net') {
             this.replacetoAuthSVG();
-            this.error=Boolean.valueOf(this.barControllerArray[1][2]);
+            if (this.barControllerArray[1][2] == 'false' || this.barControllerArray[0][2] == false ) {
+                this.error = false;
+            } else {
+                this.error = true;
+            }
             this.currentStepRequestIndicator=this.barControllerArray[1][1];
             
             console.log('Clicked on Authorize.net');
         } else if (title === 'Stripe') {
             this.replacetoStripeSVG();
-            this.error=Boolean.valueOf(this.barControllerArray[2][2]);
+            if (this.barControllerArray[2][2] == 'false' || this.barControllerArray[0][2] == false ) {
+                this.error = false;
+            } else {2
+                this.error = true;
+            }
             this.currentStepRequestIndicator=this.barControllerArray[2][1];
             
             console.log('Clicked on Stripe');
