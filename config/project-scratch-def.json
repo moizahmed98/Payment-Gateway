@@ -1,5 +1,5 @@
 {
-  "orgName": "Demo company",
+  "orgName": "PaymentGatewaysScratcOrg",
   "edition": "Developer",
   "features": ["EnableSetPasswordInApi"],
   "namespace": "logicpayment",

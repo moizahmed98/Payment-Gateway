@@ -1,77 +1,176 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-<types>
-<members>*</members>
-<name>ApexClass</name>
-</types>
-<types>
-    <members>*</members>
-    <name>RemoteSiteSetting</name>
-</types>
-<types>
-    <members>*</members>
-    <name>Layout</name>
-</types>
-<types>
-    <members>*</members>
-    <name>WebLink</name>
-</types>
-<types>
+<!-- Apex Classes -->
+    <types>
+        <members>*</members>
+        <name>ApexClass</name>
+    </types>
+ <!-- Custom Applications -->
+    <types>
+        <members>*</members>
+        <name>CustomApplication</name>
+    </types>
+<!-- Remote Site Settings -->
+    <types>
+        <members>*</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+<!-- Layouts -->
+    <types>
+        <members>*</members>
+        <name>Layout</name>
+    </types>
+ <!-- WebLinks -->
+    <types>
+        <members>*</members>
+        <name>WebLink</name>
+    </types>
+<!-- Custom Tabs -->
+    <types>
         <members>*</members>
         <name>CustomTab</name>
     </types>
-<types> 
+    <types>
+        <members>Payment_Gateway</members>
+        <name>CustomTab</name>
+    </types>
+ 
+
+     <!-- QuickActions -->
+    <types>
+        <members>logicpayment__Account.Add_Card</members>
+        <members>logicpayment__Account.Make_Payment</members>
+        <members>logicpayment__Contact.*</members>
+        <!-- Add more QuickAction members as needed -->
+        <name>QuickAction</name>
+    </types>
+       
+    <types>
 <members>*</members> 
 <name>StaticResource</name> 
 </types>
-<types>
-<members>logicpayment__GlobalPayment_CustomSetting__c</members>
-<name>CustomObject</name>
-</types>
-<types>
-<members>logicpayment__AuthorizeNet_CustomSettings__c</members>
-<name>CustomObject</name>
-</types>
-<types>
-<members>logicpayment__Square_CustomSettings__c</members>
-<name>CustomObject</name>
-</types>
-<types>
-<members>logicpayment__stripe_CustomSetting__c</members>
-<name>CustomObject</name>
-</types>
-<types>
-<members>*</members>
-<name>CustomObject</name>
-</types>
+<!-- FlexiPages -->
+    <types>
+        <members>logicpayment__Payment_Gateway</members>
+        <name>FlexiPage</name>
+    </types>
+    <!-- Specify the individual FlexiPage names -->
+    <types>
+        <members>*</members>
+        <!-- Add more FlexiPage members as needed -->
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>Payment_Gateway_Admin_Panel_UtilityBar</members>
+        <name>FlexiPage</name>
+    </types>
+ <!-- Custom Objects -->
+    <types>
+        <members>logicpayment__GlobalPayment_CustomSetting__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>logicpayment__AuthorizeNet_CustomSettings__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>logicpayment__Square_CustomSettings__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>logicpayment__stripe_CustomSetting__c</members>
+        <name>CustomObject</name>
+    </types>
+    <!-- Specify the individual CustomObject names -->
+    <types>
+        <members>*</members>
+        <!-- Add more CustomObject members as needed -->
+        <name>CustomObject</name>
+    </types>
 
-<types>
-<members>*</members>
-<name>ApexComponent</name>
-</types>
-<types>
-<members>*</members>
-<name>ApexPage</name>
-</types>
-<types>
-<members>*</members>
-<name>ApexTestSuite</name>
-</types>
-<types>
-<members>*</members>
-<name>ApexTrigger</name>
-</types>
-<types>
-<members>*</members>
-<name>AuraDefinitionBundle</name>
-</types>
-<types>
-<members>*</members>
-<name>LightningComponentBundle</name>
-</types>
-<types>
-<members>*</members>
-<name>StaticResource</name>
-</types>
+
+<!-- Apex Triggers -->
+    <types>
+        <members>*</members>
+        <name>ApexTrigger</name>
+    </types>
+
+    <!-- Apex Components -->
+    <types>
+        <members>*</members>
+        <name>ApexComponent</name>
+    </types>
+
+    <!-- Apex Pages -->
+    <types>
+        <members>*</members>
+        <name>ApexPage</name>
+    </types>
+
+    <!-- Apex Test Suites -->
+    <types>
+        <members>*</members>
+        <name>ApexTestSuite</name>
+    </types>
+
+    <!-- Aura Definitions -->
+    <types>
+        <members>*</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+
+    <!-- Lightning Components -->
+    <types>
+        <members>*</members>
+        <name>LightningComponentBundle</name>
+    </types>
+
+    <!-- Static Resources -->
+    <types>
+        <members>*</members>
+        <name>StaticResource</name>
+    </types>
+
+    <!-- Validation Rules -->
+    <types>
+        <members>*</members>
+        <name>ValidationRule</name>
+    </types>
+
+    <!-- Custom Labels -->
+    <types>
+        <members>*</members>
+        <name>CustomLabel</name>
+    </types>
+
+    <!-- Workflow Rules -->
+    <types>
+        <members>*</members>
+        <name>WorkflowRule</name>
+    </types>
+
+    <!-- Approval Processes -->
+    <types>
+        <members>*</members>
+        <name>ApprovalProcess</name>
+    </types>
+
+    <!-- Reports -->
+    <types>
+        <members>*</members>
+        <name>Report</name>
+    </types>
+
+    <!-- Dashboards -->
+    <types>
+        <members>*</members>
+        <name>Dashboard</name>
+    </types>
+
+    <!-- Email Templates -->
+    <types>
+        <members>*</members>
+        <name>EmailTemplate</name>
+    </types>
 <version>58.0</version>
 </Package>
