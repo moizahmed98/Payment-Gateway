@@ -7,8 +7,13 @@
     </types>
  <!-- Custom Applications -->
     <types>
-        <members>*</members>
+        <members>Payment_Gateway_Admin_Panel</members>
         <name>CustomApplication</name>
+    </types>
+     <!-- Profiles -->
+    <types>
+        <members>Admin</members>
+        <name>Profile</name>
     </types>
 <!-- Remote Site Settings -->
     <types>
@@ -17,19 +22,11 @@
     </types>
 <!-- Layouts -->
     <types>
-        <members>*</members>
+        <members>Account-Account Layout</members>
+        <members>API_Logs__c-API Logs Layout</members>
         <name>Layout</name>
     </types>
- <!-- WebLinks -->
-    <types>
-        <members>*</members>
-        <name>WebLink</name>
-    </types>
 <!-- Custom Tabs -->
-    <types>
-        <members>*</members>
-        <name>CustomTab</name>
-    </types>
     <types>
         <members>Payment_Gateway</members>
         <name>CustomTab</name>
@@ -38,9 +35,8 @@
 
      <!-- QuickActions -->
     <types>
-        <members>logicpayment__Account.Add_Card</members>
-        <members>logicpayment__Account.Make_Payment</members>
-        <members>logicpayment__Contact.*</members>
+        <members>Account.Add_Card</members>
+        <members>Account.Make_Payment</members>
         <!-- Add more QuickAction members as needed -->
         <name>QuickAction</name>
     </types>
@@ -55,11 +51,7 @@
         <name>FlexiPage</name>
     </types>
     <!-- Specify the individual FlexiPage names -->
-    <types>
-        <members>*</members>
-        <!-- Add more FlexiPage members as needed -->
-        <name>FlexiPage</name>
-    </types>
+  
     <types>
         <members>Payment_Gateway_Admin_Panel_UtilityBar</members>
         <name>FlexiPage</name>
@@ -67,58 +59,14 @@
  <!-- Custom Objects -->
     <types>
         <members>logicpayment__GlobalPayment_CustomSetting__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
         <members>logicpayment__AuthorizeNet_CustomSettings__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
-        <members>logicpayment__Square_CustomSettings__c</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
         <members>logicpayment__stripe_CustomSetting__c</members>
+        <members>logicpayment__API_Logs__c</members>
+        <members>logicpayment__Payment__c</members>
+        <members>logicpayment__Transaction__c</members>
         <name>CustomObject</name>
     </types>
-    <!-- Specify the individual CustomObject names -->
-    <types>
-        <members>*</members>
-        <!-- Add more CustomObject members as needed -->
-        <name>CustomObject</name>
-    </types>
-
-
-<!-- Apex Triggers -->
-    <types>
-        <members>*</members>
-        <name>ApexTrigger</name>
-    </types>
-
-    <!-- Apex Components -->
-    <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-
-    <!-- Apex Pages -->
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-
-    <!-- Apex Test Suites -->
-    <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-
-    <!-- Aura Definitions -->
-    <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-
+    
     <!-- Lightning Components -->
     <types>
         <members>*</members>
@@ -131,46 +79,5 @@
         <name>StaticResource</name>
     </types>
 
-    <!-- Validation Rules -->
-    <types>
-        <members>*</members>
-        <name>ValidationRule</name>
-    </types>
-
-    <!-- Custom Labels -->
-    <types>
-        <members>*</members>
-        <name>CustomLabel</name>
-    </types>
-
-    <!-- Workflow Rules -->
-    <types>
-        <members>*</members>
-        <name>WorkflowRule</name>
-    </types>
-
-    <!-- Approval Processes -->
-    <types>
-        <members>*</members>
-        <name>ApprovalProcess</name>
-    </types>
-
-    <!-- Reports -->
-    <types>
-        <members>*</members>
-        <name>Report</name>
-    </types>
-
-    <!-- Dashboards -->
-    <types>
-        <members>*</members>
-        <name>Dashboard</name>
-    </types>
-
-    <!-- Email Templates -->
-    <types>
-        <members>*</members>
-        <name>EmailTemplate</name>
-    </types>
 <version>58.0</version>
 </Package>
