@@ -20,12 +20,7 @@
         <members>*</members>
         <name>RemoteSiteSetting</name>
     </types>
-<!-- Layouts -->
-    <types>
-        <members>Account-Account Layout</members>
-        <members>API_Logs__c-API Logs Layout</members>
-        <name>Layout</name>
-    </types>
+
 <!-- Custom Tabs -->
     <types>
         <members>Payment_Gateway</members>

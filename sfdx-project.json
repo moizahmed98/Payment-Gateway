@@ -2,11 +2,27 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "Payment Gateways Manage Package 1",
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
+      "versionDescription": ""
+    },
+    {
+      "path": "force-app",
+      "package": "Payment Gateways Manage Package 2",
+      "versionName": "ver 0.1",
+      "versionNumber": "0.1.0.NEXT",
+      "default": false,
+      "versionDescription": ""
     }
   ],
   "namespace": "logicpayment",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "58.0"
- 
+  "sourceApiVersion": "58.0",
+  "packageAliases": {
+    "Payment Gateways Manage Package 1": "0Ho5h000000k9sOCAQ",
+    "Payment Gateways Manage Package 2": "0Ho5h000000k9sTCAQ",
+    "Payment Gateways Manage Package 2@0.1.0-1": "04t5h000000N8PaAAK"
+  }
 }
