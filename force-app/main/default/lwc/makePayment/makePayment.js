@@ -26,13 +26,27 @@ export default class MakePayment extends LightningElement {
                 acc[card.Id] = card;
                 return acc;
             }, {});
+
             this.creditCardOptions = data.map(card => ({
                 label: card.logicpayment__Card__c,
                 value: card.Id
             }));
+            console.log('this.creditCardOptions = '+this.creditCardOptions);
+            if(this.creditCardOptions.length  === 0) {
+              console.log('Nothing in List');
+              const updateMain = this.template.querySelector('.desktop-container');
+              updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;justify-content: space-around;padding: 1em 2em 2.5em 2em;height: 80vh;">   <div><span >To make a payment, please <span style="font-weight: 600;">add at least one card</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>';
+          }
         } else if (error) {
+          console.log('Error is :: '+error);
+          console.log('Error');
+              const updateMain = this.template.querySelector('.desktop-container');
+              updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;justify-content: space-around;padding: 1em 2em 2.5em 2em;height: 80vh;">   <div><span >To make a payment, please <span style="font-weight: 600;">add at least one card</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>';
+          
             // Handle the error
         }
+
+
     }
     @track autorizeNet = false;
     @track skrill = false;
@@ -42,6 +56,10 @@ export default class MakePayment extends LightningElement {
     @track paymentGatewayType;
     @track paynowdisabled = true;
     @track amount ='';
+
+
+    
+    
     handleCreditCardChange(event) {
         console.log('this is card value : '+event.detail.value);
         this.selectedCreditCardId = event.detail.value;

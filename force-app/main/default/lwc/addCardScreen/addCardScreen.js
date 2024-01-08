@@ -31,7 +31,8 @@ export default class AddCardScreen extends LightningElement {
             ['Authorize.Net', '1', 'false'],
             ['Stripe', '1', 'false']
         ];
-        console.log(this.barControllerArray);
+        
+        console.log("Progress Bar Array Initial  "+this.barControllerArray);
     }
 
     renderedCallback() {
@@ -46,9 +47,6 @@ export default class AddCardScreen extends LightningElement {
             // Check if the clicked element has the 'slds-is-open' or 'dropdown-button-text' class
             const hasOpenClass = clickedElementClassList.contains('slds-is-open');
             const hasButtonTextClass = (clickedElementClassList.contains('dropdown-button-text') || clickedElementClassList.contains('slds-custom-button'));
-
-            console.log('--------' + hasOpenClass);
-            console.log('--------' + hasButtonTextClass);
             // If the clicked element does not have the specified classes, close any open dropdown
             if (!(hasOpenClass || hasButtonTextClass)) {
                 const openDropdown = this.template.querySelector('.slds-is-open');
@@ -63,21 +61,30 @@ export default class AddCardScreen extends LightningElement {
 
 
     loadCustomSettingData() {
+        console.log("In getCustomSettingDataChecker");
+        
         // Call the getCustomSettingDataChecker function to retrieve custom setting data
         getCustomSettingDataChecker()
-            .then(result => {
-                // Update the component property with the retrieved custom setting data
-                this.customSettingNames = result;
-
-                // Call a function to filter the <li> elements based on the custom setting data
-                this.filterLiElements();
-            })
-            .catch(error => {
-                // Log an error message if there's an issue retrieving custom setting data
-                console.error('Error retrieving custom setting data', error);
-            });
-    }
-
+        .then(result => {
+            console.log("result of getCustomSettingDataChecker : "+result);
+            // Update the component property with the retrieved custom setting data
+            this.customSettingNames = result;
+            console.log("this.customSettingNames : "+this.customSettingNames);
+            console.log("this.customSettingNames.length : "+this.customSettingNames.length);
+            // Call a function to filter the <li> elements based on the custom setting data
+        this.filterLiElements();
+            
+        })
+        .catch(error => {
+            // Log an error message if there's an issue retrieving custom setting data
+            console.error('Error retrieving custom setting data', error);
+            // Call a function to filter the <li> elements based on the custom setting data
+        this.filterLiElements();
+        });
+        
+        }
+        
+     
 
     clearErrors() {
         console.log('In Clear errors');
@@ -94,6 +101,9 @@ export default class AddCardScreen extends LightningElement {
     }
 
     filterLiElements() {
+
+        console.log("In filterLiElements ");
+
         // Get all <li> elements with the class 'li-elements'
         const liElements = this.template.querySelectorAll('.li-elements');
 
@@ -133,7 +143,7 @@ export default class AddCardScreen extends LightningElement {
             if (this.customSettingNames.length === 0) {
                 console.log('Nothing in List');
                 const updateMain = this.template.querySelector('.main');
-                updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;">   <div><span style="font-size: x-large;">To proceed with adding a new card, please <span style="font-weight: 600;">add at least one merchant</span> first.</span></div> <span>Thank you for your understanding and cooperation!</span> </div>      ';
+                updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;">   <div><span >To proceed with adding a new card, please <span style="font-weight: 600;">add at least one merchant</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>      ';
             }
         });
     }

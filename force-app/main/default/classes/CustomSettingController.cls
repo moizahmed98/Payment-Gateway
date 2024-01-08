@@ -1,11 +1,9 @@
-public with sharing class CustomSettingController {
+public class CustomSettingController {
     @AuraEnabled(cacheable=true)
     public static List<String> getCustomSettingDataChecker() {
         List<String> customSettingNames = new List<String>();
         try
         {
-            
-
             // Check and add custom setting names if they are not null or empty
             if (logicpayment__GlobalPayment_CustomSetting__c.getInstance() != null && !String.isBlank(logicpayment__GlobalPayment_CustomSetting__c.getInstance().logicpayment__App_Key__c)) {
                 customSettingNames.add('Global Payments');

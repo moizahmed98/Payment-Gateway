@@ -11,8 +11,8 @@
     {
       "path": "force-app",
       "package": "Payment Gateways Manage Package 2",
-      "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
+      "versionName": "ver 1.1",
+      "versionNumber": "1.1.0.NEXT",
       "default": false,
       "versionDescription": ""
     }
@@ -23,6 +23,15 @@
   "packageAliases": {
     "Payment Gateways Manage Package 1": "0Ho5h000000k9sOCAQ",
     "Payment Gateways Manage Package 2": "0Ho5h000000k9sTCAQ",
-    "Payment Gateways Manage Package 2@0.1.0-1": "04t5h000000N8PaAAK"
+    "Payment Gateways Manage Package 2@0.1.0-1": "04t5h000000N8PaAAK",
+    "Payment Gateways Manage Package 2@1.1.0-1": "04t5h000000N8cIAAS",
+    "Payment Gateways Manage Package 2@1.1.0-2": "04t5h000000N8cNAAS",
+    "Payment Gateways Manage Package 2@1.1.0-3": "04t5h000000N8cSAAS",
+    "Payment Gateways Manage Package 2@1.1.0-4": "04t5h000000N8gzAAC",
+    "Payment Gateways Manage Package 2@1.1.0-5": "04t5h000000N8h4AAC",
+    "Payment Gateways Manage Package 2@1.1.0-6": "04t5h000000N8h9AAC",
+    "Payment Gateways Manage Package 2@1.1.0-7": "04t5h000000N8pUAAS",
+    "Payment Gateways Manage Package 2@1.1.0-8": "04t5h000000N8pZAAS",
+    "Payment Gateways Manage Package 2@1.1.0-9": "04t5h000000N8peAAC"
   }
 }

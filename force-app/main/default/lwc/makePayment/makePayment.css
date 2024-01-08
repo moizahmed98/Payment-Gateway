@@ -50,7 +50,7 @@
 /* CSS */
 .image-container {
 
-    background-image: url('/resource/makepaymentbg');
+    background-image: url('/resource/logicpayment__makepaymentbg');
     width: 30%;
     background-size: cover; /* Cover the entire container */
     background-repeat: no-repeat; /* Do not repeat the image */
