@@ -10,6 +10,11 @@
     width: 30%;
     
 }
+.main
+{
+    display: flex;
+    justify-content: center;
+}
 .st0{fill:#000000;}
 .st1{fill:#0075FF;}
 .st2{fill:#FFC300;}

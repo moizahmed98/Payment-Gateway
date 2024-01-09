@@ -34,14 +34,18 @@ export default class MakePayment extends LightningElement {
             console.log('this.creditCardOptions = '+this.creditCardOptions);
             if(this.creditCardOptions.length  === 0) {
               console.log('Nothing in List');
+              const insertMain = this.template.querySelector('.to-allign');
+              insertMain.classList.add('main');
               const updateMain = this.template.querySelector('.desktop-container');
-              updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;justify-content: space-around;padding: 1em 2em 2.5em 2em;height: 80vh;">   <div><span >To make a payment, please <span style="font-weight: 600;">add at least one card</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>';
-          }
+              updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;justify-content: center;padding: 1em 2em 2.5em 2em;height: 80vh;">   <div><span >To make a payment, please <span style="font-weight: 600;">add at least one card</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>';
+           }
         } else if (error) {
           console.log('Error is :: '+error);
           console.log('Error');
-              const updateMain = this.template.querySelector('.desktop-container');
-              updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;justify-content: space-around;padding: 1em 2em 2.5em 2em;height: 80vh;">   <div><span >To make a payment, please <span style="font-weight: 600;">add at least one card</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>';
+          const insertMain = this.template.querySelector('.to-allign');
+          insertMain.classList.add('main');
+          const updateMain = this.template.querySelector('.desktop-container');
+          updateMain.innerHTML = '<div style="display: flex; flex-direction: column; align-items: center; font-size: large;justify-content: center;padding: 1em 2em 2.5em 2em;height: 80vh;">   <div><span >To make a payment, please <span style="font-weight: 600;">add at least one card</span> first.</span></div> <br><b>Or</b><br><span>You do not have sufficicent Permissions. Please ask your system administrator.</span></div>';
           
             // Handle the error
         }
