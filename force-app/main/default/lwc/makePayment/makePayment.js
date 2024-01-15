@@ -11,10 +11,10 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class MakePayment extends LightningElement {
     ////////////////////////////////////////////////////////////  ****Integration****  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
+  
     @api recordId; // Pass the Account Id from the parent component
    
-
+    @track loader=false;
     selectedCreditCardId = null;
     creditCardOptions = [];
     creditCardData = [];
@@ -60,8 +60,10 @@ export default class MakePayment extends LightningElement {
     @track paymentGatewayType;
     @track paynowdisabled = true;
     @track amount ='';
-
-
+    @track width;
+    @track height;
+    @track top;
+    
     
     
     handleCreditCardChange(event) {
@@ -209,6 +211,18 @@ error;
 @track ProgressError;
 
 handleClickYes() {
+  this.loader=true;
+  const getWrapperContainer = document.querySelector('.slds-modal__content');
+      console.log('getWrapperContainer.offsetHeight  '+getWrapperContainer.offsetHeight);
+    console.log('getWrapperContainer.offsetTop  '+getWrapperContainer.offsetTop);
+    var element = document.getElementById("Spinner-setter");
+    const getspinnerdiv = document.querySelector('.slds-spinner_brand');
+        // Now you can manipulate the element as needed
+        //element.style.height = (getWrapperContainer.offsetHeight+'px');
+        console.log('element'+element);
+        console.log('getspinnerdiv'+getspinnerdiv.stringify);
+        var Element = this.template.querySelector("[id='Spinner-setter']");
+        console.log('Element'+Element);
   console.log("ftn is called" +this.recordId);
   this.isShowModal = false;
   console.log("thi is the   this.selectedAction : " +  this.value);
@@ -258,7 +272,9 @@ handleClickYes() {
               message: "Payment successful",
               variant: "success"
             });
-            this.dispatchEvent(evt);}
+            this.dispatchEvent(evt);
+            //this.loader=false;
+          }
             else{
               const evtr = new ShowToastEvent({
               title: "Success!",
@@ -266,7 +282,7 @@ handleClickYes() {
               variant: "success"
             });
             this.dispatchEvent(evtr);
-
+            //this.loader=false;
             }
             setTimeout(() => {
             this.isShowModal = false;
@@ -305,6 +321,7 @@ handleClickYes() {
               this.dispatchEvent(evt);
               this.currentstep = "3";
               this.ProgressError = true;
+              //this.loader=false;
             }, 1500);
           }
           
@@ -323,7 +340,7 @@ handleClickYes() {
           this.dispatchEvent(evt);
           this.ProgressError = true;
           this.response = null;
-        
+          //this.loader=false;
           this.error = error;
         });
                   console.log("final response that is retuned  : ");
@@ -378,7 +395,7 @@ handleClickYes() {
               variant: "success"
             });
             this.dispatchEvent(evt);
-            
+            //this.loader=false;
          
             setTimeout(() => {
               this.isShowModal = false;
@@ -417,6 +434,7 @@ handleClickYes() {
             this.dispatchEvent(evt);
             this.currentstep = "3";
             this.ProgressError = true;
+            //this.loader=false;
           }, 1500);
           }
           console.log("final response that is retuned  : ");
@@ -433,7 +451,7 @@ handleClickYes() {
           this.dispatchEvent(evt);
           this.ProgressError = true;
           this.response = null;
-         
+          //this.loader=false;
           this.error = error;
         });
 
@@ -485,7 +503,7 @@ handleClickYes() {
               variant: "success"
             });
             this.dispatchEvent(evt);
-            
+            //this.loader=false;
             setTimeout(() => {
               this.isShowModal = false;
               this.selectedCreditCardId = null;
@@ -522,6 +540,7 @@ handleClickYes() {
                 this.dispatchEvent(evt);
                 this.currentstep = '1';
                 this.ProgressError = true;
+                //this.loader=false;
             }
             else{
               this.currentstep = "2";
@@ -546,6 +565,7 @@ handleClickYes() {
               this.dispatchEvent(evt);
               this.currentstep = "3";
               this.ProgressError = true;
+              //this.loader=false;
             }, 1500);
           }}
           console.log("final response that is retuned  : ");
@@ -564,7 +584,7 @@ handleClickYes() {
           this.dispatchEvent(evt);
           this.ProgressError = true;
           this.response = null;
-     
+          //this.loader=false;
           this.error = error;
         });
       
@@ -614,7 +634,9 @@ handleClickYes() {
               message: "Payment successful",
               variant: "success"
             });
-            this.dispatchEvent(evt);}
+            this.dispatchEvent(evt);
+            //this.loader=false;
+          }
             else{
               const evtr = new ShowToastEvent({
               title: "Success!",
@@ -622,7 +644,7 @@ handleClickYes() {
               variant: "success"
             });
             this.dispatchEvent(evtr);
-
+            //this.loader=false;
             }
             setTimeout(() => {
               this.isShowModal = false;
@@ -656,6 +678,7 @@ handleClickYes() {
               this.currentstep = "3";
               this.ProgressError = true;
               this.dispatchEvent(evt);
+              //this.loader=false;
             }, 1500);
             
           }
@@ -676,6 +699,7 @@ handleClickYes() {
           this.ProgressError = true;
           this.response = null;
           this.error = error;
+          //this.loader=false;
         });
         
                   

@@ -8,6 +8,13 @@
     
     
 }
+
+.slds-spinner_container
+{
+    bottom: 0;
+    top: 9vh;
+    height: 79vh;
+}
 ul {
       cursor: pointer; /* Change cursor to a hand */
     }

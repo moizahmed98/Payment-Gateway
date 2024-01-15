@@ -1,4 +1,4 @@
-public class CustomSettingController {
+public with sharing  class CustomSettingController {
     @AuraEnabled(cacheable=true)
     public static List<String> getCustomSettingDataChecker() {
         List<String> customSettingNames = new List<String>();

@@ -1,6 +1,9 @@
 <template>
+
   <div class="slds-tabs_default container">
-   
+    <div class="slds-spinner_brand" if:true={loader}>
+      <lightning-spinner alternative-text="Loading" variant="brand" size="medium"></lightning-spinner>
+  </div>
     <!-- Tabs of All the Gateways -->
     <ul class="slds-tabs_default__nav displaynone" role="tablist">
       <li class="slds-tabs_default__item slds-is-active margin_top " data-id="authorizeNetId" onclick={tabonclick}

@@ -5,10 +5,16 @@
     background-color: #ffffff;
 
 }
+
 .anet_page_logo{
    
     width: 30%;
     
+}
+.spinner-setter
+{
+    height: 79vh;
+    top: 8vh;
 }
 .main
 {

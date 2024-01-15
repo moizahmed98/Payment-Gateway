@@ -45,8 +45,12 @@
     </section>
    
   </template>
+  <div class="slds-spinner_brand " if:true={loader}>
+    <lightning-spinner class="spinner-setter"  alternative-text="Loading" variant="brand" size="medium"></lightning-spinner>
+</div>
   <!--mainmontainer start --> 
 <div class="to-allign">
+  
   <div class="container  desktop-container">
     <!-- image div -->
     <div class="image-container background">

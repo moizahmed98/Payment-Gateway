@@ -22,9 +22,10 @@ export default class AddCardScreen extends LightningElement {
     account;
     resultdata;
     barControllerArray = [];
-
+    @track loader=false;
+    
     connectedCallback() {
-        // Call a function to load custom setting data when the component is connected to the DOM
+                // Call a function to load custom setting data when the component is connected to the DOM
         this.loadCustomSettingData();
         this.barControllerArray = [
             ['Global Payment', '1', 'false'],
@@ -33,10 +34,11 @@ export default class AddCardScreen extends LightningElement {
         ];
         
         console.log("Progress Bar Array Initial  "+this.barControllerArray);
+         
     }
 
     renderedCallback() {
-        // Add a click event listener to the component's template
+                // Add a click event listener to the component's template
         this.template.addEventListener('click', (event) => {
             // Get the class list of the clicked element
             const clickedElementClassList = event.target.classList;
@@ -57,6 +59,7 @@ export default class AddCardScreen extends LightningElement {
                 }
             }
         });
+        
     }
 
 
@@ -99,7 +102,7 @@ export default class AddCardScreen extends LightningElement {
         this.template.querySelector('.expiry-data').reportValidity();
         this.template.querySelector('.card-number-input').reportValidity();
     }
-
+    
     filterLiElements() {
 
         console.log("In filterLiElements ");
@@ -152,7 +155,8 @@ export default class AddCardScreen extends LightningElement {
     // Use wire service to get the Account record
     @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id', 'Account.Name'] })
     wiredAccount({ error, data }) {
-        if (data) {
+        this.loader=true;
+                if (data) {
             this.account = data;
             console.log(data);
             console.log('Account Id:', this.account.fields.Id.value);
@@ -164,6 +168,7 @@ export default class AddCardScreen extends LightningElement {
         } else if (error) {
             console.error('Error loading account data', error);
         }
+        this.loader=false;
     }
 
     //This function replaces logos with Global Payment logo and changes the text of dropdown button
@@ -509,8 +514,19 @@ export default class AddCardScreen extends LightningElement {
     // Insert the modified text back into the input field
     document.execCommand('insertText', false, numericText);
   }
+  showLoader()
+  {
+    console.log('Show Loader');
+    this.loader=true;
+  }
+  hideLoader()
+  {
+    console.log('Hide Loader');
+    this.loader=false;
+  }
     //This function handles card submission, updates the request indicator, and triggers different toast events
     handleSubmitClick() {
+        this.showLoader();
         const currentGateway = this.template.querySelector('.dropdown-button-text').innerHTML;
         console.log('In Submit CLick' + currentGateway);
         this.resultdata = '';
@@ -583,6 +599,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.barControllerArray[0][1]=this.currentStepRequestIndicator;
                                     this.barControllerArray[0][2]=this.error;
                                     this.dispatchEvent(cardAddedSuccessfully);
+                                    this.hideLoader();
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
                                         this.barControllerArray[0][1]=this.currentStepRequestIndicator;
@@ -609,6 +626,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.barControllerArray[0][1]=this.currentStepRequestIndicator;
                                     this.barControllerArray[0][2]=this.error;
                                     this.dispatchEvent(toastRequestRecievedError);
+                                    this.hideLoader();
                                 }, 1200);
                             }
 
@@ -621,6 +639,7 @@ export default class AddCardScreen extends LightningElement {
                             this.error = true;
                             this.barControllerArray[0][1]=this.currentStepRequestIndicator;
                                     this.barControllerArray[0][2]=this.error;
+                                    this.hideLoader();
                         }
 
                     })
@@ -635,6 +654,7 @@ export default class AddCardScreen extends LightningElement {
                         this.error = true;
                         this.dispatchEvent(toastRequestRecievedError);
                         console.error('Error fetching data: ', error);
+                        this.hideLoader();
                     });
             }
             else if (currentGateway == 'Authorize.Net') {
@@ -645,6 +665,7 @@ export default class AddCardScreen extends LightningElement {
                 // Call the Apex method when the "Fetch Data" button is clicked
                 getAuthorizeNetCardController({ cardNumber: cardNumberInput, cardExpirationDate: cardExpiryInput, cardCVV: cardCVVInput, accountId: this.account.fields.Id.value, type: currentGateway })
                     .then(result => {
+                        
                         this.currentStepRequestIndicator = "2";
                         this.barControllerArray[1][1]=this.currentStepRequestIndicator;
                         this.resultdata = result;
@@ -679,6 +700,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.error = false;
                                     this.barControllerArray[1][2]=this.error;
                                     this.dispatchEvent(cardAddedSuccessfully);
+                                    this.hideLoader();
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
                                         this.barControllerArray[1][1]=this.currentStepRequestIndicator;
@@ -690,6 +712,7 @@ export default class AddCardScreen extends LightningElement {
                                         this.outputCVV = 'CVV';
                                     }, 2500);
                                 }, 1200);
+                                
                                 console.log('Card AddModule End');
                             }
                             else {
@@ -706,6 +729,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.error = true;
                                     this.barControllerArray[1][2]=this.error;
                                     this.dispatchEvent(toastRequestRecievedError);
+                                    this.hideLoader();
                                 }, 1200);
                             }
 
@@ -715,10 +739,12 @@ export default class AddCardScreen extends LightningElement {
                             this.barControllerArray[1][1]=this.currentStepRequestIndicator;
                             this.error = true;
                             this.barControllerArray[1][2]=this.error;
+                            this.hideLoader();
                         }
-
+                        
                     })
                     .catch(error => {
+                       
                         // Handle errors
                         const toastRequestRecievedError = new ShowToastEvent({
                             title: 'Error code: ' + error.status,
@@ -730,6 +756,7 @@ export default class AddCardScreen extends LightningElement {
                         this.barControllerArray[1][2]=this.error;
                         this.dispatchEvent(toastRequestRecievedError);
                         console.error('Error fetching data: ', error);
+                        this.hideLoader();
                     });
             }
             else if (currentGateway == 'Stripe') {
@@ -774,6 +801,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.error = false;
                                     this.barControllerArray[2][2]=this.error;
                                     this.dispatchEvent(cardAddedSuccessfully);
+
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
                                         this.barControllerArray[2][1]=this.currentStepRequestIndicator;
@@ -796,6 +824,7 @@ export default class AddCardScreen extends LightningElement {
                                     variant: 'error', // 'success', 'warning', 'error', or 'info'
                                     mode: 'dismissible' // 'dismissable' or 'pester'
                                 });
+                                this.hideLoader();
                                 setTimeout(() => {
                                     this.currentStepRequestIndicator = "3";
                                     this.barControllerArray[2][1]=this.currentStepRequestIndicator;
@@ -811,8 +840,8 @@ export default class AddCardScreen extends LightningElement {
                             this.barControllerArray[2][1]=this.currentStepRequestIndicator;
                             this.error = true;
                             this.barControllerArray[2][2]=this.error;
+                            this.hideLoader();
                         }
-
                     })
                     .catch(error => {
                         // Handle errors
@@ -822,21 +851,19 @@ export default class AddCardScreen extends LightningElement {
                             variant: 'error', // 'success', 'warning', 'error', or 'info'
                             mode: 'dismissible' // 'dismissable' or 'pester'
                         });
+                        this.hideLoader();
                         this.error = true;
                         this.barControllerArray[2][2]=this.error;
                         this.dispatchEvent(toastRequestRecievedError);
                         console.error('Error fetching data: ', error);
                     });
                 
-                
             }
 
         }
 
 
-
-
-
+        
     }
 
 

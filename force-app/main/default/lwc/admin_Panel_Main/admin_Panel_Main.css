@@ -12,14 +12,6 @@
 .onlyonmob{
     display: none;
 }
-.exampleHolder{
-    position: relative;
-    display: inline-block;
-    margin-left: 15px;
-    width: 55px;
-    vertical-align: middle;
-    white-space: nowrap;
-}
 
 
 /* Styles for SVG elements with class st0, st1, st2 */
@@ -56,7 +48,12 @@
     display: flex;
     justify-content: space-between;
 }
-
+.slds-spinner_container
+{
+    bottom: 0;
+    top: 9vh;
+    height: 100vh;
+}
 /* Styles for logos with class square_page_logo */
 .square_page_logo{
     margin: 0 auto;

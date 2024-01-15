@@ -14,7 +14,17 @@ export default class TabExample extends LightningElement {
   @track authNetprevMerchantName;
   @track globalPaymentprevMerchant = false;
   loaded = true;
-
+  @track loader=false;
+  showLoader()
+  {
+    console.log('Show Loader');
+    this.loader=true;
+  }
+  hideLoader()
+  {
+    console.log('Hide Loader');
+    this.loader=false;
+  }
   connectedCallback() {
     // This code will run when the component is connected to the DOM (i.e., when it loads).
     this.callauthNetPrevMerchantName();
