@@ -14,6 +14,8 @@ export default class TabExample extends LightningElement {
   @track authNetprevMerchantName;
   @track globalPaymentprevMerchant = false;
   loaded = true;
+
+
   @track loader=false;
   showLoader()
   {
@@ -286,6 +288,7 @@ export default class TabExample extends LightningElement {
   authNetresponse;
   error;
   AuthNethandleButtonClick() {
+    this.showLoader();
     console.log("ftn is called");
     this.authNetcurrentstep ='1';
     this.authNetProgressError=false;
@@ -302,6 +305,7 @@ export default class TabExample extends LightningElement {
         mode: "dismissable"
       });
       this.dispatchEvent(evt);
+      this.hideLoader();
     } else {
       authorizeNetAdminAuth({
         authorizeNetMerchantName: this.authNetemerchantName,
@@ -344,6 +348,7 @@ export default class TabExample extends LightningElement {
                 variant: "success"
               });
               this.dispatchEvent(evt);
+              
               ///////////////////////////////////
               setTimeout(() => {
                 this.callauthNetPrevMerchantName();
@@ -351,6 +356,7 @@ export default class TabExample extends LightningElement {
                 this.authNetLoginId = null;
                 this.authNetTransactoinId = null;
                 this.authNetcurrentstep = "1";
+                this.hideLoader();
               }, 2500);
             }, 1500);
 
@@ -375,6 +381,7 @@ export default class TabExample extends LightningElement {
               this.dispatchEvent(evt);
               this.authNetcurrentstep = "3";
               this.authNetProgressError = true;
+              this.hideLoader();
             }, 1500);
           }
           console.log("final response that is retuned  : ");
@@ -393,6 +400,7 @@ export default class TabExample extends LightningElement {
           this.authNetProgressError = true;
           this.response = null;
           this.error = error;
+          this.hideLoader();
         });
     }
   }
@@ -433,6 +441,7 @@ export default class TabExample extends LightningElement {
   globalPaymentresponse;
 
   globalPaymenthandleButtonClick() {
+    this.showLoader();
     this.globalPaymenterror = false;
     this.globalPaymentcurrentstep ='1';
     console.log("ftn is called");
@@ -448,6 +457,7 @@ export default class TabExample extends LightningElement {
         mode: "dismissable"
       });
       this.dispatchEvent(evt);
+      this.hideLoader();
     } else {
       globalPaymentAdminAuth({
         globalPaymentMerchantName: this.globalPaymentemerchantName,
@@ -482,6 +492,7 @@ export default class TabExample extends LightningElement {
                 variant: "success"
               });
               this.dispatchEvent(evt);
+              
               //////////////////////////////////
               setTimeout(() => {
                 this.globalPaymentemerchantName = null;
@@ -489,6 +500,7 @@ export default class TabExample extends LightningElement {
                 this.globalPaymentLoginId = null;
                 this.globalPaymentTransactoinId = null;
                 this.globalPaymentcurrentstep = "1";
+                this.hideLoader();
               }, 2500);
             }, 1500);
 
@@ -506,6 +518,7 @@ export default class TabExample extends LightningElement {
               this.dispatchEvent(evt);
               this.globalPaymentcurrentstep = "3";
               this.globalPaymenterror = true;
+              this.hideLoader();
             }, 1500);
           }
           console.log("final response that is retuned  : ");
@@ -524,6 +537,7 @@ export default class TabExample extends LightningElement {
           this.globalPaymenterror = true;
           this.response = null;
           this.error = error;
+          this.hideLoader();
         });
     }
   }
@@ -564,6 +578,7 @@ export default class TabExample extends LightningElement {
   response;
   error;
   StripehandleButtonClick() {
+    this.showLoader();
     this.currentstep = '1';
     this.stripeProgressError = false;
     console.log("ftn is called" );
@@ -579,6 +594,7 @@ export default class TabExample extends LightningElement {
         mode: "dismissable"
       });
       this.dispatchEvent(evt);
+      this.hideLoader();
     } else {
       stripeAdminAuth({
         stripeMerchantName: this.stripemerchantName,
@@ -627,12 +643,14 @@ export default class TabExample extends LightningElement {
                   variant: "success"
                 });
                 this.dispatchEvent(evt);
+                
                 setTimeout(() => {
                   this.callstripePrevMerchantName();
                   this.stripemerchantName = null;
                   this.stripesecretKey = null;
                   this.stripepublishKey = null;
                   this.currentstep = "1";
+                  this.hideLoader();
                 }, 2500);
               }, 1500);
               /////////////////////////////////
@@ -655,6 +673,7 @@ export default class TabExample extends LightningElement {
                 this.dispatchEvent(evt);
                 this.currentstep = "3";
                 this.stripeProgressError = true;
+                this.hideLoader();
               }, 1500);
             }
           }
@@ -675,6 +694,7 @@ export default class TabExample extends LightningElement {
               this.dispatchEvent(evt);
               this.currentstep = "3";
               this.stripeProgressError = true;
+              this.hideLoader();
             }, 1500);
           }
           console.log("final response that is retuned  : ");
@@ -692,6 +712,7 @@ export default class TabExample extends LightningElement {
           this.stripeProgressError = true;
           this.response = null;
           this.error = error;
+          this.hideLoader();
         });
     }
   }

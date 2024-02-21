@@ -1,3 +1,42 @@
+.background {
+    flex: 1;
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.image-container {
+
+    background-image: url('/resource/logicpayment__makepaymentbg');
+    background-size: cover; /* Cover the entire container */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-position: center center;
+    height: 80vh;
+}
+.main{
+    padding: 0;
+    background-color: #ffffff ;
+    height: 80vh;
+    
+    
+}
+.right{
+	width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.left
+{
+	width: 31%;
+}
+.to-allign
+{
+	width: 100%;
+    display: flex;
+}
+
 .container {
     display: flex;
     height: auto;
@@ -5,7 +44,12 @@
     background-color: #ffffff;
 
 }
-
+.slds-spinner_brand
+{
+    height: 58vh;
+    position: absolute;
+    width: 100%;
+}
 .anet_page_logo{
    
     width: 30%;
@@ -13,14 +57,10 @@
 }
 .spinner-setter
 {
-    height: 79vh;
-    top: 8vh;
+    margin-bottom: 400px;
+
 }
-.main
-{
-    display: flex;
-    justify-content: center;
-}
+
 .st0{fill:#000000;}
 .st1{fill:#0075FF;}
 .st2{fill:#FFC300;}
@@ -59,16 +99,6 @@
 /*/////////////////////////////////////////////////////////////////////////////////////*/
 
 /* CSS */
-.image-container {
-
-    background-image: url('/resource/logicpayment__makepaymentbg');
-    width: 30%;
-    background-size: cover; /* Cover the entire container */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-position: center center
-    
-    
-}
 
 img {
     max-width: 100%;
@@ -85,14 +115,7 @@ img {
     text-align: center; /* Center text within the overlay */
 }
 
-.background {
-    flex: 1;
-    display: flex;
-    color: white;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
+
 
 .output-field {
     
@@ -121,24 +144,31 @@ img {
 }
 
 
-
+.slds-spinner_container
+{
+    bottom: 0;
+    top: 0;
+    height: 79.75vh;
+}
 .background img {
     max-width: 100%; /* Make sure the image doesn't exceed the container width */
     max-height: 100%; /* Make sure the image doesn't exceed the container height */
     object-fit: cover; /* Cover the container with the image */
 }
 
-
+.internalContent
+{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .content {
-    flex: 2;
-    display: flex;
+	display: flex;
+    height: 100%;
     flex-direction: column;
-    padding: 20px;
-    overflow-y: auto;
-    align-items: stretch;
-    /* align-content: center; */
-    justify-content: space-around;
+    width: 80%;
+    justify-content: space-evenly;
 }
 
 .column {
@@ -146,11 +176,7 @@ img {
     flex-direction: column;
 }
 
-.box {
-    
-    padding: 10px;
-    margin: 10px;
-}
+
 
 
 /* Different background colors for each box */
@@ -158,13 +184,12 @@ img {
     
     font-size: 40px;
     font-family: sans-serif;
-    margin-left: 14%;
     
 }
 
 .box2 {
     width: 70%;
-    margin-left: 15%;
+    margin: 4%;
     
     
 
@@ -361,7 +386,6 @@ button.selected {
     
     font-size: 25px;
     font-family: sans-serif;
-    margin-left: 14%;
     
 }
 .background {
@@ -391,12 +415,5 @@ button.selected {
 }
 .imgheight{
     height: 10vh;
-}
-.image-container {
-
-    background-image: url('/resource/logicpayment__makepaymentbg');
-    background-size: cover; /* Cover the entire container */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-position: center center
 }
 }

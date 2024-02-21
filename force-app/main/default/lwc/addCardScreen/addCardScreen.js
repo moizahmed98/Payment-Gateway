@@ -42,7 +42,7 @@ export default class AddCardScreen extends LightningElement {
         this.template.addEventListener('click', (event) => {
             // Get the class list of the clicked element
             const clickedElementClassList = event.target.classList;
-
+            
             // Log the selected class for debugging purposes
             console.log('Selected Class: ' + clickedElementClassList.toString());
 
@@ -155,7 +155,6 @@ export default class AddCardScreen extends LightningElement {
     // Use wire service to get the Account record
     @wire(getRecord, { recordId: '$recordId', fields: ['Account.Id', 'Account.Name'] })
     wiredAccount({ error, data }) {
-        this.loader=true;
                 if (data) {
             this.account = data;
             console.log(data);
@@ -168,7 +167,6 @@ export default class AddCardScreen extends LightningElement {
         } else if (error) {
             console.error('Error loading account data', error);
         }
-        this.loader=false;
     }
 
     //This function replaces logos with Global Payment logo and changes the text of dropdown button
@@ -527,6 +525,7 @@ export default class AddCardScreen extends LightningElement {
     //This function handles card submission, updates the request indicator, and triggers different toast events
     handleSubmitClick() {
         this.showLoader();
+        console.log('Ali :: '+JSON.stringify(this.template.querySelector('.slds-spinner_brand')));
         const currentGateway = this.template.querySelector('.dropdown-button-text').innerHTML;
         console.log('In Submit CLick' + currentGateway);
         this.resultdata = '';
@@ -599,7 +598,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.barControllerArray[0][1]=this.currentStepRequestIndicator;
                                     this.barControllerArray[0][2]=this.error;
                                     this.dispatchEvent(cardAddedSuccessfully);
-                                    this.hideLoader();
+                                    
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
                                         this.barControllerArray[0][1]=this.currentStepRequestIndicator;
@@ -609,6 +608,7 @@ export default class AddCardScreen extends LightningElement {
                                         this.outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
                                         this.outputMMYY = 'MM/YY';
                                         this.outputCVV = 'CVV';
+                                        this.hideLoader();
                                     }, 2500);
                                 }, 1200);
                             }
@@ -700,7 +700,7 @@ export default class AddCardScreen extends LightningElement {
                                     this.error = false;
                                     this.barControllerArray[1][2]=this.error;
                                     this.dispatchEvent(cardAddedSuccessfully);
-                                    this.hideLoader();
+                                    
                                     setTimeout(() => {
                                         this.currentStepRequestIndicator = "1";
                                         this.barControllerArray[1][1]=this.currentStepRequestIndicator;
@@ -710,6 +710,7 @@ export default class AddCardScreen extends LightningElement {
                                         this.outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
                                         this.outputMMYY = 'MM/YY';
                                         this.outputCVV = 'CVV';
+                                        this.hideLoader();
                                     }, 2500);
                                 }, 1200);
                                 
@@ -811,6 +812,7 @@ export default class AddCardScreen extends LightningElement {
                                         this.outputCardNumber = 'XXXX-XXXX-XXXX-XXXX';
                                         this.outputMMYY = 'MM/YY';
                                         this.outputCVV = 'CVV';
+                                        this.hideLoader();
                                     }, 2500);
                                 }, 1200);
                                 console.log('Card AddModule End');
